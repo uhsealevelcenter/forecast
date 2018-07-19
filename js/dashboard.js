@@ -498,7 +498,7 @@ function plotData(t, tide, msl, wav, name) {
       }
     },
     yaxis: {
-      title: 'Relative water level above MHHWL (cm)',
+      title: 'cm above MHHW',
       titlefont: {
         family: 'Helvetica, monospace',
         size: 18,
@@ -515,16 +515,99 @@ function plotData(t, tide, msl, wav, name) {
     },
     margin: {
     l: 50,
-    r: 5,
+    r: 50, //105
     b: 100,
     t: 100,
     pad: 4
-  }
+  },
+
+  annotations: [
+    {
+      x: 1,
+      y: 10,
+      xref: 'paper',
+      yref: 'y',
+      // text: 'Tidal Flooding*',
+      showarrow: true,
+      arrowhead: 2,
+      ax: 20,
+      ay: -0,
+      arrowsize: 3,
+      arrowwidth: 2,
+      // arrowcolor: 'rgba(213, 94, 0, 0.6)',
+      arrowcolor: 'rgba(227, 178, 147, 1.0)',
+      bordercolor: 'rgba(199, 101, 39, 0.0)',
+      // borderwidth: 2,
+      // borderpad: 4,
+      bgcolor: 'rgba(213, 94, 0, 0.0)',
+      opacity: 1.0
+    },
+    {
+      x: 1,
+      y: 18,
+      xref: 'paper',
+      yref: 'y',
+      // text: 'Coastal Flooding*',
+      showarrow: true,
+      arrowhead: 2,
+      ax: 20,
+      ay: -0,
+      arrowsize: 3,
+      arrowwidth: 2,
+      arrowcolor: 'rgba(159,196,150,0.6)',
+      arrowcolor: 'rgba(168,207,159,1.0)',
+      bordercolor: 'rgba(0, 0, 0, 0.0)',
+      // borderwidth: 3,
+      // borderpad: 4,
+      bgcolor: 'rgba(159,196,150,0.0)',
+      opacity: 1.0
+    }
+  ]
+  // ,
+  // shapes: [
+  //
+  //   //line horizontal
+  //
+  //   {
+  //     type: 'line',
+  //     xref: 'paper',
+  //     yref: 'y',
+  //     x0: 0,
+  //     y0: 18,
+  //     x1: 1,
+  //     y1: 18,
+  //     line: {
+  //       color: 'rgb(0, 0, 0)',
+  //       width: 1
+  //     }
+  //   },
+  //   {
+  //     type: 'line',
+  //     xref: 'paper',
+  //     yref: 'y',
+  //     x0: 0,
+  //     y0: 10,
+  //     x1: 1,
+  //     y1: 10,
+  //     line: {
+  //       color: 'rgb(0, 0, 0)',
+  //       width: 1
+  //     }
+  //   }
+  //   ]
   };
   // Creating a minimum horizontal line to fill the graph to
   traceMin.y = minWaterLevel([trace1, trace2]);
   var data = [traceMin, trace2, trace3, trace1, trace4];
   Plotly.newPlot('myDiv', data, layout);
+  
+  // To make Graph responsive:
+//   window.onresize = function() {
+//   Plotly.relayout('myDiv', {
+//     width: 0.9 * window.innerWidth,
+//     height: 0.9 * window.innerHeight
+//   })
+// }
 }
 
 function stackedArea(traces) {
