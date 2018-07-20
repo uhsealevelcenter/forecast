@@ -70,7 +70,7 @@ var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.pn
 // } );
 var markers = [];
 var allPulsesGroup = {};
-var coastalWarningsLayer = new L.GeoJSON.AJAX("PacificTest.geojson", {
+var coastalWarningsLayer = new L.GeoJSON.AJAX("ExampleCSVtoGeojson.json", {
   onEachFeature: getData,
   style: function(feature) {
     switch (feature.properties.coast_alert_code) {
@@ -600,7 +600,6 @@ function plotData(t, tide, msl, wav, name) {
   traceMin.y = minWaterLevel([trace1, trace2]);
   var data = [traceMin, trace2, trace3, trace1, trace4];
   Plotly.newPlot('myDiv', data, layout);
-  
   // To make Graph responsive:
 //   window.onresize = function() {
 //   Plotly.relayout('myDiv', {
@@ -623,23 +622,55 @@ function minWaterLevel(traces) {
   result = [];
   arr0 = traces[0].y.slice();
   arr1 = traces[1].y.slice();
-  if (arr0.indexOf("_NaN_") > 0)
-    arr0[arr0.indexOf("_NaN_")] = 9999;
-  if (arr1.indexOf("_NaN_") > 0)
-    arr1[arr1.indexOf("_NaN_")] = 9999;
+  // if (arr0.indexOf("_NaN_") > 0)
+  //   arr0[arr0.indexOf("_NaN_")] = 9999;
+  // if (arr1.indexOf("_NaN_") > 0)
+  //   arr1[arr1.indexOf("_NaN_")] = 9999;
+  nans_indices_arr1 = getAllIndexes(arr0,"_NaN_");
+  nans_indices_arr2 = getAllIndexes(arr1,"_NaN_");
+  for (i=0; i<nans_indices_arr1.length; i++){
+    arr0[nans_indices_arr1[i]] = 9999;
+  }
+  for (i=0; i<nans_indices_arr2.length; i++){
+    arr1[nans_indices_arr2[i]] = 9999;
+  }
+
   var minVal = Math.min(Math.min.apply(null, arr0), Math.min.apply(null, arr1));
   for (var j = 0; j < (Math.min(arr0.length, arr1.length)); j++) {
     // traces['y'][j] = minVal;
     result.push(minVal)
   }
 
+  for (i=0; i<nans_indices_arr1.length; i++){
+    result[nans_indices_arr1[i]] = "_NaN_";
+  }
+  for (i=0; i<nans_indices_arr2.length; i++){
+    result[nans_indices_arr2[i]] = "_NaN_";
+  }
   return result;
 }
 
 function sumTwoArrays(a1, a2) {
+  nans_indices_a1 = getAllIndexes(a1,9999);
+  nans_indices_a2 = getAllIndexes(a2,9999);
+  for (i=0; i<nans_indices_a1.length; i++){
+    a1[i] = 0;
+  }
+  for (i=0; i<nans_indices_a2.length; i++){
+    a2[i] = 0;
+  }
+
   return a1.map(function(num, idx) {
     return num + a2[idx];
   });
+}
+
+function getAllIndexes(arr, val) {
+    var indexes = [], i;
+    for(i = 0; i < arr.length; i++)
+        if (arr[i] === val)
+            indexes.push(i);
+    return indexes;
 }
 
 var closestLayer = null;
