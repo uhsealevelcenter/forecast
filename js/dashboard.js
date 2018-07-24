@@ -6,19 +6,19 @@ var ORANGE = "#FF9A00";
 var RED = "#FF310D";
 var BLACK = "#000000";
 var WHITE = "#FFFFFF";
-var states = L.esri.featureLayer({
-  url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3",
-  style: function(feature) {
-    return {
-      color: '#000000',
-      "fillOpacity": 1.0,
-      weight: 2
-    };
-  }
-});
-var overlays = {
-  "U.S. States": states
-}
+// var states = L.esri.featureLayer({
+//   url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3",
+//   style: function(feature) {
+//     return {
+//       color: '#000000',
+//       "fillOpacity": 1.0,
+//       weight: 2
+//     };
+//   }
+// });
+// var overlays = {
+//   "U.S. States": states
+// }
 var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
   maxZoom: 12,
   minZoom: 2,
@@ -46,32 +46,17 @@ var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.pn
   id: 'mapbox.satellite'
 });
 
-// Layers in this pane are non-interactive and do not obscure mouse/touch events
 
-// var circle = L.circle([21.467351, -157.976473], {
-//   color: 'red',
-//   fillColor: '#f03',
-//   fillOpacity: 0.5,
-//   radius: 500000
-// });
-//
-// circle.bindPopup("Additional Info would go here");
-// circle.on("click",function(e){
-//   console.log("Clik "+e.latlng);
-//   map.flyTo([circle._latlng.lat, circle._latlng.lng], 10);
-//   map.removeLayer(circle);
-//     plotData();
-// });
-
-// map.flyTo([13.87992, 45.9791], 12);
-// 	map.on('click', function(e) {
-//     // alert(e.latlng);
-// 		map.flyTo([e.latlng.lat, e.latlng.lng], 7);
-// } );
 var markers = [];
 var allPulsesGroup = {};
+// Loading a geojson file with Sea Level and tide prediction for Oahu coastline
+// encoded in LineString
+// The file also contains Points which serve to show the pulsating warning
+// signals when the map is zoomed out
 var coastalWarningsLayer = new L.GeoJSON.AJAX("PacificTest.geojson", {
   onEachFeature: getData,
+  // Styling each GeoJSON LineString feature based on the
+  // properties.coast_alert_code attribute
   style: function(feature) {
     switch (feature.properties.coast_alert_code) {
       case 'green':
@@ -112,6 +97,9 @@ var coastalWarningsLayer = new L.GeoJSON.AJAX("PacificTest.geojson", {
         };
     }
   },
+  // Styling each GeoJSON Point feature based on the
+  // properties.region_alert_code attribute so that we can have pulsating alerts
+  // when the map is zoomed out
   pointToLayer: function(feature, latlng) {
     var alColor = {};
     switch (feature.properties.region_alert_code) {
@@ -128,35 +116,35 @@ var coastalWarningsLayer = new L.GeoJSON.AJAX("PacificTest.geojson", {
         alColor = YELLOW;
         break;
     }
+    // create a pulse icon
     var pulse = L.icon.pulse({
       iconSize: [20, 20],
       color: alColor,
       fillColor: alColor,
     });
+    // Create a marker at lat,lng that has pulse icon
     var mark = new L.marker(latlng, {
       icon: pulse
     });
+    // Added all markers to the markers an array that is added to a Layer to be
+    // displayed below
     markers.push(mark);
-    // return mark;
   },
 
 });
-// var offset=30;
-// setInterval(function(){
-//   console.log("TIMED");
-//   offset-=1;
-//   if(offset==0)
-//     offset=30;
-//   wavesLayer.getLayers()[0].setOffset(offset)
-// }, 100);
+
 coastalWarningsLayer.on('data:progress', function() {
   console.log("Progress");
 });
+
+// When the GeoJSON is loaded create a Layer of of pulses and add it to the map
 coastalWarningsLayer.on('data:loaded', function() {
   console.log("Loaded");
   allPulsesGroup = L.layerGroup(markers);
   allPulsesGroup.addTo(map);
 
+// When a pulsating circle is clicked fly to the location of the circle,
+// remove the pulsating layer and show only LineString features after 3 seconds
   allPulsesGroup.eachLayer(function(layer) {
     layer.on('click', function() {
       console.log("Clik " + this._latlng);
@@ -173,6 +161,8 @@ coastalWarningsLayer.on('data:loading', function() {
   console.log("Loading");
 });
 
+// loads in a wave geojson file and styles the Leaflet layer based on
+// the properties.coast_alert_code attribute
 var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
   style: function(feature) {
     switch (feature.properties.coast_alert_code) {
@@ -224,34 +214,12 @@ var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
     }
   }
 });
-var path = null;
+
+// Use a setText plugin on waves layer data to add text symbols to it so that
+// it looks different from the SeaLevel/Tide data
 wavesLayer.on('data:loaded', function() {
   console.log("WAVES LOADED");
-  // for (var i = 0; i < wavesLayer.getLayers().length; i++){
-  //   // l.setOffset(+20)
-  //  var test= wavesLayer.getLayers()[i].setOffset(+20).toGeoJSON()
-  //  path = L.polyline.antPath(turf.flip(test).geometry.coordinates,
-  //   {"delay":400,"dashArray":[10,20],"weight":10,"color":"#FFFFFF40","pulseColor":"#FFFFFFBF","paused":false,"reverse":false,"offset":20}
-  //  );
-  //  mypath = L.polyline(turf.flip(test).geometry.coordinates);
-  //
-  //  coastalWarningsLayer.addLayer(wavesLayer.setText('^', {repeat: true,
-  //                      offset: 7,
-  //                      attributes: {fill: '#007DEF',
-  //                                   'font-weight': 'bold',
-  //                                   'font-size': '24'}}));
-  // coastalWarningsLayer.addLayer(mypath);
 
-  // // Define corridor options including width
-  // var options = {
-  //   corridor: 1000, // meters
-  //   className: 'route-corridor'
-  // };
-  // var corridor = L.corridor(turf.flip(test).geometry.coordinates, options);
-  // map.fitBounds(corridor.getBounds());
-  // map.addLayer(corridor);
-  // }
-  // 🗤
   wavesLayer.setText('~', {
     repeat: true,
     offset: 9,
@@ -262,44 +230,30 @@ wavesLayer.on('data:loaded', function() {
       'rotate': 0,
     }
   });
-  // coastalWarningsLayer.addLayer(wavesLayer.setText('^', {repeat: true,
-  //                     offset: 12,
-  //                     attributes: {fill: '#000000',
-  //                                  'font-weight': 'bold',
-  //                                  'font-size': '24',
-  //                                'rotate':0}}));
 
 });
 
-
-// wavesLayer.bindPopup("Wave Popup");
-// var regionalWarningsLayer = new L.GeoJSON.AJAX("RegionTest.geojson", {
-//   onEachFeature: getLocations,
-// 	style: function(feature) {
-//       switch (feature.properties.region_alert_code) {
-//           case 'green': return {color: "#7EFF0D",weight:lineWeight};
-//           case 'red':   return {color: "#FF310D",weight:lineWeight};
-// 					case 'orange': return {color: "#FF9A00",weight:lineWeight};
-//           case 'yellow':   return {color: "#FCFF05",weight:lineWeight};
-//       }
-//   },
-// });
-
+// Create map and add a default layer to it
 var map = new L.Map('mapid', {
   center: new L.LatLng(21.463271, -157.969467),
   zoom: 2,
   layers: [streets_l]
 });
+
+// Craating panes and assigning zIndex so that Sea Level layer always shows below
+// the waves layer but the labels of the positron maps show all the way on top
 map.createPane('sealevel');
 map.getPane('sealevel').style.zIndex = 399;
 // map.getPane('sealevel').style.pointerEvents = 'none';
 
 map.createPane('labels');
 map.getPane('labels').style.zIndex = 700;
-
+// Prevent labels from capturing clicks
 map.getPane('labels').style.pointerEvents = 'none';
 
-
+// Loading the positron map
+// Map and label are separate so that we can put the map labels on top of the
+// Sea Level and Waves layers
 var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
 var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
@@ -313,62 +267,8 @@ var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_la
 
 var positronGroup = L.layerGroup([positron, positronLabels]);
 
-var myIcon = L.divIcon({
-  className: 'my-div-icon',
-  iconSize: [50, 50],
-});
-var firefoxIcon = L.icon({
-  iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
-  iconSize: [100, 100],
-});
-
-
-
-// var regions = [
-//   [21.467351, -157.976473],
-//   [7.10743, -188.806218]];
-// // you can set .my-div-icon styles in CSS
-// // var pulseMarker=L.marker([21.467351, -157.976473], {icon: pulse}).addTo(map);
-// var markers = [];
-// for (var i = 0; i < regions.length; i++) {
-// 			markers.push(new L.marker([regions[i][0],regions[i][1]], {icon: pulse}))
-// 				// .addTo(map);
-//
-//         // markers[i].on("click",function(e){
-//         //   console.log("Clik "+e.latlng);
-//         //   map.flyTo([marker[i]._latlng.lat, marker[i]._latlng.lng], 10);
-//         //   map.removeLayer(marker);
-//         //     plotData();
-//         //     setTimeout(showCoastWarnings,3000);
-//         // });
-// 		}
-
-// var allPulsesGroup = L.layerGroup(markers);
-// allPulsesGroup.addTo(map);
-//
-// allPulsesGroup.eachLayer(function(layer){
-//   layer.on('click', function(){
-//     console.log("Clik "+this._latlng);
-//     map.flyTo([this._latlng.lat, this._latlng.lng], 10);
-//     map.removeLayer(allPulsesGroup);
-//       plotData();
-//       setTimeout(showCoastWarnings,3000);
-//   });
-// });
-
-// pulseMarker.on("click",funct;ion(e){
-//   console.log("Clik "+e.latlng);
-//   map.flyTo([pulseMarker._latlng.lat, pulseMarker._latlng.lng], 10);
-//   map.removeLayer(pulseMarker);
-//     plotData();
-//     setTimeout(showCoastWarnings,3000);
-// });
-
-
-
-// var myBase = L.layerGroup([streets]);
-// var sla = L.layerGroup([states]);
-
+// Creating a selection of maps
+// Only one can be active at a time
 var baseMaps = {
   "Light": streets_l,
   "Dark": streets_d,
@@ -376,6 +276,9 @@ var baseMaps = {
   "Positron": positronGroup,
 
 };
+
+// Map overlays (SLA, Waves layer)
+// Can have multiple active at a time
 var overlayMaps = {
   "Tide+SLA Warning": coastalWarningsLayer,
   "Wave Warning": wavesLayer,
@@ -385,333 +288,18 @@ var overlayMaps = {
 //
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-// map.on("zoomend",function(){
-//     zoomLev = map.getZoom();
-//     if(zoomLev<5){
-//       console.log("Zoom Level: "+zoomLev+" ,Adding Layer");
-//       map.addLayer(pulseMarker);
-//       map.removeLayer(coastalWarningsLayer);
-//     }else{
-//       map.addLayer(coastalWarningsLayer);
-//       map.removeLayer(pulseMarker);
-//     }
-// });
-
-// coastalWarningsLayer.addTo(map);
-// circle.addTo(map);
-
-
-// var pointGrid = $.getJSON("GeoObs.json", function(json) {
-// 	return json.features[1]; // this will show the info it in firebug console
-// });
-// console.log(pointGrid);
 function showCoastWarnings() {
   // wavesLayer.addTo(map);
   coastalWarningsLayer.addTo(map);
 
 }
 
+// Create an instance of Map Controller which controls the display and removal
+// of pulsating warning and coastal data based on the map zoom level
 var myMapController = new MapController(map);
 
-function plotData(t, tide, msl, wav, name) {
-  var trace1 = {
-    x: t,
-    y: tide,
-    mode: "lines",
-    name: 'High Tide Prediction',
-    type: 'scatter',
-    line: {
-      color: 'rgb(86, 180, 233)',
-      width: 3,
-      dash: 'dash'
-    },
-    // fill: 'tozeroy'
-  };
-  var traceMin = {
-    x: t,
-    y: [],
-    mode: "lines",
-    name: 'Test',
-    type: 'scatter',
-    line: {
-      color: 'rgba(0,0,0,0)'
-    },
-    // fill: 'tozeroy'
-    hoverinfo: 'skip',
-    showlegend: false
-  };
-  var trace2 = {
-    x: t,
-    y: msl,
-    type: 'scatter',
-    name: 'Sea Level',
-    mode: "lines",
-    line: {
-      color: 'rgb(213, 94, 0)'
-    },
-    fill: 'tonexty',
-    error_y: {
-      type: 'data',
-      array: [1, 2, 3, 1, 2, 3, 2, 1, 0.5, 2, 3, 4, 1, 2],
-      visible: true
-    },
-  };
-  var trace3 = {
-    x: t,
-    y: sumTwoArrays(wav,msl),
-    type: 'scatter',
-    name: 'Waves',
-    mode: 'none',
-    line: {
-      color: 'rgba(0,100,80)'
-    },
-    fill: 'tonexty',
-    error_y: {
-      type: 'data',
-      array: [1, 2, 3, 1, 2, 3, 2, 4, 5, 3, 2, 1, 2, 4],
-      visible: true
-    },
-  };
+// Data plotting with plotly
 
-  var trace4 = {
-    x: t,
-    y: sumTwoArrays(wav,msl),
-    mode: "lines",
-    name: 'Total Water Level',
-    type: 'scatter',
-    line: {
-      color: 'rgb(0, 0, 0)',
-      width: 4,
-      dash: 'dashdot'
-    },
-    // fill: 'tozeroy'
-  };
-
-  var sla_thresh = {
-  // t.slice(-1)[0] gets the last date/time in the t time_vector
-  // replaceAt replace string at the specified indexOf, we are looking for index
-  // of the second to last character in the string, which is time and we replace
-  // it with 23 hrs so that the arrow marker is pushed to the right a little
-  x: [t.slice(-1)[0].replaceAt(t.slice(-1)[0].indexOf(t.slice(-1)[0].slice(-2)), "23:59")],
-  y: [10],
-  mode: 'markers',
-  type: 'scatter',
-  showlegend: false,
-  name: '',
-  marker: {
-    symbol: 'triangle-left',
-    size: 28,
-    color: 'rgba(227, 178, 147, 1.0)'
-  },
-  text: ['Tidal Flooding Threshold'],
-  hoverinfo:"y+text"
-};
-
-var sla_thresh_line = {
-  x: [t[0], sla_thresh.x[0]],
-  y: [sla_thresh.y[0],sla_thresh.y[0]],
-  mode: 'lines',
-  type: 'scatter',
-  hoverinfo: 'skip',
-  showlegend: false,
-  visible: false,
-  line: {
-    color: 'rgb(0, 0, 0)',
-    width: 1,
-    dash: 'dashdot'
-  },
-
-}
-
-var tot_thresh = {
-// t.slice(-1)[0] gets the last date/time in the t time_vector
-// replaceAt replace string at the specified indexOf, we are looking for index
-// of the second to last character in the string, which is time and we replace
-// it with 23 hrs so that the arrow marker is pushed to the right a little
-x: [t.slice(-1)[0].replaceAt(t.slice(-1)[0].indexOf(t.slice(-1)[0].slice(-2)), "23:59")],
-y: [18],
-mode: 'markers',
-type: 'scatter',
-showlegend: false,
-name: '',
-marker: {
-  symbol: 'triangle-left',
-  size: 28,
-  color: 'rgba(168,207,159,1.0)'
-},
-text: ['Coastal Flooding Threshold'],
-hoverinfo:"y+text",
-// hoverlabel: {
-//   bgcolor: 'rgba(0, 0, 0, 0.5)',
-//   color: 'rgba(0, 0, 0, 0.5)'
-// }
-};
-
-var tot_thresh_line = {
-  x: [t[0], tot_thresh.x[0]],
-  y: [tot_thresh.y[0],tot_thresh.y[0]],
-  mode: 'lines',
-  type: 'scatter',
-  hoverinfo: 'skip',
-  showlegend: false,
-  visible: false,
-  line: {
-    color: 'rgb(0, 0, 0)',
-    width: 1,
-    dash: 'dashdot'
-  },
-}
-
-  var layout = {
-    title: name,
-    xaxis: {
-      title: 'Date/time',
-      titlefont: {
-        family: 'Helvetica, monospace',
-        size: 18,
-        color: '#000000'
-      }
-    },
-    yaxis: {
-      title: 'cm above MHHW',
-      titlefont: {
-        family: 'Helvetica, monospace',
-        size: 18,
-        color: '#000000'
-      }
-    },
-    showlegend: true,
-    legend: {
-      xanchor: "center",
-      yanchor: "top",
-      "orientation": "h",
-      x: 0.5,
-      y: 1.1,
-    },
-    margin: {
-    l: 50,
-    r: 50, //105
-    b: 100,
-    t: 100,
-    pad: 4
-  },
-
-  // annotations: [
-  //   {
-  //     x: 1,
-  //     y: 10,
-  //     xref: 'paper',
-  //     yref: 'y',
-  //     // text: 'Tidal Flooding*',
-  //     showarrow: true,
-  //     arrowhead: 2,
-  //     ax: 20,
-  //     ay: -0,
-  //     arrowsize: 3,
-  //     arrowwidth: 2,
-  //     // arrowcolor: 'rgba(213, 94, 0, 0.6)',
-  //     arrowcolor: 'rgba(227, 178, 147, 1.0)',
-  //     bordercolor: 'rgba(199, 101, 39, 0.0)',
-  //     // borderwidth: 2,
-  //     // borderpad: 4,
-  //     bgcolor: 'rgba(213, 94, 0, 0.0)',
-  //     opacity: 1.0
-  //   },
-  //   {
-  //     x: 1,
-  //     y: 18,
-  //     xref: 'paper',
-  //     yref: 'y',
-  //     // text: 'Coastal Flooding*',
-  //     showarrow: true,
-  //     arrowhead: 2,
-  //     ax: 20,
-  //     ay: -0,
-  //     arrowsize: 3,
-  //     arrowwidth: 2,
-  //     arrowcolor: 'rgba(159,196,150,0.6)',
-  //     arrowcolor: 'rgba(168,207,159,1.0)',
-  //     bordercolor: 'rgba(0, 0, 0, 0.0)',
-  //     // borderwidth: 3,
-  //     // borderpad: 4,
-  //     bgcolor: 'rgba(159,196,150,0.0)',
-  //     opacity: 1.0
-  //   }
-  // ]
-  // ,
-  // shapes: [
-  //
-  //   //line horizontal
-  //
-  //   {
-  //     type: 'line',
-  //     xref: 'paper',
-  //     yref: 'y',
-  //     x0: 0,
-  //     y0: 18,
-  //     x1: 1,
-  //     y1: 18,
-  //     line: {
-  //       color: 'rgb(0, 0, 0)',
-  //       width: 1
-  //     }
-  //   },
-  //   {
-  //     type: 'line',
-  //     xref: 'paper',
-  //     yref: 'y',
-  //     x0: 0,
-  //     y0: 10,
-  //     x1: 1,
-  //     y1: 10,
-  //     line: {
-  //       color: 'rgb(0, 0, 0)',
-  //       width: 1
-  //     }
-  //   }
-  //   ]
-  };
-  // Creating a minimum horizontal line to fill the graph to
-  traceMin.y = minWaterLevel([trace1, trace2]);
-  var data = [traceMin, trace2, trace3, trace1, trace4, sla_thresh,tot_thresh, sla_thresh_line, tot_thresh_line];
-  Plotly.newPlot('myDiv', data, layout);
-  var myPlot = document.getElementById('myDiv');
-
-  myPlot.on('plotly_hover', function(data){
-    data.points.forEach(function(p) {
-      if(p.data.name===""){
-        // p.data.showlegend = true;
-        Plotly.restyle(myPlot, {
-          visible: true
-      }, [7,8]);
-      }
-
-	  });
-
-
-   //  var infotext = data.points.map(function(d){
-   //   console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
-   // });
-})
- .on('plotly_unhover', function(data){
-   data.points.forEach(function(p) {
-     if(p.data.name===""){
-       // p.data.showlegend = true;
-       Plotly.restyle(myPlot, {
-         visible: false
-     }, [7,8]);
-     }
-
-   });
-});
-  // To make Graph responsive:
-//   window.onresize = function() {
-//   Plotly.relayout('myDiv', {
-//     width: 0.9 * window.innerWidth,
-//     height: 0.9 * window.innerHeight
-//   })
-// }
-}
 
 function stackedArea(traces) {
   for (var i = 1; i < traces.length; i++) {
@@ -724,14 +312,14 @@ function stackedArea(traces) {
 
 function minWaterLevel(traces) {
   result = [];
+  // get the y array of the data of the two traces we are comparing
   arr0 = traces[0].y.slice();
   arr1 = traces[1].y.slice();
-  // if (arr0.indexOf("_NaN_") > 0)
-  //   arr0[arr0.indexOf("_NaN_")] = 9999;
-  // if (arr1.indexOf("_NaN_") > 0)
-  //   arr1[arr1.indexOf("_NaN_")] = 9999;
+  // get indices that have "_NaN_" values (generated in python script for missing data)
   nans_indices_arr1 = getAllIndexes(arr0,"_NaN_");
   nans_indices_arr2 = getAllIndexes(arr1,"_NaN_");
+  // Give a high value to data at NaN indices so that a comparison between the two
+  // arrays can be made. Because of the Math.min() the 9999 data will be excluded
   for (i=0; i<nans_indices_arr1.length; i++){
     arr0[nans_indices_arr1[i]] = 9999;
   }
@@ -739,12 +327,17 @@ function minWaterLevel(traces) {
     arr1[nans_indices_arr2[i]] = 9999;
   }
 
+  //Find a minimum value between the two arrays
   var minVal = Math.min(Math.min.apply(null, arr0), Math.min.apply(null, arr1));
+  // Create an array of copies of minimum values in the length of the shorter of the two arrays
+  // Maybe it should be in the length of the longer of the two arrays???
   for (var j = 0; j < (Math.min(arr0.length, arr1.length)); j++) {
     // traces['y'][j] = minVal;
     result.push(minVal)
   }
 
+  // Put the "_NaN_" data back where it originally was because of one of the entries
+  // was NaN then total water level and wave levels cannot be calculated
   for (i=0; i<nans_indices_arr1.length; i++){
     result[nans_indices_arr1[i]] = "_NaN_";
   }
@@ -755,6 +348,7 @@ function minWaterLevel(traces) {
 }
 
 function sumTwoArrays(a1, a2) {
+  // get indices that have 9999 and give it a value of 0
   nans_indices_a1 = getAllIndexes(a1,9999);
   nans_indices_a2 = getAllIndexes(a2,9999);
   for (i=0; i<nans_indices_a1.length; i++){
@@ -780,14 +374,6 @@ function getAllIndexes(arr, val) {
 var closestLayer = null;
 
 function getData(feature, layer) {
-  // console.log(feature.properties.tide_values);
-  // console.log(typeof(feature.properties.tide_values));
-
-
-  // var el = document.createElement('div');
-  // el.classList.add("my-class");
-  // el.innerHTML = '<h2>' +"NK"+ feature.id + '</h2>';
-  // layer.bindPopup(el);
 
   var time = feature.properties.time_vector;
   var tide = feature.properties.tide_values;
@@ -848,66 +434,6 @@ function assemblePopup(t, l, alert) {
   // return '<h1>' + l + '</h1> <br> <div class="textCircle">' + t[0] + '</div><div class="textCircle">' + t[1] + '</div>' + '</div><div class="textCircle">' + t[2] + '</div>' + '</div><div class="textCircle">' + t[3] + '</div>' + '</div><div class="textCircle">' + t[4] + '</div>' + '</div><div class="textCircle">' + t[5] + '</div>' + '</div><div class="textCircle">' + t[6] + '</div>'
 }
 
-function rgbColorString(x, colormap) {
-  var color = interpolateLinearly(x, colormap)
-  r = Math.round(255 * color[0]);
-  g = Math.round(255 * color[1]);
-  b = Math.round(255 * color[2]);
-  return 'rgb(' + r + ', ' + g + ', ' + b + ')'
-}
-
-function normalize(min, max, data) {
-  norm = [];
-  dataMin = Math.min(...data);
-  dataMax = Math.max(...data);
-  for (i = 0; i < data.length; i++) {
-    norm.push((max - min) * (data[i] - dataMin) / (dataMax - dataMin) + min)
-  }
-  return norm;
-}
-
-function enforceBounds(x) {
-  if (x < 0) {
-    return 0;
-  } else if (x > 1) {
-    return 1;
-  } else {
-    return x;
-  }
-}
-
-function interpolateLinearly(x, values) {
-
-  // Split values into four lists
-  var x_values = [];
-  var r_values = [];
-  var g_values = [];
-  var b_values = [];
-  for (i in values) {
-    x_values.push(values[i][0]);
-    r_values.push(values[i][1][0]);
-    g_values.push(values[i][1][1]);
-    b_values.push(values[i][1][2]);
-  }
-
-  var i = 1;
-  while (x_values[i] < x) {
-    i = i + 1;
-  }
-  i = i - 1;
-
-  var width = Math.abs(x_values[i] - x_values[i + 1]);
-  var scaling_factor = (x - x_values[i]) / width;
-
-  // Get the new color values though interpolation
-  var r = r_values[i] + scaling_factor * (r_values[i + 1] - r_values[i])
-  var g = g_values[i] + scaling_factor * (g_values[i + 1] - g_values[i])
-  var b = b_values[i] + scaling_factor * (b_values[i + 1] - b_values[i])
-
-  return [enforceBounds(r), enforceBounds(g), enforceBounds(b)];
-
-
-}
 
 String.prototype.replaceAt=function(index, replacement) {
     return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
