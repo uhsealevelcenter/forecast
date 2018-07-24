@@ -70,7 +70,7 @@ var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.pn
 // } );
 var markers = [];
 var allPulsesGroup = {};
-var coastalWarningsLayer = new L.GeoJSON.AJAX("ExampleCSVtoGeojson.json", {
+var coastalWarningsLayer = new L.GeoJSON.AJAX("PacificTest.geojson", {
   onEachFeature: getData,
   style: function(feature) {
     switch (feature.properties.coast_alert_code) {
@@ -487,6 +487,81 @@ function plotData(t, tide, msl, wav, name) {
     // fill: 'tozeroy'
   };
 
+  var sla_thresh = {
+  // t.slice(-1)[0] gets the last date/time in the t time_vector
+  // replaceAt replace string at the specified indexOf, we are looking for index
+  // of the second to last character in the string, which is time and we replace
+  // it with 23 hrs so that the arrow marker is pushed to the right a little
+  x: [t.slice(-1)[0].replaceAt(t.slice(-1)[0].indexOf(t.slice(-1)[0].slice(-2)), "23:59")],
+  y: [10],
+  mode: 'markers',
+  type: 'scatter',
+  showlegend: false,
+  name: '',
+  marker: {
+    symbol: 'triangle-left',
+    size: 28,
+    color: 'rgba(227, 178, 147, 1.0)'
+  },
+  text: ['Tidal Flooding Threshold'],
+  hoverinfo:"y+text"
+};
+
+var sla_thresh_line = {
+  x: [t[0], sla_thresh.x[0]],
+  y: [sla_thresh.y[0],sla_thresh.y[0]],
+  mode: 'lines',
+  type: 'scatter',
+  hoverinfo: 'skip',
+  showlegend: false,
+  visible: false,
+  line: {
+    color: 'rgb(0, 0, 0)',
+    width: 1,
+    dash: 'dashdot'
+  },
+
+}
+
+var tot_thresh = {
+// t.slice(-1)[0] gets the last date/time in the t time_vector
+// replaceAt replace string at the specified indexOf, we are looking for index
+// of the second to last character in the string, which is time and we replace
+// it with 23 hrs so that the arrow marker is pushed to the right a little
+x: [t.slice(-1)[0].replaceAt(t.slice(-1)[0].indexOf(t.slice(-1)[0].slice(-2)), "23:59")],
+y: [18],
+mode: 'markers',
+type: 'scatter',
+showlegend: false,
+name: '',
+marker: {
+  symbol: 'triangle-left',
+  size: 28,
+  color: 'rgba(168,207,159,1.0)'
+},
+text: ['Coastal Flooding Threshold'],
+hoverinfo:"y+text",
+// hoverlabel: {
+//   bgcolor: 'rgba(0, 0, 0, 0.5)',
+//   color: 'rgba(0, 0, 0, 0.5)'
+// }
+};
+
+var tot_thresh_line = {
+  x: [t[0], tot_thresh.x[0]],
+  y: [tot_thresh.y[0],tot_thresh.y[0]],
+  mode: 'lines',
+  type: 'scatter',
+  hoverinfo: 'skip',
+  showlegend: false,
+  visible: false,
+  line: {
+    color: 'rgb(0, 0, 0)',
+    width: 1,
+    dash: 'dashdot'
+  },
+}
+
   var layout = {
     title: name,
     xaxis: {
@@ -521,48 +596,48 @@ function plotData(t, tide, msl, wav, name) {
     pad: 4
   },
 
-  annotations: [
-    {
-      x: 1,
-      y: 10,
-      xref: 'paper',
-      yref: 'y',
-      // text: 'Tidal Flooding*',
-      showarrow: true,
-      arrowhead: 2,
-      ax: 20,
-      ay: -0,
-      arrowsize: 3,
-      arrowwidth: 2,
-      // arrowcolor: 'rgba(213, 94, 0, 0.6)',
-      arrowcolor: 'rgba(227, 178, 147, 1.0)',
-      bordercolor: 'rgba(199, 101, 39, 0.0)',
-      // borderwidth: 2,
-      // borderpad: 4,
-      bgcolor: 'rgba(213, 94, 0, 0.0)',
-      opacity: 1.0
-    },
-    {
-      x: 1,
-      y: 18,
-      xref: 'paper',
-      yref: 'y',
-      // text: 'Coastal Flooding*',
-      showarrow: true,
-      arrowhead: 2,
-      ax: 20,
-      ay: -0,
-      arrowsize: 3,
-      arrowwidth: 2,
-      arrowcolor: 'rgba(159,196,150,0.6)',
-      arrowcolor: 'rgba(168,207,159,1.0)',
-      bordercolor: 'rgba(0, 0, 0, 0.0)',
-      // borderwidth: 3,
-      // borderpad: 4,
-      bgcolor: 'rgba(159,196,150,0.0)',
-      opacity: 1.0
-    }
-  ]
+  // annotations: [
+  //   {
+  //     x: 1,
+  //     y: 10,
+  //     xref: 'paper',
+  //     yref: 'y',
+  //     // text: 'Tidal Flooding*',
+  //     showarrow: true,
+  //     arrowhead: 2,
+  //     ax: 20,
+  //     ay: -0,
+  //     arrowsize: 3,
+  //     arrowwidth: 2,
+  //     // arrowcolor: 'rgba(213, 94, 0, 0.6)',
+  //     arrowcolor: 'rgba(227, 178, 147, 1.0)',
+  //     bordercolor: 'rgba(199, 101, 39, 0.0)',
+  //     // borderwidth: 2,
+  //     // borderpad: 4,
+  //     bgcolor: 'rgba(213, 94, 0, 0.0)',
+  //     opacity: 1.0
+  //   },
+  //   {
+  //     x: 1,
+  //     y: 18,
+  //     xref: 'paper',
+  //     yref: 'y',
+  //     // text: 'Coastal Flooding*',
+  //     showarrow: true,
+  //     arrowhead: 2,
+  //     ax: 20,
+  //     ay: -0,
+  //     arrowsize: 3,
+  //     arrowwidth: 2,
+  //     arrowcolor: 'rgba(159,196,150,0.6)',
+  //     arrowcolor: 'rgba(168,207,159,1.0)',
+  //     bordercolor: 'rgba(0, 0, 0, 0.0)',
+  //     // borderwidth: 3,
+  //     // borderpad: 4,
+  //     bgcolor: 'rgba(159,196,150,0.0)',
+  //     opacity: 1.0
+  //   }
+  // ]
   // ,
   // shapes: [
   //
@@ -598,8 +673,37 @@ function plotData(t, tide, msl, wav, name) {
   };
   // Creating a minimum horizontal line to fill the graph to
   traceMin.y = minWaterLevel([trace1, trace2]);
-  var data = [traceMin, trace2, trace3, trace1, trace4];
+  var data = [traceMin, trace2, trace3, trace1, trace4, sla_thresh,tot_thresh, sla_thresh_line, tot_thresh_line];
   Plotly.newPlot('myDiv', data, layout);
+  var myPlot = document.getElementById('myDiv');
+
+  myPlot.on('plotly_hover', function(data){
+    data.points.forEach(function(p) {
+      if(p.data.name===""){
+        // p.data.showlegend = true;
+        Plotly.restyle(myPlot, {
+          visible: true
+      }, [7,8]);
+      }
+
+	  });
+
+
+   //  var infotext = data.points.map(function(d){
+   //   console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
+   // });
+})
+ .on('plotly_unhover', function(data){
+   data.points.forEach(function(p) {
+     if(p.data.name===""){
+       // p.data.showlegend = true;
+       Plotly.restyle(myPlot, {
+         visible: false
+     }, [7,8]);
+     }
+
+   });
+});
   // To make Graph responsive:
 //   window.onresize = function() {
 //   Plotly.relayout('myDiv', {
@@ -803,4 +907,8 @@ function interpolateLinearly(x, values) {
   return [enforceBounds(r), enforceBounds(g), enforceBounds(b)];
 
 
+}
+
+String.prototype.replaceAt=function(index, replacement) {
+    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
 }
