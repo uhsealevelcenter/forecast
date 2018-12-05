@@ -176,6 +176,8 @@ var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
           interactive: false
         };
       case 'red':
+        console.log("LAYER",feature.geometry.coordinates);
+
         return {
           color: "white",
           weight: lineWeightWave,
@@ -185,6 +187,7 @@ var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
           interactive: false
         };
       case 'orange':
+        console.log(feature);
         return {
           color: "white",
           weight: lineWeightWave,
@@ -220,36 +223,63 @@ var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
 wavesLayer.on('data:loaded', function() {
   console.log("WAVES LOADED");
 
-  wavesLayer.setText('~', {
-    repeat: true,
-    offset: 9,
-    attributes: {
-      fill: RED,
-      'font-weight': 'bold',
-      'font-size': '24',
-      'rotate': 0,
+  wavesLayer.getLayers().forEach(function(layer) {
+    switch (layer.feature.properties.coast_alert_code) {
+      case "red":
+        layer.setText('~', {
+          repeat: true,
+          offset: 9,
+          attributes: {
+            fill: RED,
+            'font-weight': 'bold',
+            'font-size': '24',
+            'rotate': 0,
+          }
+        });
+        break;
+        case "orange":
+        layer.setText('~', {
+          repeat: true,
+          offset: 9,
+          attributes: {
+            fill: ORANGE,
+            'font-weight': 'bold',
+            'font-size': '24',
+            'rotate': 0,
+          }
+        });
+          break;
+        case "green":
+        layer.setText('~', {
+          repeat: true,
+          offset: 9,
+          attributes: {
+            fill: GREEN,
+            'font-weight': 'bold',
+            'font-size': '24',
+            'rotate': 0,
+          }
+        });
+          break;
+      default:
+
     }
+
   });
+  // wavesLayer.getLayers()[0].setText('~', {
+  //   repeat: true,
+  //   offset: 9,
+  //   attributes: {
+  //     fill: RED,
+  //     'font-weight': 'bold',
+  //     'font-size': '24',
+  //     'rotate': 0,
+  //   }
+  // });
 
 });
 
-// Create map and add a default layer to it
-var map = new L.Map('mapid', {
-  center: new L.LatLng(21.463271, -157.969467),
-  zoom: 2,
-  layers: [streets_l]
-});
 
-// Craating panes and assigning zIndex so that Sea Level layer always shows below
-// the waves layer but the labels of the positron maps show all the way on top
-map.createPane('sealevel');
-map.getPane('sealevel').style.zIndex = 399;
-// map.getPane('sealevel').style.pointerEvents = 'none';
-
-map.createPane('labels');
-map.getPane('labels').style.zIndex = 700;
-// Prevent labels from capturing clicks
-map.getPane('labels').style.pointerEvents = 'none';
 
 // Loading the positron map
 // Map and label are separate so that we can put the map labels on top of the
@@ -266,6 +296,25 @@ var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_la
 	});
 
 var positronGroup = L.layerGroup([positron, positronLabels]);
+
+
+// Create map and add a default layer to it
+var map = new L.Map('mapid', {
+  center: new L.LatLng(21.463271, -157.969467),
+  zoom: 3,
+  layers: [streets_s]
+});
+
+// Craating panes and assigning zIndex so that Sea Level layer always shows below
+// the waves layer but the labels of the positron maps show all the way on top
+map.createPane('sealevel');
+map.getPane('sealevel').style.zIndex = 399;
+// map.getPane('sealevel').style.pointerEvents = 'none';
+
+map.createPane('labels');
+map.getPane('labels').style.zIndex = 700;
+// Prevent labels from capturing clicks
+map.getPane('labels').style.pointerEvents = 'none';
 
 // Creating a selection of maps
 // Only one can be active at a time
@@ -346,6 +395,7 @@ function minWaterLevel(traces) {
   }
   return result;
 }
+
 
 function sumTwoArrays(a1, a2) {
   // get indices that have 9999 and give it a value of 0

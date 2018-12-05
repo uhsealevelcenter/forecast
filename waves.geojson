@@ -22,7 +22,7 @@
 },
 "properties": {
   "popupContent": "Can contain some additional info for popups 1",
-  "wave_values": [2,3,4,7,8,7,6,5,4,2,1,2,3,6],
+  "wave_values": [2,1,1,0,0,1,2,1,1,2,1,2,0,2],
   "coast_alert_code": "red"
 },
 "id": "Some Coastline 1 pertitent to waves"
@@ -89,7 +89,7 @@
 "properties": {
 "popupContent": "Can contain some additional info for popups 3",
 "wave_values": [4,6,8,9,2,1,0,4,3,2,3,4,6,3],
-"coast_alert_code": "red"
+"coast_alert_code": "green"
 },
 "id": "Some Coastline 3 pertitent to waves"
 
