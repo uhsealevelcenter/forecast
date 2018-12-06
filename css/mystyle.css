@@ -1,18 +1,23 @@
+
+h1 {
+    color: #ff6f69;
+    text-align: center;
+}
 #mapid {
-    width: 100px;
+    /* width: 100px;
     height:500px;
     min-height: 100%;
     min-width: 100%;
-    display: block;
+    display: block; */
 }
 
-html, body{
+/* html, body{
     height: 100%;
 }
 
 #map-holder{
     height: 100%;
-}
+} */
 
 .fill{
     min-height: 100%;
@@ -21,10 +26,48 @@ html, body{
     max-width: 100%;
 }
 
-.container{
+/* .container{
     max-width:60em;
     padding: 0.2em;
+} */
+
+.container {
+  height: 100%;
+   display: grid;
+   grid-gap: 3px;
+   grid-template-columns: repeat(12, 1fr);
+   grid-template-rows: 500px 500px;
+   grid-template-areas:
+       "l m m m m m m m m m m r"
+       "l g g g g g g g g g g r";
+            }
+.container > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+.left{
+  grid-area: l;
+  align-self: start;
+}
+.mymap{
+  grid-area: m;
+}
+.right{
+  grid-area: r;
+  align-self: start;
+}
+.graph{
+  grid-area: g;
+}
+/* .title{
+grid-column: span 12;
+}
+
+
+.graph{
+  grid-column: span 12;
+} */
 
 .myCSSClass{
   color: pink;
