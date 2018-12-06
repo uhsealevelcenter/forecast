@@ -462,6 +462,17 @@ function getData(feature, layer) {
 
     // Finds the wave layer closest to the clicked location and gets the wave data
     closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
+
+    $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat='+e.latlng.lat+'&lon='+e.latlng.lng, function(data) {
+    //data is the JSON string
+    // console.log("json respom",data.display_name);
+
+    location = data.display_name;
+    popup.setContent(assemblePopup(time, location, sl_alerts))
+});
+    // console.log(e.latlng.lat);
+    // https://nominatim.openstreetmap.org/reverse?format=json&lat=21.2960920&lon=-158.1063080
+
     var wave = closestLayer.layer.feature.properties.wave_values
     plotData(time, tide, msl, wave, location);
     // $('#ifr').contents().find('h1').html('<div> KJDFHSDFKSHFKJSHJKFSDKJFBFKJDKBJ </div>');
@@ -485,7 +496,7 @@ function getData(feature, layer) {
     // popup.setContent(iframe)
 
 
-    popup.setContent(assemblePopup(time, location, sl_alerts))
+
 
   });
 

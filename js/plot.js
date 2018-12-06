@@ -269,7 +269,7 @@ for (var i=0; i<dummy.x.length-1; i++){
       yanchor: "top",
       "orientation": "h",
       x: 0.5,
-      y: 1.2,
+      y: 1.1,
     },
     grid: {
       columns: 20,
