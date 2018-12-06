@@ -114,7 +114,7 @@ for (var i = 0; i<t.length-1; i++){
     y: wave_y,
     warninglevel : [0,1,2,0,2,1,0,1,2,0,2,1,1],
     type: 'scatter',
-    name: 'Wave warning',
+    name: 'WaveWarning',
     mode: "markers",
     line: {
       color: 'rgba(0, 0, 0,0)'
@@ -136,7 +136,7 @@ for (var i = 0; i<t.length-1; i++){
   mode: 'markers',
   type: 'scatter',
   showlegend: false,
-  name: '', // This must be empty string because of the hover listener below
+  name: 'sla_thresh', // This string the one in the hover listener below
   marker: {
     symbol: 'triangle-left',
     size: 28,
@@ -281,7 +281,28 @@ for (var i=0; i<dummy.x.length-1; i++){
     t: 100,
     pad: 4
   },
-  images: wave_array
+  images: wave_array,
+
+  shapes: [
+        // 1st highlight during Feb 4 - Feb 6
+        {
+            type: 'rect',
+            // x-reference is assigned to the x-values
+            xref: 'x',
+            // y-reference is assigned to the plot paper [0,1]
+            yref: 'paper',
+            x0: t[0].split(" ")[0], // taking only date without time to center the shaded area on the hour
+            y0: 0,
+            x1: t[0].split(" ")[0],
+            y1: 1,
+            fillcolor: '#A9A9A9',
+            opacity: 0.2,
+            line: {
+                width: 0
+            }
+        },
+      ]
+
 
   // annotations: [
   //   {
@@ -359,6 +380,15 @@ for (var i=0; i<dummy.x.length-1; i++){
   //   ]
   };
 
+  // // update only values within nested objects
+  // var update = {
+  //     // title: 'some new title', // updates the title
+  //     // 'xaxis.range': [0, 5],   // updates the xaxis range
+  //     // 'yaxis.range[1]': 15     // updates the end of the yaxis range
+  //     shapes:[
+  //       {fillcolor: 'red'}
+  //     ]
+  // };
 
   // Creating a minimum horizontal line to fill the graph to
   traceMin.y = minWaterLevel([trace1, trace2]);
@@ -368,33 +398,105 @@ for (var i=0; i<dummy.x.length-1; i++){
   var myPlot = document.getElementById('myDiv');
 
   myPlot.on('plotly_hover', function(data){
-    data.points.forEach(function(p) {
-      // Isolating only arrow based on hover name, which is an empty string
-      if(p.data.name===""){
+    data.points.map(function(d){
+
+      if(d.data.name==="WaveWarning"){
+        //restyling plot, that is, showing the horizontal line tresholds
+        // console.log("The entire thing", d);
+        // console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
+        // console.log("Beginning", d.data.x[d.pointIndex].split(" ")[0]);
+        // console.log("index",d.data.x[d.pointIndex+1]);
+        // console.log("End", d.data.x[d.pointIndex+1].split(" ")[0]);
+        myPlot.layout.shapes[0].fillcolor= 'red';
+        // myPlot.layout.shapes[0].x0= d.data.x[d.pointIndex].split(" ")[0];
+        // myPlot.layout.shapes[0].x1= d.data.x[d.pointIndex+1].split(" ")[0];
+        // myPlot.layout.shapes[0].x1= 'red';
+        var update_lay ={
+          shapes:[
+            {
+                type: 'rect',
+                // x-reference is assigned to the x-values
+                xref: 'x',
+                // y-reference is assigned to the plot paper [0,1]
+                yref: 'paper',
+                x0: d.data.x[d.pointIndex].split(" ")[0], // taking only date without time to center the shaded area on the hour
+                y0: 0,
+                x1: d.data.x[d.pointIndex+1].split(" ")[0],
+                y1: 1,
+                fillcolor: '#A9A9A9',
+                opacity: 0.2,
+                line: {
+                    width: 0
+                }
+
+          }
+        ]
+        };
+        Plotly.relayout(myPlot, update_lay);
+        updateCoastWarnings(d.pointIndex);
+      // Plotly.relayout(myPlot, update);
+
+      }
+      if(d.data.name==="sla_thresh"){
         //restyling plot, that is, showing the horizontal line tresholds
         Plotly.restyle(myPlot, {
           visible: true
       }, [5]);
-      }
 
-	  });
+      // Plotly.relayout(myPlot, update);
+
+      }
+    });
+
+    // data.points.forEach(function(p) {
+    //   console.log("HOVERED ON", p.x);
+    //   // Isolating only arrow based on hover name, which is an empty string
+    //   myPlot.layout.shapes[0].fillcolor= 'red';
+    //   if(p.data.name==="sla_thresh"){
+    //     //restyling plot, that is, showing the horizontal line tresholds
+    //     Plotly.restyle(myPlot, {
+    //       visible: true
+    //   }, [5]);
+    //
+    //   // Plotly.relayout(myPlot, update);
+    //
+    //   }
+    //
+	  // });
 
 
    //  var infotext = data.points.map(function(d){
    //   console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
    // });
 })
- .on('plotly_unhover', function(data){
-   data.points.forEach(function(p) {
-     // Isolating only arrow based on hover name, which is an empty string
-     if(p.data.name===""){
-       //restyling plot, that is, removing the horizontal line tresholds
+ myPlot.on('plotly_unhover', function(data){
+   data.points.map(function(d){
+     console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
+
+     myPlot.layout.shapes[0].fillcolor= '#A9A9A9';
+     if(d.data.name==="sla_thresh"){
+       //restyling plot, that is, showing the horizontal line tresholds
        Plotly.restyle(myPlot, {
          visible: false
      }, [5]);
-     }
 
+     // Plotly.relayout(myPlot, update);
+
+     }
    });
+   // data.points.forEach(function(p) {
+   //   // Isolating only arrow based on hover name, which is an empty string
+   //   myPlot.layout.shapes[0].fillcolor= '#A9A9A9';
+   //   if(p.data.name===""){
+   //     //restyling plot, that is, removing the horizontal line tresholds
+   //     Plotly.restyle(myPlot, {
+   //       visible: false
+   //   }, [5]);
+   //
+   //
+   //   }
+   //
+   // });
 });
   // To make Graph responsive:
 //   window.onresize = function() {

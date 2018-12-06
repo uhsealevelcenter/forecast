@@ -143,8 +143,8 @@ coastalWarningsLayer.on('data:loaded', function() {
   allPulsesGroup = L.layerGroup(markers);
   allPulsesGroup.addTo(map);
 
-// When a pulsating circle is clicked fly to the location of the circle,
-// remove the pulsating layer and show only LineString features after 3 seconds
+  // When a pulsating circle is clicked fly to the location of the circle,
+  // remove the pulsating layer and show only LineString features after 3 seconds
   allPulsesGroup.eachLayer(function(layer) {
     layer.on('click', function() {
       console.log("Clik " + this._latlng);
@@ -176,7 +176,7 @@ var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
           interactive: false
         };
       case 'red':
-        console.log("LAYER",feature.geometry.coordinates);
+        console.log("LAYER", feature.geometry.coordinates);
 
         return {
           color: "white",
@@ -237,7 +237,7 @@ wavesLayer.on('data:loaded', function() {
           }
         });
         break;
-        case "orange":
+      case "orange":
         layer.setText('~', {
           repeat: true,
           offset: 9,
@@ -248,8 +248,8 @@ wavesLayer.on('data:loaded', function() {
             'rotate': 0,
           }
         });
-          break;
-        case "green":
+        break;
+      case "green":
         layer.setText('~', {
           repeat: true,
           offset: 9,
@@ -260,7 +260,7 @@ wavesLayer.on('data:loaded', function() {
             'rotate': 0,
           }
         });
-          break;
+        break;
       default:
 
     }
@@ -291,9 +291,9 @@ var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/
 });
 
 var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
-		attribution: cartodbAttribution,
-		pane: 'labels'
-	});
+  attribution: cartodbAttribution,
+  pane: 'labels'
+});
 
 var positronGroup = L.layerGroup([positron, positronLabels]);
 
@@ -343,6 +343,18 @@ function showCoastWarnings() {
 
 }
 
+function updateCoastWarnings(dayIndex) {
+  coastalWarningsLayer.eachLayer(function(featureInstancelayer) {
+
+    propertyValue = featureInstancelayer.feature.properties.alert_sealevel[dayIndex];
+
+    featureInstancelayer.setStyle({
+      color: propertyValue,
+    });
+  });
+  console.log("UPDATE WARNINGS");
+}
+
 // Create an instance of Map Controller which controls the display and removal
 // of pulsating warning and coastal data based on the map zoom level
 var myMapController = new MapController(map);
@@ -365,14 +377,14 @@ function minWaterLevel(traces) {
   arr0 = traces[0].y.slice();
   arr1 = traces[1].y.slice();
   // get indices that have "_NaN_" values (generated in python script for missing data)
-  nans_indices_arr1 = getAllIndexes(arr0,"_NaN_");
-  nans_indices_arr2 = getAllIndexes(arr1,"_NaN_");
+  nans_indices_arr1 = getAllIndexes(arr0, "_NaN_");
+  nans_indices_arr2 = getAllIndexes(arr1, "_NaN_");
   // Give a high value to data at NaN indices so that a comparison between the two
   // arrays can be made. Because of the Math.min() the 9999 data will be excluded
-  for (i=0; i<nans_indices_arr1.length; i++){
+  for (i = 0; i < nans_indices_arr1.length; i++) {
     arr0[nans_indices_arr1[i]] = 9999;
   }
-  for (i=0; i<nans_indices_arr2.length; i++){
+  for (i = 0; i < nans_indices_arr2.length; i++) {
     arr1[nans_indices_arr2[i]] = 9999;
   }
 
@@ -387,10 +399,10 @@ function minWaterLevel(traces) {
 
   // Put the "_NaN_" data back where it originally was because of one of the entries
   // was NaN then total water level and wave levels cannot be calculated
-  for (i=0; i<nans_indices_arr1.length; i++){
+  for (i = 0; i < nans_indices_arr1.length; i++) {
     result[nans_indices_arr1[i]] = "_NaN_";
   }
-  for (i=0; i<nans_indices_arr2.length; i++){
+  for (i = 0; i < nans_indices_arr2.length; i++) {
     result[nans_indices_arr2[i]] = "_NaN_";
   }
   return result;
@@ -399,12 +411,12 @@ function minWaterLevel(traces) {
 
 function sumTwoArrays(a1, a2) {
   // get indices that have 9999 and give it a value of 0
-  nans_indices_a1 = getAllIndexes(a1,9999);
-  nans_indices_a2 = getAllIndexes(a2,9999);
-  for (i=0; i<nans_indices_a1.length; i++){
+  nans_indices_a1 = getAllIndexes(a1, 9999);
+  nans_indices_a2 = getAllIndexes(a2, 9999);
+  for (i = 0; i < nans_indices_a1.length; i++) {
     a1[i] = 0;
   }
-  for (i=0; i<nans_indices_a2.length; i++){
+  for (i = 0; i < nans_indices_a2.length; i++) {
     a2[i] = 0;
   }
 
@@ -414,11 +426,12 @@ function sumTwoArrays(a1, a2) {
 }
 
 function getAllIndexes(arr, val) {
-    var indexes = [], i;
-    for(i = 0; i < arr.length; i++)
-        if (arr[i] === val)
-            indexes.push(i);
-    return indexes;
+  var indexes = [],
+    i;
+  for (i = 0; i < arr.length; i++)
+    if (arr[i] === val)
+      indexes.push(i);
+  return indexes;
 }
 
 var closestLayer = null;
@@ -485,6 +498,6 @@ function assemblePopup(t, l, alert) {
 }
 
 
-String.prototype.replaceAt=function(index, replacement) {
-    return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
+String.prototype.replaceAt = function(index, replacement) {
+  return this.substr(0, index) + replacement + this.substr(index + replacement.length);
 }
