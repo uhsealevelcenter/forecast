@@ -53,7 +53,7 @@ var allPulsesGroup = {};
 // encoded in LineString
 // The file also contains Points which serve to show the pulsating warning
 // signals when the map is zoomed out
-var coastalWarningsLayer = new L.GeoJSON.AJAX("PacificTest.geojson", {
+var coastalWarningsLayer = new L.GeoJSON.AJAX("TestCSVtoGeojson.json", {
   onEachFeature: getData,
   // Styling each GeoJSON LineString feature based on the
   // properties.coast_alert_code attribute
@@ -299,7 +299,7 @@ var positronGroup = L.layerGroup([positron, positronLabels]);
 
 
 // Create map and add a default layer to it
-var map = new L.Map('mapid', {
+var map = new L.Map('mapid' , {
   center: new L.LatLng(21.463271, -157.969467),
   zoom: 3,
   layers: [streets_s]
@@ -468,13 +468,14 @@ function getData(feature, layer) {
     // console.log("json respom",data.display_name);
 
     location = data.display_name;
+    var wave = closestLayer.layer.feature.properties.wave_values
+    plotData(time, tide, msl, wave, location);
     popup.setContent(assemblePopup(time, location, sl_alerts))
 });
     // console.log(e.latlng.lat);
     // https://nominatim.openstreetmap.org/reverse?format=json&lat=21.2960920&lon=-158.1063080
 
-    var wave = closestLayer.layer.feature.properties.wave_values
-    plotData(time, tide, msl, wave, location);
+
     // $('#ifr').contents().find('h1').html('<div> KJDFHSDFKSHFKJSHJKFSDKJFBFKJDKBJ </div>');
     // popup.setContent('<iframe id="ifr" src="./myPopup.html"></iframe>');
     // var iframe = document.createElement('iframe');

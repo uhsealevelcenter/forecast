@@ -96,7 +96,7 @@ for( var j = 0; j < tide.length-1; j++){
 }
 
 // Find the max water level and an arbitrary value. This is the height at which
-// wave images will be plotted at this height
+// wave images will be plotted
 var maxWaterLevel = Math.max.apply(Math, nonan)+15;
 
 // create an empty array populated with the same height for every point
@@ -227,7 +227,7 @@ for (var i=0; i<dummy.x.length-1; i++){
       "source": source,
       "xref": "x",
       "yref": "y",
-      "x": dummy.x[i],
+      "x": dummy.x[i].split(" ")[0]+" 12:00", // taking only date and adding noon to center wave icons in the middle of the day,
       "y": maxWaterLevel,
       "sizex": 1*24*60*60*1000,
       "sizey": 6,

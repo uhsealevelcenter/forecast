@@ -38,7 +38,7 @@ h1 {
    grid-template-columns: repeat(12, 1fr);
    grid-template-rows: 500px 500px;
    grid-template-areas:
-       "l m m m m m m m m m m r"
+       "m m m m m m m m m m m m"
        "l g g g g g g g g g g r";
             }
 .container > div {
