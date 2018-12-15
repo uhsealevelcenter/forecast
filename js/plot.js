@@ -1,4 +1,4 @@
-function plotData(t, tide, msl, wav, name) {
+function plotData(t, tide, msl_obs, msl_for, wav, name) {
   var trace1 = {
     x: t,
     y: tide,
@@ -14,8 +14,21 @@ function plotData(t, tide, msl, wav, name) {
   };
 
   // This is a trace place holder. Its y array is populated by finding the absolute
-  // minimum in the tide (trace1) and msl (trace2). The array length is preserved
+  // minimum in the tide (trace1) and msl_obs (trace2). The array length is preserved
   var traceMin = {
+    x: t,
+    y: [],
+    mode: "lines",
+    name: 'Test',
+    type: 'scatter',
+    line: {
+      color: 'rgba(0,0,0,0)'
+    },
+    // fill: 'tozeroy'
+    hoverinfo: 'skip',
+    showlegend: false
+  };
+  var traceMin2 = {
     x: t,
     y: [],
     mode: "lines",
@@ -30,12 +43,30 @@ function plotData(t, tide, msl, wav, name) {
   };
   var trace2 = {
     x: t,
-    y: msl,
+    y: msl_obs,
     type: 'scatter',
-    name: 'Sea Level',
+    name: 'Sea Level Observation',
     mode: "lines",
     line: {
       color: 'rgb(86, 180, 233)'
+    },
+    fill: 'tonexty',
+    // error_y: {
+    //   type: 'data',
+    //   array: [1, 2, 3, 1, 2, 3, 2, 1, 0.5, 2, 3, 4, 1, 2],
+    //   visible: true
+    // },
+  };
+
+  var msl_for_trace = {
+    x: t,
+    y: msl_for,
+    type: 'scatter',
+    name: 'Sea Level Forecast',
+    mode: "lines",
+    line: {
+      color: 'red', //rgb(86, 180, 233)
+      dash: 'dashdot'
     },
     fill: 'tonexty',
     // error_y: {
@@ -49,7 +80,7 @@ function plotData(t, tide, msl, wav, name) {
   // // plus the error bars
   // var trace3 = {
   //   x: t,
-  //   y: sumTwoArrays(wav,msl),
+  //   y: sumTwoArrays(wav,msl_obs),
   //   type: 'scatter',
   //   name: 'Waves',
   //   mode: 'none',
@@ -67,7 +98,7 @@ function plotData(t, tide, msl, wav, name) {
   // // Total water level line
   // var trace4 = {
   //   x: t,
-  //   y: sumTwoArrays(wav,msl),
+  //   y: sumTwoArrays(wav,msl_obs),
   //   mode: "lines",
   //   name: 'Total Water Level',
   //   type: 'scatter',
@@ -79,14 +110,14 @@ function plotData(t, tide, msl, wav, name) {
   //   // fill: 'tozeroy'
   // };
 
-  // var mymaxVal = maxWaterLevel(tide,msl);
+  // var mymaxVal = maxWaterLevel(tide,msl_obs);
   // console.log("Max Value", mymaxVal);
 
 // Get both tides and mean sea level values that don't have _NaN_
   var nonan = []
-  for( var i = 0; i < msl.length-1; i++){
-   if ( msl[i] !== "_NaN_") {
-       nonan.push(msl[i]);
+  for( var i = 0; i < msl_obs.length-1; i++){
+   if ( msl_obs[i] !== "_NaN_") {
+       nonan.push(msl_obs[i]);
    }
 }
 for( var j = 0; j < tide.length-1; j++){
@@ -392,8 +423,11 @@ for (var i=0; i<dummy.x.length-1; i++){
 
   // Creating a minimum horizontal line to fill the graph to
   traceMin.y = minWaterLevel([trace1, trace2]);
+  traceMin2.y = minWaterLevel([trace1, msl_for_trace]);
+// traceMin.y=[-15.8548230508374, -15.8548230508374, -15.8548230508374, -15.8548230508374, -15.8548230508374, -15.8548230508374,-15.8548230508374];
+//   console.log("traceMin", traceMin.y);
   // var data = [traceMin, trace2, trace3, trace1, trace4, sla_thresh,tot_thresh, sla_thresh_line, tot_thresh_line];
-  var data = [traceMin, trace2, trace1, sla_thresh, dummy, sla_thresh_line];
+  var data = [traceMin, trace2, traceMin2, msl_for_trace, trace1, sla_thresh, dummy, sla_thresh_line];
   Plotly.newPlot('myDiv', data, layout);
   var myPlot = document.getElementById('myDiv');
 
@@ -441,7 +475,7 @@ for (var i=0; i<dummy.x.length-1; i++){
         //restyling plot, that is, showing the horizontal line tresholds
         Plotly.restyle(myPlot, {
           visible: true
-      }, [5]);
+      }, [6]);
 
       // Plotly.relayout(myPlot, update);
 
@@ -478,7 +512,7 @@ for (var i=0; i<dummy.x.length-1; i++){
        //restyling plot, that is, showing the horizontal line tresholds
        Plotly.restyle(myPlot, {
          visible: false
-     }, [5]);
+     }, [6]);
 
      // Plotly.relayout(myPlot, update);
 

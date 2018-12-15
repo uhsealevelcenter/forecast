@@ -376,9 +376,13 @@ function minWaterLevel(traces) {
   // get the y array of the data of the two traces we are comparing
   arr0 = traces[0].y.slice();
   arr1 = traces[1].y.slice();
+
+  console.log("arr0", arr0);
+  console.log("arr1", arr1);
   // get indices that have "_NaN_" values (generated in python script for missing data)
   nans_indices_arr1 = getAllIndexes(arr0, "_NaN_");
   nans_indices_arr2 = getAllIndexes(arr1, "_NaN_");
+
   // Give a high value to data at NaN indices so that a comparison between the two
   // arrays can be made. Because of the Math.min() the 9999 data will be excluded
   for (i = 0; i < nans_indices_arr1.length; i++) {
@@ -387,6 +391,7 @@ function minWaterLevel(traces) {
   for (i = 0; i < nans_indices_arr2.length; i++) {
     arr1[nans_indices_arr2[i]] = 9999;
   }
+
 
   //Find a minimum value between the two arrays
   var minVal = Math.min(Math.min.apply(null, arr0), Math.min.apply(null, arr1));
@@ -440,7 +445,8 @@ function getData(feature, layer) {
 
   var time = feature.properties.time_vector;
   var tide = feature.properties.tide_values;
-  var msl = feature.properties.sealevel_values;
+  var msl_obs = feature.properties.sealevel_obs;
+  var msl_for = feature.properties.sealevel_for;
   var location = feature.id;
   var sl_alerts = feature.properties.alert_sealevel;
   // var wave = [17,18,19,20,18,17,16,15,16,17,18,15,16,17]
@@ -450,7 +456,7 @@ function getData(feature, layer) {
   // layer.bindPopup('<iframe id="ifr" src="./myPopup.html"></iframe>');
   // $('#ifr').contents().find('body').find('h1').innerText = "NEMA"
   // layer.bindPopup()
-  // console.log(time);
+
   var popup = new L.Popup();
 
   layer.bindPopup(popup);
@@ -469,7 +475,7 @@ function getData(feature, layer) {
 
     location = data.display_name;
     var wave = closestLayer.layer.feature.properties.wave_values
-    plotData(time, tide, msl, wave, location);
+    plotData(time, tide, msl_obs, msl_for, wave, location);
     popup.setContent(assemblePopup(time, location, sl_alerts))
 });
     // console.log(e.latlng.lat);
