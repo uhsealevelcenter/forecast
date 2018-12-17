@@ -1,4 +1,4 @@
-function plotData(t, tide, msl_obs, msl_for, wav, name) {
+function plotData(t, tide, msl_obs, msl_for, wav, extremeH, name) {
   var trace1 = {
     x: t,
     y: tide,
@@ -65,7 +65,7 @@ function plotData(t, tide, msl_obs, msl_for, wav, name) {
     name: 'Sea Level Forecast',
     mode: "lines",
     line: {
-      color: 'red', //rgb(86, 180, 233)
+      color: 'rgb(86, 180, 233)',
       dash: 'dashdot'
     },
     fill: 'tonexty',
@@ -113,15 +113,15 @@ function plotData(t, tide, msl_obs, msl_for, wav, name) {
   // var mymaxVal = maxWaterLevel(tide,msl_obs);
   // console.log("Max Value", mymaxVal);
 
-// Get both tides and mean sea level values that don't have _NaN_
+// Get both tides and mean sea level values that don't have ""
   var nonan = []
   for( var i = 0; i < msl_obs.length-1; i++){
-   if ( msl_obs[i] !== "_NaN_") {
+   if ( msl_obs[i] !== "") {
        nonan.push(msl_obs[i]);
    }
 }
 for( var j = 0; j < tide.length-1; j++){
-  if ( tide[j] !== "_NaN_") {
+  if ( tide[j] !== "") {
    nonan.push(tide[j]);
    }
 }
@@ -162,8 +162,9 @@ for (var i = 0; i<t.length-1; i++){
   // replaceAt replace string at the specified indexOf, we are looking for index
   // of the second to last character in the string, which is time and we replace
   // it with 23 hrs so that the arrow marker is pushed to the right a little
-  x: [t.slice(-1)[0].replaceAt(t.slice(-1)[0].indexOf(t.slice(-1)[0].slice(-2)), "23:59")],
-  y: [10],
+  // x: [t.slice(-1)[0].replaceAt(t.slice(-1)[0].indexOf(t.slice(-1)[0].slice(-2)), "23:59")],
+  x: t.slice(-1),
+  y: [extremeH],
   mode: 'markers',
   type: 'scatter',
   showlegend: false,
@@ -193,6 +194,7 @@ var sla_thresh_line = {
   },
 
 }
+
 
 // var tot_thresh = {
 // // t.slice(-1)[0] gets the last date/time in the t time_vector
@@ -422,8 +424,19 @@ for (var i=0; i<dummy.x.length-1; i++){
   // };
 
   // Creating a minimum horizontal line to fill the graph to
-  traceMin.y = minWaterLevel([trace1, trace2]);
-  traceMin2.y = minWaterLevel([trace1, msl_for_trace]);
+  var minVal = Math.min(Math.min(Math.min.apply(null, trace1.y.slice()), Math.min.apply(null, trace2.y.slice())),Math.min.apply(null, msl_for_trace.y.slice()));
+
+  traceMin.y = minWaterLevel(trace2, minVal);
+  traceMin2.y = minWaterLevel( msl_for_trace, minVal);
+  if(traceMin.y.every(isEmpty)){
+    traceMin = {};
+    trace2 = {};
+  }
+  if(traceMin2.y.every(isEmpty)){
+    traceMin2 = {};
+    msl_for_trace = {};
+  }
+
 // traceMin.y=[-15.8548230508374, -15.8548230508374, -15.8548230508374, -15.8548230508374, -15.8548230508374, -15.8548230508374,-15.8548230508374];
 //   console.log("traceMin", traceMin.y);
   // var data = [traceMin, trace2, trace3, trace1, trace4, sla_thresh,tot_thresh, sla_thresh_line, tot_thresh_line];
@@ -436,15 +449,8 @@ for (var i=0; i<dummy.x.length-1; i++){
 
       if(d.data.name==="WaveWarning"){
         //restyling plot, that is, showing the horizontal line tresholds
-        // console.log("The entire thing", d);
-        // console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
-        // console.log("Beginning", d.data.x[d.pointIndex].split(" ")[0]);
-        // console.log("index",d.data.x[d.pointIndex+1]);
-        // console.log("End", d.data.x[d.pointIndex+1].split(" ")[0]);
-        myPlot.layout.shapes[0].fillcolor= 'red';
-        // myPlot.layout.shapes[0].x0= d.data.x[d.pointIndex].split(" ")[0];
-        // myPlot.layout.shapes[0].x1= d.data.x[d.pointIndex+1].split(" ")[0];
-        // myPlot.layout.shapes[0].x1= 'red';
+
+        // myPlot.layout.shapes[0].fillcolor= 'red';
         var update_lay ={
           shapes:[
             {
@@ -475,7 +481,7 @@ for (var i=0; i<dummy.x.length-1; i++){
         //restyling plot, that is, showing the horizontal line tresholds
         Plotly.restyle(myPlot, {
           visible: true
-      }, [6]);
+      }, [7]);
 
       // Plotly.relayout(myPlot, update);
 
@@ -505,14 +511,14 @@ for (var i=0; i<dummy.x.length-1; i++){
 })
  myPlot.on('plotly_unhover', function(data){
    data.points.map(function(d){
-     console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
+     // console.log (d.data.name+': x= '+d.x+', y= '+d.y.toPrecision(3));
 
      myPlot.layout.shapes[0].fillcolor= '#A9A9A9';
      if(d.data.name==="sla_thresh"){
        //restyling plot, that is, showing the horizontal line tresholds
        Plotly.restyle(myPlot, {
          visible: false
-     }, [6]);
+     }, [7]);
 
      // Plotly.relayout(myPlot, update);
 
@@ -539,4 +545,8 @@ for (var i=0; i<dummy.x.length-1; i++){
 //     height: 0.9 * window.innerHeight
 //   })
 // }
+}
+
+function isEmpty(currentValue) {
+  return currentValue == "";
 }

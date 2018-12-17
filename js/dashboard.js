@@ -371,44 +371,18 @@ function stackedArea(traces) {
   return traces;
 }
 
-function minWaterLevel(traces) {
+function minWaterLevel(tracer, minLevel) {
   result = [];
-  // get the y array of the data of the two traces we are comparing
-  arr0 = traces[0].y.slice();
-  arr1 = traces[1].y.slice();
+  // get the y array of the data of the tracer we are comparing
+  arr0 = tracer.y.slice();
 
-  console.log("arr0", arr0);
-  console.log("arr1", arr1);
-  // get indices that have "_NaN_" values (generated in python script for missing data)
-  nans_indices_arr1 = getAllIndexes(arr0, "_NaN_");
-  nans_indices_arr2 = getAllIndexes(arr1, "_NaN_");
-
-  // Give a high value to data at NaN indices so that a comparison between the two
-  // arrays can be made. Because of the Math.min() the 9999 data will be excluded
-  for (i = 0; i < nans_indices_arr1.length; i++) {
-    arr0[nans_indices_arr1[i]] = 9999;
-  }
-  for (i = 0; i < nans_indices_arr2.length; i++) {
-    arr1[nans_indices_arr2[i]] = 9999;
-  }
-
-
-  //Find a minimum value between the two arrays
-  var minVal = Math.min(Math.min.apply(null, arr0), Math.min.apply(null, arr1));
-  // Create an array of copies of minimum values in the length of the shorter of the two arrays
-  // Maybe it should be in the length of the longer of the two arrays???
-  for (var j = 0; j < (Math.min(arr0.length, arr1.length)); j++) {
+  for (var j = 0; j < arr0.length; j++) {
     // traces['y'][j] = minVal;
-    result.push(minVal)
-  }
-
-  // Put the "_NaN_" data back where it originally was because of one of the entries
-  // was NaN then total water level and wave levels cannot be calculated
-  for (i = 0; i < nans_indices_arr1.length; i++) {
-    result[nans_indices_arr1[i]] = "_NaN_";
-  }
-  for (i = 0; i < nans_indices_arr2.length; i++) {
-    result[nans_indices_arr2[i]] = "_NaN_";
+    if(typeof arr0[j] == 'number')
+      result.push(minLevel);
+    else {
+      result.push("");
+    }
   }
   return result;
 }
@@ -449,6 +423,7 @@ function getData(feature, layer) {
   var msl_for = feature.properties.sealevel_for;
   var location = feature.id;
   var sl_alerts = feature.properties.alert_sealevel;
+  var extremeHigh = feature.properties.extreme_high;
   // var wave = [17,18,19,20,18,17,16,15,16,17,18,15,16,17]
 
   // layer.bindPopup('<h2>' +location + '</h2> <br>'+feature.properties.alert_sealevel+'<br>'+time);
@@ -475,7 +450,7 @@ function getData(feature, layer) {
 
     location = data.display_name;
     var wave = closestLayer.layer.feature.properties.wave_values
-    plotData(time, tide, msl_obs, msl_for, wave, location);
+    plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
     popup.setContent(assemblePopup(time, location, sl_alerts))
 });
     // console.log(e.latlng.lat);
