@@ -347,9 +347,23 @@ function updateCoastWarnings(dayIndex) {
   coastalWarningsLayer.eachLayer(function(featureInstancelayer) {
 
     propertyValue = featureInstancelayer.feature.properties.alert_sealevel[dayIndex];
+    var newColor = null;
+    switch (propertyValue) {
+      case "green":
+      newColor = GREEN;
+        break;
+      case "orange":
+      newColor = ORANGE;
+        break;
+      case "red":
+      newColor = RED;
+        break;
+      default:
+      newColor = GREEN;
 
+    }
     featureInstancelayer.setStyle({
-      color: propertyValue,
+      color: newColor,
     });
   });
   console.log("UPDATE WARNINGS");
