@@ -15,7 +15,7 @@
 </head>
 
 <body>
-<h1>Dashboard Prototype</h1>
+<!-- <h1>Dashboard Prototype</h1> -->
   <div class="container">
 
 
@@ -26,11 +26,24 @@
 
         <!-- <div id="map-holder"> -->
           <!-- <div class="fill"> -->
-          <div class="left"> LEFT CONTENT</div>
-            <div class ="mymap" id="mapid"></div>
+          <!-- <div class="left"> LEFT CONTENT</div> -->
+            <div class ="mymap mymap-container" id="mapid">
+              <div class="item1 smallBoxStyle" ><!--<span class='close'>x</span>--><h3>ISLAND</h3><p style="font-style: italic;">Choose from map</p></div>
+              <div class="item2 smallBoxStyle"><span class='close'>x</span><h3>COASTLINE</h3><p style="font-style: italic;">Choose from map</p></div>
+              <div class="item3"><span class='close'>x</span><h3>ITEM3</h3>ITEM3 CONTENT</div>
+              <div class="item4"><span class='close'>x</span><h3>ITEM4</h3>ITEM4 CONTENT</div>
+              <div id="alertlegend">
+                <h3 style="padding-left:25px;">ALERT LEVEL</h3>
+                <ul>
+                <li><span>Typical or below</span></li>
+                <li><span>Moderate high</span></li>
+                <li><span>Extreme high</span></li>
+              </ul>
+              </div>
+            </div>
           <!-- </div> -->
         <!-- </div> -->
-        <div class="right"> RIGHT CONTENT</div>
+        <!-- <div class="right"> RIGHT CONTENT</div> -->
           <div class="graph" id="myDiv">
             <!-- Plotly chart will be drawn inside this DIV -->
           </div>
