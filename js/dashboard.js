@@ -472,6 +472,33 @@ function getData(feature, layer) {
 
             // Remove plotting for now
             // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
+            console.log("LOCATION: ", location);
+            $('.item2').children('p').text(location);
+            $(".item3").show();
+
+            //clear the table
+            $('#datatable tr:has(td)').remove();
+            for (var i = 0; i < 7; i++) {
+              console.log("counter", i);
+                $('#datatable').append(
+                    $('<tr>').append(
+                        $('<td>').append(i+"tide"
+                            // $('').attr('href', 'https://www.google.com')
+                            // .addClass('selectRow')
+                            // .text(i+"N")
+                        ),
+                        $('<td>').append(i+"wave"
+                            // $('<a>').attr('href', 'https://www.blic.rs')
+                            // .addClass('imgurl')
+                            // .attr('target', '_blank')
+                            // .text(i+"K")
+                        ),
+                        $('<td>').append(i+"day"),
+                        $('<td>').append(i+"date")
+                    )
+                );
+            }
+
             popup.setContent(assemblePopup(time, location, sl_alerts))
         });
         // console.log(e.latlng.lat);
@@ -504,12 +531,11 @@ function getData(feature, layer) {
     });
 
 };
-// window.onload = function(){
-//     document.getElementById('close').onclick = function(){
-//         // $(".item4").hide();
-//         $('.item4').hide();
-//     };
-// };
+$(document).ready(function(){
+    $("#datatable").delegate("tr", "click", function(){
+        $(".item4").show();
+    });
+});
 var theParent = document.getElementById("mapid");
 theParent.addEventListener("click", closeBox, false);
 

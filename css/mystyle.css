@@ -133,7 +133,7 @@ h1 {
   display: grid;
   grid-gap: 20px;
   padding: 20px;
-  grid-template-columns: 25% 25% 35%;
+  grid-template-columns: 20% 30% 35%;
   grid-template-rows: 70px 70px 70px 70px;
 }
 .right{
@@ -158,6 +158,29 @@ grid-column: span 12;
 .graph{
   grid-column: span 12;
 } */
+
+table,
+th,
+td {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+  padding: 7px;
+  text-align:center;
+}
+
+table {
+  margin-left: 13px;
+  width: 90%;
+}
+
+th {
+  height: 20px;
+}
+
+tr:hover {
+  background-color: #ffff99;
+}
+
 
 .myCSSClass{
   color: pink;
