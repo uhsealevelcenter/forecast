@@ -6,6 +6,7 @@ var ORANGE = "#FF9A00";
 var RED = "#FF310D";
 var BLACK = "#000000";
 var WHITE = "#FFFFFF";
+// var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 // var states = L.esri.featureLayer({
 //   url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3",
 //   style: function(feature) {
@@ -53,13 +54,13 @@ var allPulsesGroup = {};
 // encoded in LineString
 // The file also contains Points which serve to show the pulsating warning
 // signals when the map is zoomed out
-var coastalWarningsLayer = new L.GeoJSON.AJAX("TestCSVtoGeojson.json", {
+var coastalWarningsLayer = new L.GeoJSON.AJAX("TestWaveForecast.geojson", {
     onEachFeature: getData,
     // Styling each GeoJSON LineString feature based on the
     // properties.coast_alert_code attribute
     style: function(feature) {
-        switch (feature.properties.coast_alert_code) {
-            case 'green':
+        switch (feature.properties.sl_component.sea_level_forecast[8]) {
+            case 0:
                 return {
                     color: GREEN,
                     weight: lineWeight,
@@ -68,7 +69,7 @@ var coastalWarningsLayer = new L.GeoJSON.AJAX("TestCSVtoGeojson.json", {
                     lineJoin: 'round',
                     pane: 'sealevel'
                 };
-            case 'red':
+            case 2:
                 return {
                     color: RED,
                     weight: lineWeight,
@@ -77,7 +78,7 @@ var coastalWarningsLayer = new L.GeoJSON.AJAX("TestCSVtoGeojson.json", {
                     lineJoin: 'round',
                     pane: 'sealevel'
                 };
-            case 'orange':
+            case 1:
                 return {
                     color: ORANGE,
                     weight: lineWeight,
@@ -86,34 +87,23 @@ var coastalWarningsLayer = new L.GeoJSON.AJAX("TestCSVtoGeojson.json", {
                     lineJoin: 'round',
                     pane: 'sealevel'
                 };
-            case 'yellow':
-                return {
-                    color: YELLOW,
-                    weight: lineWeight,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    pane: 'sealevel'
-                };
+
         }
     },
     // Styling each GeoJSON Point feature based on the
-    // properties.region_alert_code attribute so that we can have pulsating alerts
+    // properties.islandwide_wave_alert_code attribute so that we can have pulsating alerts
     // when the map is zoomed out
     pointToLayer: function(feature, latlng) {
         var alColor = {};
-        switch (feature.properties.region_alert_code) {
-            case 'green':
+        switch (feature.properties.region_master_alert_code) {
+            case 0:
                 alColor = GREEN;
                 break;
-            case 'red':
+            case 2:
                 alColor = RED;
                 break;
-            case 'orange':
+            case 1:
                 alColor = ORANGE;
-                break;
-            case 'yellow':
-                alColor = YELLOW;
                 break;
         }
         // create a pulse icon
@@ -132,6 +122,11 @@ var coastalWarningsLayer = new L.GeoJSON.AJAX("TestCSVtoGeojson.json", {
         // displayed below
         markers.push(mark);
     },
+
+    // filter: function(feature, layer) {
+    //   console.log("NEMANJA", feature.properties.show_on_map);
+    //     return feature.properties.show_on_map;
+    // }
 
 });
 
@@ -165,60 +160,89 @@ coastalWarningsLayer.on('data:loading', function() {
     console.log("Loading");
 });
 
+
+// var myTest = $.getJSON( "forecast_wave_component_quasigeo.json", function( data ) {
+//   var items = [];
+//   $.each( data, function( key, val ) {
+//     console.log(val);
+//     items.push(val);
+//   });
+//   return items;
+// }).done(function() {
+//     console.log( "second success" );
+//   })
+//   .fail(function() {
+//     console.log( "error" );
+//   })
+//   .always(function() {
+//     console.log( "complete" );
+//   });
+
 // loads in a wave geojson file and styles the Leaflet layer based on
 // the properties.coast_alert_code attribute
-var wavesLayer = new L.GeoJSON.AJAX("waves.geojson", {
-    style: function(feature) {
-        switch (feature.properties.coast_alert_code) {
-            case 'green':
-                return {
-                    color: "white",
-                    weight: lineWeightWave,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    interactive: false
-                };
-            case 'red':
-                console.log("LAYER", feature.geometry.coordinates);
+var wavesLayer = new L.GeoJSON.AJAX("TestWaveForecast.geojson", {
 
-                return {
-                    color: "white",
-                    weight: lineWeightWave,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    interactive: false
-                };
-            case 'orange':
-                console.log(feature);
-                return {
-                    color: "white",
-                    weight: lineWeightWave,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    interactive: false
-                };
-            case 'yellow':
-                return {
-                    color: "white",
-                    weight: lineWeightWave,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    interactive: false
-                };
-            case 'black':
-                return {
-                    color: "white",
-                    weight: lineWeightWave,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    interactive: false
-                };
-        }
+    style: function(feature) {
+      console.log("feature",feature.properties.wave_component_alert_code);
+      return {
+          color: "white",
+          weight: lineWeightWave,
+          opacity: 0.75,
+          lineCap: 'round',
+          lineJoin: 'round',
+          interactive: false
+      };
+
+        // switch (feature.properties.wave_component_alert_code) {
+        //     case 0:
+        //         return {
+        //             color: "white",
+        //             weight: lineWeightWave,
+        //             opacity: 0.75,
+        //             lineCap: 'round',
+        //             lineJoin: 'round',
+        //             interactive: false
+        //         };
+        //     case 2:
+        //         console.log("LAYER", feature.geometry.coordinates);
+        //
+        //         return {
+        //             color: "white",
+        //             weight: lineWeightWave,
+        //             opacity: 0.75,
+        //             lineCap: 'round',
+        //             lineJoin: 'round',
+        //             interactive: false
+        //         };
+        //     case 1:
+        //         console.log(feature);
+        //         return {
+        //             color: "white",
+        //             weight: lineWeightWave,
+        //             opacity: 0.75,
+        //             lineCap: 'round',
+        //             lineJoin: 'round',
+        //             interactive: false
+        //         };
+        //     case 'yellow':
+        //         return {
+        //             color: "white",
+        //             weight: lineWeightWave,
+        //             opacity: 0.75,
+        //             lineCap: 'round',
+        //             lineJoin: 'round',
+        //             interactive: false
+        //         };
+        //     case 'black':
+        //         return {
+        //             color: "white",
+        //             weight: lineWeightWave,
+        //             opacity: 0.75,
+        //             lineCap: 'round',
+        //             lineJoin: 'round',
+        //             interactive: false
+        //         };
+        // }
     }
 });
 
@@ -228,8 +252,12 @@ wavesLayer.on('data:loaded', function() {
     console.log("WAVES LOADED");
 
     wavesLayer.getLayers().forEach(function(layer) {
-        switch (layer.feature.properties.coast_alert_code) {
-            case "red":
+      // console.log("TST", layer.feature.properties.wave_component_alert_code);
+      if(layer.feature.properties.wave_component_alert_code != null)
+        {
+          switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
+
+            case 2:
                 layer.setText('~', {
                     repeat: true,
                     offset: 9,
@@ -241,7 +269,8 @@ wavesLayer.on('data:loaded', function() {
                     }
                 });
                 break;
-            case "orange":
+            case 1:
+            console.log("HERE");
                 layer.setText('~', {
                     repeat: true,
                     offset: 9,
@@ -253,7 +282,7 @@ wavesLayer.on('data:loaded', function() {
                     }
                 });
                 break;
-            case "green":
+            case 0:
                 layer.setText('~', {
                     repeat: true,
                     offset: 9,
@@ -266,8 +295,21 @@ wavesLayer.on('data:loaded', function() {
                 });
                 break;
             default:
+            layer.setText('~', {
+                repeat: true,
+                offset: 9,
+                attributes: {
+                    fill: GREEN,
+                    'font-weight': 'bold',
+                    'font-size': '24',
+                    'rotate': 0,
+                }
+            });
 
         }
+      }else{
+        console.log("VALUE IS NULL");
+      }
 
     });
     // wavesLayer.getLayers()[0].setText('~', {
@@ -436,12 +478,12 @@ var closestLayer = null;
 
 function getData(feature, layer) {
 
-    var time = feature.properties.time_vector;
+    var time = feature.properties.sl_component.time;
     var tide = feature.properties.tide_values;
     var msl_obs = feature.properties.sealevel_obs;
     var msl_for = feature.properties.sealevel_for;
     var location = feature.id;
-    var sl_alerts = feature.properties.alert_sealevel;
+    var sl_alerts = feature.properties.sl_component.sea_level_forecast;
     var extremeHigh = feature.properties.extreme_high;
     // var wave = [17,18,19,20,18,17,16,15,16,17,18,15,16,17]
 
@@ -451,9 +493,9 @@ function getData(feature, layer) {
     // $('#ifr').contents().find('body').find('h1').innerText = "NEMA"
     // layer.bindPopup()
 
-    var popup = new L.Popup();
+    // var popup = new L.Popup();
 
-    layer.bindPopup(popup);
+    // layer.bindPopup(popup);
 
     layer.on("click", function(e) {
         // console.log("Clik "+feature.id);
@@ -468,38 +510,39 @@ function getData(feature, layer) {
             // console.log("json respom",data.display_name);
 
             location = data.display_name;
-            var wave = closestLayer.layer.feature.properties.wave_values
-
+            var wave = closestLayer.layer.feature.properties.wave_component_alert_code
             // Remove plotting for now
             // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
-            console.log("LOCATION: ", location);
+            // console.log("LOCATION: ", location);
             $('.item2').children('p').text(location);
             $(".item3").show();
 
             //clear the table
             $('#datatable tr:has(td)').remove();
             for (var i = 0; i < 7; i++) {
-              console.log("counter", i);
+              var dateString = time[i+8].slice(0,-3);
+              var d = new Date(dateString);
+              var dayName = getDayName(d,"en-US");
                 $('#datatable').append(
                     $('<tr>').append(
-                        $('<td>').append(i+"tide"
+                        $('<td>').append(sl_alerts[i+8]
                             // $('').attr('href', 'https://www.google.com')
                             // .addClass('selectRow')
                             // .text(i+"N")
                         ),
-                        $('<td>').append(i+"wave"
+                        $('<td>').append(wave[i]
                             // $('<a>').attr('href', 'https://www.blic.rs')
                             // .addClass('imgurl')
                             // .attr('target', '_blank')
                             // .text(i+"K")
                         ),
-                        $('<td>').append(i+"day"),
-                        $('<td>').append(i+"date")
+                        $('<td>').append(dayName),
+                        $('<td>').append(dateString)
                     )
                 );
             }
 
-            popup.setContent(assemblePopup(time, location, sl_alerts))
+            // popup.setContent(assemblePopup(time, location, sl_alerts))
         });
         // console.log(e.latlng.lat);
         // https://nominatim.openstreetmap.org/reverse?format=json&lat=21.2960920&lon=-158.1063080
@@ -563,4 +606,10 @@ function assemblePopup(t, l, alert) {
 
 String.prototype.replaceAt = function(index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+function getDayName(dateStr, locale)
+{
+    var date = new Date(dateStr);
+    return date.toLocaleDateString(locale, { weekday: 'long' });
 }
