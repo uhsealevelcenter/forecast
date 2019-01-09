@@ -350,118 +350,63 @@ mainGeoJSON.on('data:loaded', function() {
         });
     });
 
-  //   L.geoJSON(coastalWarningsLayer, {
-  //   onEachFeature: getData
-  // });
+
+    // Layer click handler
+    coastalWarningsLayer.on('click', function(e) {
+      var time = e.layer.feature.properties.sl_component.time;
+      // // var location = feature.id;
+      var sl_alerts = e.layer.feature.properties.sl_component.sea_level_forecast;
+
+      // Finds the wave layer closest to the clicked location and gets the wave data
+      var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
+
+      $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng, function(data) {
+          //data is the JSON string
+          // console.log("json respom",data.display_name);
+
+          var location = data.display_name;
+          var wave = closestLayer.layer.feature.properties.wave_component_alert_code
+          // Remove plotting for now
+          // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
+          // console.log("LOCATION: ", location);
+          $('.item2').children('p').text(location);
+          $(".item3").show();
+
+          //clear the table
+          $('#datatable tr:has(td)').remove();
+          for (var i = 0; i < 7; i++) {
+              var dateString = time[i + 8].slice(0, -3);
+              var d = new Date(dateString);
+              var dayName = getDayName(d, "en-US");
+              $('#datatable').append(
+                  $('<tr>').append(
+                      $('<td>').append(sl_alerts[i + 8]
+                          // $('').attr('href', 'https://www.google.com')
+                          // .addClass('selectRow')
+                          // .text(i+"N")
+                      ),
+                      $('<td>').append(wave[i]
+                          // $('<a>').attr('href', 'https://www.blic.rs')
+                          // .addClass('imgurl')
+                          // .attr('target', '_blank')
+                          // .text(i+"K")
+                      ),
+                      $('<td>').append(dayName),
+                      $('<td>').append(dateString)
+                  )
+              );
+          }
+
+          // popup.setContent(assemblePopup(time, location, sl_alerts))
+      });
+    });
+
 });
 
 
 mainGeoJSON.on('data:loading', function() {
     console.log("Loading");
 });
-
-
-// var myTest = $.getJSON( "forecast_wave_component_quasigeo.json", function( data ) {
-//   var items = [];
-//   $.each( data, function( key, val ) {
-//     console.log(val);
-//     items.push(val);
-//   });
-//   return items;
-// }).done(function() {
-//     console.log( "second success" );
-//   })
-//   .fail(function() {
-//     console.log( "error" );
-//   })
-//   .always(function() {
-//     console.log( "complete" );
-//   });
-
-// loads in a wave geojson file and styles the Leaflet layer based on
-// the properties.coast_alert_code attribute
-// var wavesLayer = new L.GeoJSON.AJAX("TestWaveForecast.geojson", {
-//
-//     style: function(feature) {
-//       return {
-//           color: "white",
-//           weight: lineWeightWave,
-//           opacity: 1.0,
-//           lineCap: 'round',
-//           lineJoin: 'round',
-//           interactive: false
-//       };
-//     }
-// });
-
-// Use a setText plugin on waves layer data to add text symbols to it so that
-// it looks different from the SeaLevel/Tide data
-// wavesLayer.on('data:loaded', function() {
-//     console.log("WAVES LOADED");
-//
-//     wavesLayer.getLayers().forEach(function(layer) {
-//       // console.log("TST", layer.feature.properties.wave_component_alert_code);
-//       if(layer.feature.properties.wave_component_alert_code != null)
-//         {
-//           switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
-//
-//             case 2:
-//                 layer.setText('~', {
-//                     repeat: true,
-//                     offset: 9,
-//                     attributes: {
-//                         fill: RED,
-//                         'font-weight': 'bold',
-//                         'font-size': '24',
-//                         'rotate': 0,
-//                     }
-//                 });
-//                 break;
-//             case 1:
-//             console.log("HERE");
-//                 layer.setText('~', {
-//                     repeat: true,
-//                     offset: 9,
-//                     attributes: {
-//                         fill: ORANGE,
-//                         'font-weight': 'bold',
-//                         'font-size': '24',
-//                         'rotate': 0,
-//                     }
-//                 });
-//                 break;
-//             case 0:
-//                 layer.setText('~', {
-//                     repeat: true,
-//                     offset: 9,
-//                     attributes: {
-//                         fill: GREEN,
-//                         'font-weight': 'bold',
-//                         'font-size': '24',
-//                         'rotate': 0,
-//                     }
-//                 });
-//                 break;
-//             default:
-//             layer.setText('~', {
-//                 repeat: true,
-//                 offset: 9,
-//                 attributes: {
-//                     fill: GREEN,
-//                     'font-weight': 'bold',
-//                     'font-size': '24',
-//                     'rotate': 0,
-//                 }
-//             });
-//
-//         }
-//       }else{
-//         // console.log("VALUE IS NULL");
-//       }
-//
-//     });
-//
-// });
 
 
 
@@ -579,10 +524,9 @@ function getAllIndexes(arr, val) {
     return indexes;
 }
 
-var closestLayer = null;
 
 function getData(feature, layer) {
-  console.log("GETDATA");
+  // console.log("GETDATA");
     var time = feature.properties.sl_component.time;
     var tide = feature.properties.tide_values;
     var msl_obs = feature.properties.sealevel_obs;
@@ -601,7 +545,7 @@ function getData(feature, layer) {
     // var popup = new L.Popup();
 
     // layer.bindPopup(popup);
-
+    console.log("LAYER", layer);
     layer.on("click", function(e) {
         // console.log("Clik "+feature.id);
         // console.log(feature.properties.alert_sealevel);
