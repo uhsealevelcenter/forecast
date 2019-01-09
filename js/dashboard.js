@@ -50,93 +50,289 @@ var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.pn
 
 var markers = [];
 var allPulsesGroup = {};
+var seaLevelLayer = {};
+var wavesLayer = {};
+var regionAlertLayer = {};
+
 // Loading a geojson file with Sea Level and tide prediction for Oahu coastline
 // encoded in LineString
 // The file also contains Points which serve to show the pulsating warning
 // signals when the map is zoomed out
-var coastalWarningsLayer = new L.GeoJSON.AJAX("TestWaveForecast.geojson", {
-    onEachFeature: getData,
-    // Styling each GeoJSON LineString feature based on the
-    // properties.coast_alert_code attribute
-    style: function(feature) {
-        switch (feature.properties.sl_component.sea_level_forecast[8]) {
-            case 0:
-                return {
-                    color: GREEN,
-                    weight: lineWeight,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    pane: 'sealevel'
-                };
-            case 2:
-                return {
-                    color: RED,
-                    weight: lineWeight,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    pane: 'sealevel'
-                };
-            case 1:
-                return {
-                    color: ORANGE,
-                    weight: lineWeight,
-                    opacity: 0.75,
-                    lineCap: 'round',
-                    lineJoin: 'round',
-                    pane: 'sealevel'
-                };
+var mainGeoJSON = new L.GeoJSON.AJAX("TestWaveForecast.geojson");
+// , {
+//     onEachFeature: getData
+//     // Styling each GeoJSON LineString feature based on the
+//     // properties.coast_alert_code attribute
+//     // style: function(feature) {
+//     //     switch (Math.max.apply(null, feature.properties.sl_component.sea_level_forecast)) {
+//     //         case 0:
+//     //             return {
+//     //                 color: GREEN,
+//     //                 weight: lineWeight,
+//     //                 opacity: 0.75,
+//     //                 lineCap: 'round',
+//     //                 lineJoin: 'round',
+//     //                 pane: 'sealevel'
+//     //             };
+//     //         case 2:
+//     //             return {
+//     //                 color: RED,
+//     //                 weight: lineWeight,
+//     //                 opacity: 0.75,
+//     //                 lineCap: 'round',
+//     //                 lineJoin: 'round',
+//     //                 pane: 'sealevel'
+//     //             };
+//     //         case 1:
+//     //             return {
+//     //                 color: ORANGE,
+//     //                 weight: lineWeight,
+//     //                 opacity: 0.75,
+//     //                 lineCap: 'round',
+//     //                 lineJoin: 'round',
+//     //                 pane: 'sealevel'
+//     //             };
+//     //
+//     //     }
+//     // },
+//     // Styling each GeoJSON Point feature based on the
+//     // properties.islandwide_wave_alert_code attribute so that we can have pulsating alerts
+//     // when the map is zoomed out
+//     // pointToLayer: function(feature, latlng) {
+//     //     var alColor = {};
+//     //     switch (feature.properties.region_master_alert_code) {
+//     //         case 0:
+//     //             alColor = GREEN;
+//     //             break;
+//     //         case 2:
+//     //             alColor = RED;
+//     //             break;
+//     //         case 1:
+//     //             alColor = ORANGE;
+//     //             break;
+//     //     }
+//     //     // create a pulse icon
+//     //     var pulse = L.icon.pulse({
+//     //         iconSize: [20, 20],
+//     //         color: alColor,
+//     //         fillColor: alColor,
+//     //     });
+//     //     // Create a marker at lat,lng that has pulse icon
+//     //     var mark = new L.marker(latlng, {
+//     //         icon: pulse,
+//     //         title: feature.id,
+//     //         myCustomOption: "Can Insert Data Here",
+//     //     });
+//     //     // Added all markers to the markers an array that is added to a Layer to be
+//     //     // displayed below
+//     //     markers.push(mark);
+//     // },
+//
+//
+// });
 
-        }
-    },
-    // Styling each GeoJSON Point feature based on the
-    // properties.islandwide_wave_alert_code attribute so that we can have pulsating alerts
-    // when the map is zoomed out
-    pointToLayer: function(feature, latlng) {
-        var alColor = {};
-        switch (feature.properties.region_master_alert_code) {
-            case 0:
-                alColor = GREEN;
-                break;
-            case 2:
-                alColor = RED;
-                break;
-            case 1:
-                alColor = ORANGE;
-                break;
-        }
-        // create a pulse icon
-        var pulse = L.icon.pulse({
-            iconSize: [20, 20],
-            color: alColor,
-            fillColor: alColor,
-        });
-        // Create a marker at lat,lng that has pulse icon
-        var mark = new L.marker(latlng, {
-            icon: pulse,
-            title: feature.id,
-            myCustomOption: "Can Insert Data Here",
-        });
-        // Added all markers to the markers an array that is added to a Layer to be
-        // displayed below
-        markers.push(mark);
-    },
-
-    // filter: function(feature, layer) {
-    //   console.log("NEMANJA", feature.properties.show_on_map);
-    //     return feature.properties.show_on_map;
-    // }
-
-});
-
-coastalWarningsLayer.on('data:progress', function() {
+mainGeoJSON.on('data:progress', function() {
     console.log("Progress");
 });
-
+var coastalWarningsLayer = {};
 // When the GeoJSON is loaded create a Layer of of pulses and add it to the map
-coastalWarningsLayer.on('data:loaded', function() {
-    console.log("Loaded");
+mainGeoJSON.on('data:loaded', function() {
+    console.log("Loaded", mainGeoJSON);
+    var geoJsonFormat = this.toGeoJSON();
+
+
+
+    coastalWarningsLayer = L.geoJSON(geoJsonFormat, {
+        filter: function(feature, layer) {
+            return typeof feature.properties.sl_component !== "undefined";
+        }
+    });
+
+    wavesLayer = L.geoJSON(geoJsonFormat, {
+        filter: function(feature, layer) {
+            return typeof feature.properties.coastline_center !== "undefined";
+        }
+    });
+
+    regionAlertLayer = L.geoJSON(geoJsonFormat, {
+        // filter: function(feature, layer) {
+        //
+        //     return feature.properties.show_on_map;
+        // }
+        pointToLayer: function (feature, latlng) {
+
+          if(feature.properties.show_on_map){
+            var alertColor = {};
+            switch (feature.properties.region_master_alert_code) {
+                case 0:
+                    alertColor = GREEN;
+                    break;
+                case 2:
+                    alertColor = RED;
+                    break;
+                case 1:
+                    alertColor = ORANGE;
+                    break;
+            }
+            // create a pulse icon
+            var pulse = L.icon.pulse({
+                iconSize: [20, 20],
+                color: alertColor,
+                fillColor: alertColor,
+            });
+            // Create a marker at lat,lng that has pulse icon
+            var mark = new L.marker(latlng, {
+                icon: pulse,
+                title: feature.id,
+                myCustomOption: "Can Insert Data Here",
+            });
+            // Added all markers to the markers an array that is added to a Layer to be
+            // displayed below
+            markers.push(mark);
+          }
+        // return L.circleMarker(latlng, geojsonMarkerOptions);
+    }
+    });
+
+    // L.geoJSON(geoJsonFormat.features, {
+    //     pointToLayer: function (feature, latlng) {
+          // // create a pulse icon
+          // var pulse = L.icon.pulse({
+          //     iconSize: [20, 20],
+          //     color: alColor,
+          //     fillColor: alColor,
+          // });
+          // // Create a marker at lat,lng that has pulse icon
+          // var mark = new L.marker(latlng, {
+          //     icon: pulse,
+          //     title: feature.id,
+          //     myCustomOption: "Can Insert Data Here",
+          // });
+          // // Added all markers to the markers an array that is added to a Layer to be
+          // // displayed below
+          // markers.push(mark);
+    //       console.log("POINT FEATURE", feature);
+    //         return L.circleMarker(latlng, geojsonMarkerOptions);
+    //     }
+    // });
+
+    coastalWarningsLayer.getLayers().forEach(function(layer) {
+
+      switch (Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast)) {
+          case 0:
+              layer.setStyle ({
+                  color: GREEN,
+                  weight: lineWeight,
+                  opacity: 0.75,
+                  lineCap: 'round',
+                  lineJoin: 'round',
+                  pane: 'sealevel'
+              });
+              break;
+          case 2:
+              layer.setStyle ({
+                  color: RED,
+                  weight: lineWeight,
+                  opacity: 0.75,
+                  lineCap: 'round',
+                  lineJoin: 'round',
+                  pane: 'sealevel'
+              });
+              break;
+          case 1:
+              layer.setStyle ({
+                  color: ORANGE,
+                  weight: lineWeight,
+                  opacity: 0.75,
+                  lineCap: 'round',
+                  lineJoin: 'round',
+                  pane: 'sealevel'
+              });
+              break;
+      }
+    });
+
+    wavesLayer.getLayers().forEach(function(layer) {
+        // console.log("TST", layer.feature.properties.wave_component_alert_code);
+        if (layer.feature.properties.wave_component_alert_code != null) {
+            switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
+
+                case 2:
+                    layer.setText('~', {
+                        repeat: true,
+                        offset: 9,
+                        attributes: {
+                            fill: RED,
+                            'font-weight': 'bold',
+                            'font-size': '24',
+                            'rotate': 0,
+                        }
+                    });
+                    break;
+                case 1:
+                    console.log("HERE");
+                    layer.setText('~', {
+                        repeat: true,
+                        offset: 9,
+                        attributes: {
+                            fill: ORANGE,
+                            'font-weight': 'bold',
+                            'font-size': '24',
+                            'rotate': 0,
+                        }
+                    });
+                    break;
+                case 0:
+                    layer.setText('~', {
+                        repeat: true,
+                        offset: 9,
+                        attributes: {
+                            fill: GREEN,
+                            'font-weight': 'bold',
+                            'font-size': '24',
+                            'rotate': 0,
+                        }
+                    });
+                    break;
+                default:
+                    layer.setText('~', {
+                        repeat: true,
+                        offset: 9,
+                        attributes: {
+                            fill: GREEN,
+                            'font-weight': 'bold',
+                            'font-size': '24',
+                            'rotate': 0,
+                        }
+                    });
+
+            }
+        } else {
+            // console.log("VALUE IS NULL");
+        }
+
+    });
+
+    wavesLayer.setStyle({
+        color: "white",
+        weight: lineWeightWave,
+        opacity: 1.0,
+        lineCap: 'round',
+        lineJoin: 'round',
+        interactive: false
+    });
+
+    // Map overlays (SLA, Waves layer)
+    // Can have multiple active at a time
+    var overlayMaps = {
+        "Tide+SLA Warning": coastalWarningsLayer,
+        "Wave Warning": wavesLayer,
+        // "Positron Label": positronLabels
+    };
+    //
+    //
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
+
     allPulsesGroup = L.layerGroup(markers);
     allPulsesGroup.addTo(map);
 
@@ -153,10 +349,14 @@ coastalWarningsLayer.on('data:loaded', function() {
             setTimeout(showCoastWarnings, 3000);
         });
     });
+
+  //   L.geoJSON(coastalWarningsLayer, {
+  //   onEachFeature: getData
+  // });
 });
 
 
-coastalWarningsLayer.on('data:loading', function() {
+mainGeoJSON.on('data:loading', function() {
     console.log("Loading");
 });
 
@@ -180,150 +380,88 @@ coastalWarningsLayer.on('data:loading', function() {
 
 // loads in a wave geojson file and styles the Leaflet layer based on
 // the properties.coast_alert_code attribute
-var wavesLayer = new L.GeoJSON.AJAX("TestWaveForecast.geojson", {
-
-    style: function(feature) {
-      console.log("feature",feature.properties.wave_component_alert_code);
-      return {
-          color: "white",
-          weight: lineWeightWave,
-          opacity: 0.75,
-          lineCap: 'round',
-          lineJoin: 'round',
-          interactive: false
-      };
-
-        // switch (feature.properties.wave_component_alert_code) {
-        //     case 0:
-        //         return {
-        //             color: "white",
-        //             weight: lineWeightWave,
-        //             opacity: 0.75,
-        //             lineCap: 'round',
-        //             lineJoin: 'round',
-        //             interactive: false
-        //         };
-        //     case 2:
-        //         console.log("LAYER", feature.geometry.coordinates);
-        //
-        //         return {
-        //             color: "white",
-        //             weight: lineWeightWave,
-        //             opacity: 0.75,
-        //             lineCap: 'round',
-        //             lineJoin: 'round',
-        //             interactive: false
-        //         };
-        //     case 1:
-        //         console.log(feature);
-        //         return {
-        //             color: "white",
-        //             weight: lineWeightWave,
-        //             opacity: 0.75,
-        //             lineCap: 'round',
-        //             lineJoin: 'round',
-        //             interactive: false
-        //         };
-        //     case 'yellow':
-        //         return {
-        //             color: "white",
-        //             weight: lineWeightWave,
-        //             opacity: 0.75,
-        //             lineCap: 'round',
-        //             lineJoin: 'round',
-        //             interactive: false
-        //         };
-        //     case 'black':
-        //         return {
-        //             color: "white",
-        //             weight: lineWeightWave,
-        //             opacity: 0.75,
-        //             lineCap: 'round',
-        //             lineJoin: 'round',
-        //             interactive: false
-        //         };
-        // }
-    }
-});
+// var wavesLayer = new L.GeoJSON.AJAX("TestWaveForecast.geojson", {
+//
+//     style: function(feature) {
+//       return {
+//           color: "white",
+//           weight: lineWeightWave,
+//           opacity: 1.0,
+//           lineCap: 'round',
+//           lineJoin: 'round',
+//           interactive: false
+//       };
+//     }
+// });
 
 // Use a setText plugin on waves layer data to add text symbols to it so that
 // it looks different from the SeaLevel/Tide data
-wavesLayer.on('data:loaded', function() {
-    console.log("WAVES LOADED");
-
-    wavesLayer.getLayers().forEach(function(layer) {
-      // console.log("TST", layer.feature.properties.wave_component_alert_code);
-      if(layer.feature.properties.wave_component_alert_code != null)
-        {
-          switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
-
-            case 2:
-                layer.setText('~', {
-                    repeat: true,
-                    offset: 9,
-                    attributes: {
-                        fill: RED,
-                        'font-weight': 'bold',
-                        'font-size': '24',
-                        'rotate': 0,
-                    }
-                });
-                break;
-            case 1:
-            console.log("HERE");
-                layer.setText('~', {
-                    repeat: true,
-                    offset: 9,
-                    attributes: {
-                        fill: ORANGE,
-                        'font-weight': 'bold',
-                        'font-size': '24',
-                        'rotate': 0,
-                    }
-                });
-                break;
-            case 0:
-                layer.setText('~', {
-                    repeat: true,
-                    offset: 9,
-                    attributes: {
-                        fill: GREEN,
-                        'font-weight': 'bold',
-                        'font-size': '24',
-                        'rotate': 0,
-                    }
-                });
-                break;
-            default:
-            layer.setText('~', {
-                repeat: true,
-                offset: 9,
-                attributes: {
-                    fill: GREEN,
-                    'font-weight': 'bold',
-                    'font-size': '24',
-                    'rotate': 0,
-                }
-            });
-
-        }
-      }else{
-        console.log("VALUE IS NULL");
-      }
-
-    });
-    // wavesLayer.getLayers()[0].setText('~', {
-    //   repeat: true,
-    //   offset: 9,
-    //   attributes: {
-    //     fill: RED,
-    //     'font-weight': 'bold',
-    //     'font-size': '24',
-    //     'rotate': 0,
-    //   }
-    // });
-
-});
+// wavesLayer.on('data:loaded', function() {
+//     console.log("WAVES LOADED");
+//
+//     wavesLayer.getLayers().forEach(function(layer) {
+//       // console.log("TST", layer.feature.properties.wave_component_alert_code);
+//       if(layer.feature.properties.wave_component_alert_code != null)
+//         {
+//           switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
+//
+//             case 2:
+//                 layer.setText('~', {
+//                     repeat: true,
+//                     offset: 9,
+//                     attributes: {
+//                         fill: RED,
+//                         'font-weight': 'bold',
+//                         'font-size': '24',
+//                         'rotate': 0,
+//                     }
+//                 });
+//                 break;
+//             case 1:
+//             console.log("HERE");
+//                 layer.setText('~', {
+//                     repeat: true,
+//                     offset: 9,
+//                     attributes: {
+//                         fill: ORANGE,
+//                         'font-weight': 'bold',
+//                         'font-size': '24',
+//                         'rotate': 0,
+//                     }
+//                 });
+//                 break;
+//             case 0:
+//                 layer.setText('~', {
+//                     repeat: true,
+//                     offset: 9,
+//                     attributes: {
+//                         fill: GREEN,
+//                         'font-weight': 'bold',
+//                         'font-size': '24',
+//                         'rotate': 0,
+//                     }
+//                 });
+//                 break;
+//             default:
+//             layer.setText('~', {
+//                 repeat: true,
+//                 offset: 9,
+//                 attributes: {
+//                     fill: GREEN,
+//                     'font-weight': 'bold',
+//                     'font-size': '24',
+//                     'rotate': 0,
+//                 }
+//             });
+//
+//         }
+//       }else{
+//         // console.log("VALUE IS NULL");
+//       }
+//
+//     });
+//
+// });
 
 
 
@@ -373,16 +511,7 @@ var baseMaps = {
 
 };
 
-// Map overlays (SLA, Waves layer)
-// Can have multiple active at a time
-var overlayMaps = {
-    "Tide+SLA Warning": coastalWarningsLayer,
-    "Wave Warning": wavesLayer,
-    // "Positron Label": positronLabels
-};
-//
-//
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+
 
 function showCoastWarnings() {
     // wavesLayer.addTo(map);
@@ -390,31 +519,7 @@ function showCoastWarnings() {
 
 }
 
-function updateCoastWarnings(dayIndex) {
-    coastalWarningsLayer.eachLayer(function(featureInstancelayer) {
 
-        propertyValue = featureInstancelayer.feature.properties.alert_sealevel[dayIndex];
-        var newColor = null;
-        switch (propertyValue) {
-            case "green":
-                newColor = GREEN;
-                break;
-            case "orange":
-                newColor = ORANGE;
-                break;
-            case "red":
-                newColor = RED;
-                break;
-            default:
-                newColor = GREEN;
-
-        }
-        featureInstancelayer.setStyle({
-            color: newColor,
-        });
-    });
-    console.log("UPDATE WARNINGS");
-}
 
 // Create an instance of Map Controller which controls the display and removal
 // of pulsating warning and coastal data based on the map zoom level
@@ -477,7 +582,7 @@ function getAllIndexes(arr, val) {
 var closestLayer = null;
 
 function getData(feature, layer) {
-
+  console.log("GETDATA");
     var time = feature.properties.sl_component.time;
     var tide = feature.properties.tide_values;
     var msl_obs = feature.properties.sealevel_obs;
@@ -520,12 +625,12 @@ function getData(feature, layer) {
             //clear the table
             $('#datatable tr:has(td)').remove();
             for (var i = 0; i < 7; i++) {
-              var dateString = time[i+8].slice(0,-3);
-              var d = new Date(dateString);
-              var dayName = getDayName(d,"en-US");
+                var dateString = time[i + 8].slice(0, -3);
+                var d = new Date(dateString);
+                var dayName = getDayName(d, "en-US");
                 $('#datatable').append(
                     $('<tr>').append(
-                        $('<td>').append(sl_alerts[i+8]
+                        $('<td>').append(sl_alerts[i + 8]
                             // $('').attr('href', 'https://www.google.com')
                             // .addClass('selectRow')
                             // .text(i+"N")
@@ -574,12 +679,12 @@ function getData(feature, layer) {
     });
 
 };
-$(document).ready(function(){
-    $("#datatable").delegate("tr", "click", function(){
+$(document).ready(function() {
+    $("#datatable").delegate("tr", "click", function() {
         $(".item4").show();
     });
 });
-var theParent = document.getElementById("mapid");
+var theParent = document.getElementById("overlayParent");
 theParent.addEventListener("click", closeBox, false);
 
 
@@ -608,8 +713,9 @@ String.prototype.replaceAt = function(index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
 }
 
-function getDayName(dateStr, locale)
-{
+function getDayName(dateStr, locale) {
     var date = new Date(dateStr);
-    return date.toLocaleDateString(locale, { weekday: 'long' });
+    return date.toLocaleDateString(locale, {
+        weekday: 'long'
+    });
 }

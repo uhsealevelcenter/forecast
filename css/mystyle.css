@@ -19,6 +19,8 @@ h1 {
     display: block; */
 }
 
+
+
 .item1 {
   padding-left: 15px;
   /*position: absolute;*/
@@ -135,6 +137,16 @@ h1 {
   padding: 20px;
   grid-template-columns: 250px 340px 500px;
   grid-template-rows: 70px 70px 70px 70px;
+}
+#overlayParent {
+  /*width: 100%;
+  height: 100%;*/
+  display: grid;
+  grid-gap: 20px;
+  padding: 20px;
+  grid-template-columns: 250px 340px 500px;
+  grid-template-rows: 70px 70px 70px 70px;
+  z-index: 1000;
 }
 .right{
   grid-area: r;
