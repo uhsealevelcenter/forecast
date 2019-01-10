@@ -53,83 +53,14 @@ var allPulsesGroup = {};
 var seaLevelLayer = {};
 var wavesLayer = {};
 var regionAlertLayer = {};
+var stationsLayer = {};
 
 // Loading a geojson file with Sea Level and tide prediction for Oahu coastline
 // encoded in LineString
 // The file also contains Points which serve to show the pulsating warning
 // signals when the map is zoomed out
 var mainGeoJSON = new L.GeoJSON.AJAX("TestWaveForecast.geojson");
-// , {
-//     onEachFeature: getData
-//     // Styling each GeoJSON LineString feature based on the
-//     // properties.coast_alert_code attribute
-//     // style: function(feature) {
-//     //     switch (Math.max.apply(null, feature.properties.sl_component.sea_level_forecast)) {
-//     //         case 0:
-//     //             return {
-//     //                 color: GREEN,
-//     //                 weight: lineWeight,
-//     //                 opacity: 0.75,
-//     //                 lineCap: 'round',
-//     //                 lineJoin: 'round',
-//     //                 pane: 'sealevel'
-//     //             };
-//     //         case 2:
-//     //             return {
-//     //                 color: RED,
-//     //                 weight: lineWeight,
-//     //                 opacity: 0.75,
-//     //                 lineCap: 'round',
-//     //                 lineJoin: 'round',
-//     //                 pane: 'sealevel'
-//     //             };
-//     //         case 1:
-//     //             return {
-//     //                 color: ORANGE,
-//     //                 weight: lineWeight,
-//     //                 opacity: 0.75,
-//     //                 lineCap: 'round',
-//     //                 lineJoin: 'round',
-//     //                 pane: 'sealevel'
-//     //             };
-//     //
-//     //     }
-//     // },
-//     // Styling each GeoJSON Point feature based on the
-//     // properties.islandwide_wave_alert_code attribute so that we can have pulsating alerts
-//     // when the map is zoomed out
-//     // pointToLayer: function(feature, latlng) {
-//     //     var alColor = {};
-//     //     switch (feature.properties.region_master_alert_code) {
-//     //         case 0:
-//     //             alColor = GREEN;
-//     //             break;
-//     //         case 2:
-//     //             alColor = RED;
-//     //             break;
-//     //         case 1:
-//     //             alColor = ORANGE;
-//     //             break;
-//     //     }
-//     //     // create a pulse icon
-//     //     var pulse = L.icon.pulse({
-//     //         iconSize: [20, 20],
-//     //         color: alColor,
-//     //         fillColor: alColor,
-//     //     });
-//     //     // Create a marker at lat,lng that has pulse icon
-//     //     var mark = new L.marker(latlng, {
-//     //         icon: pulse,
-//     //         title: feature.id,
-//     //         myCustomOption: "Can Insert Data Here",
-//     //     });
-//     //     // Added all markers to the markers an array that is added to a Layer to be
-//     //     // displayed below
-//     //     markers.push(mark);
-//     // },
-//
-//
-// });
+
 
 mainGeoJSON.on('data:progress', function() {
     console.log("Progress");
@@ -140,8 +71,6 @@ mainGeoJSON.on('data:loaded', function() {
     console.log("Loaded", mainGeoJSON);
     var geoJsonFormat = this.toGeoJSON();
 
-
-
     coastalWarningsLayer = L.geoJSON(geoJsonFormat, {
         filter: function(feature, layer) {
             return typeof feature.properties.sl_component !== "undefined";
@@ -151,6 +80,12 @@ mainGeoJSON.on('data:loaded', function() {
     wavesLayer = L.geoJSON(geoJsonFormat, {
         filter: function(feature, layer) {
             return typeof feature.properties.coastline_center !== "undefined";
+        }
+    });
+
+    stationsLayer = L.geoJSON(geoJsonFormat, {
+        filter: function(feature, layer) {
+            return typeof feature.properties.some_property !== "undefined";
         }
     });
 
@@ -327,6 +262,7 @@ mainGeoJSON.on('data:loaded', function() {
     var overlayMaps = {
         "Tide+SLA Warning": coastalWarningsLayer,
         "Wave Warning": wavesLayer,
+        "Tide Gauge Locations": stationsLayer,
         // "Positron Label": positronLabels
     };
     //
@@ -343,8 +279,7 @@ mainGeoJSON.on('data:loaded', function() {
             console.log("Clik " + this._latlng);
             map.flyTo([this._latlng.lat, this._latlng.lng], 10);
             map.removeLayer(allPulsesGroup);
-            $('.item1').children('p').text(this.options.title);
-            $(".item2").show();
+            boxFlow1(this.options.title);
             // plotData();
             setTimeout(showCoastWarnings, 3000);
         });
@@ -369,34 +304,8 @@ mainGeoJSON.on('data:loaded', function() {
           // Remove plotting for now
           // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
           // console.log("LOCATION: ", location);
-          $('.item2').children('p').text(location);
-          $(".item3").show();
 
-          //clear the table
-          $('#datatable tr:has(td)').remove();
-          for (var i = 0; i < 7; i++) {
-              var dateString = time[i + 8].slice(0, -3);
-              var d = new Date(dateString);
-              var dayName = getDayName(d, "en-US");
-              $('#datatable').append(
-                  $('<tr>').append(
-                      $('<td>').append(sl_alerts[i + 8]
-                          // $('').attr('href', 'https://www.google.com')
-                          // .addClass('selectRow')
-                          // .text(i+"N")
-                      ),
-                      $('<td>').append(wave[i]
-                          // $('<a>').attr('href', 'https://www.blic.rs')
-                          // .addClass('imgurl')
-                          // .attr('target', '_blank')
-                          // .text(i+"K")
-                      ),
-                      $('<td>').append(dayName),
-                      $('<td>').append(dateString)
-                  )
-              );
-          }
-
+          boxFlow2(location, time, sl_alerts, wave);
           // popup.setContent(assemblePopup(time, location, sl_alerts))
       });
     });
@@ -461,7 +370,7 @@ var baseMaps = {
 function showCoastWarnings() {
     // wavesLayer.addTo(map);
     coastalWarningsLayer.addTo(map);
-
+    stationsLayer.addTo(map);
 }
 
 
@@ -545,82 +454,7 @@ function getData(feature, layer) {
     // var popup = new L.Popup();
 
     // layer.bindPopup(popup);
-    console.log("LAYER", layer);
-    layer.on("click", function(e) {
-        // console.log("Clik "+feature.id);
-        // console.log(feature.properties.alert_sealevel);
-        // console.log($('#ifr').contents().find('body').find('h1').innerText);
 
-        // Finds the wave layer closest to the clicked location and gets the wave data
-        closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
-
-        $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng, function(data) {
-            //data is the JSON string
-            // console.log("json respom",data.display_name);
-
-            location = data.display_name;
-            var wave = closestLayer.layer.feature.properties.wave_component_alert_code
-            // Remove plotting for now
-            // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
-            // console.log("LOCATION: ", location);
-            $('.item2').children('p').text(location);
-            $(".item3").show();
-
-            //clear the table
-            $('#datatable tr:has(td)').remove();
-            for (var i = 0; i < 7; i++) {
-                var dateString = time[i + 8].slice(0, -3);
-                var d = new Date(dateString);
-                var dayName = getDayName(d, "en-US");
-                $('#datatable').append(
-                    $('<tr>').append(
-                        $('<td>').append(sl_alerts[i + 8]
-                            // $('').attr('href', 'https://www.google.com')
-                            // .addClass('selectRow')
-                            // .text(i+"N")
-                        ),
-                        $('<td>').append(wave[i]
-                            // $('<a>').attr('href', 'https://www.blic.rs')
-                            // .addClass('imgurl')
-                            // .attr('target', '_blank')
-                            // .text(i+"K")
-                        ),
-                        $('<td>').append(dayName),
-                        $('<td>').append(dateString)
-                    )
-                );
-            }
-
-            // popup.setContent(assemblePopup(time, location, sl_alerts))
-        });
-        // console.log(e.latlng.lat);
-        // https://nominatim.openstreetmap.org/reverse?format=json&lat=21.2960920&lon=-158.1063080
-
-
-        // $('#ifr').contents().find('h1').html('<div> KJDFHSDFKSHFKJSHJKFSDKJFBFKJDKBJ </div>');
-        // popup.setContent('<iframe id="ifr" src="./myPopup.html"></iframe>');
-        // var iframe = document.createElement('iframe');
-        // iframe.onload = iframeN(); // before setting 'src'
-        // iframe.src = './myPopup.html';
-        // iframe.id ='ifr';
-        // document.body.appendChild(iframe); // add it to wherever you need it in the document
-
-        // document.getElementById('ifr').contentWindow.testingIframe("PASSING");
-        // popup.setContent('<iframe id="ifr" src="./myPopup.html"></iframe>');
-
-        // $("#feature-title").html("myMarkerTitle");
-        // $("#feature-info").html("myMarkerContent");
-        // $("#featureModal").modal("show");
-        // layer.bindPopup(popup);
-        // console.log("CALLED");
-        // $('#ifr').ready(function () {
-        // $('#ifr').contents().find('h1').html('KJDFHSDFKSHFKJSHJKFSDKJFBFKJDKBJ');
-        // popup.setContent(iframe)
-
-
-
-
-    });
 
 };
 $(document).ready(function() {
@@ -633,19 +467,69 @@ theParent.addEventListener("click", closeBox, false);
 
 
 function closeBox(e) {
+    var parentContainer = $(e.target.parentNode);
     if (e.target.nodeName === "SPAN") {
-        if ($(e.target.parentNode).hasClass("item1")) {
-
+        if (parentContainer.hasClass("item1") || parentContainer.hasClass("item2")) {
+            if(parentContainer.hasClass("item2")){
+              boxClose2();
+            }
         } else {
-            $(e.target.parentNode).hide();
-            if ($(e.target.parentNode).hasClass("item2") || $(e.target.parentNode).hasClass("item3")) {
+            parentContainer.hide();
+            if (parentContainer.hasClass("item2") || parentContainer.hasClass("item3")) {
                 $(".item3").hide();
                 $(".item4").hide();
             }
         }
     }
 }
+function boxClose2(){
+  $('.item2').children('p').text("Choose from map");
+  $(".item3").hide();
+  $(".item4").hide();
+}
 
+function resetAllBoxes(){
+  $('.item1').children('p').text("Choose from map");
+  $(".item2").hide();
+  $(".item3").hide();
+  $(".item4").hide();
+}
+
+function boxFlow1(title){
+  $('.item1').children('p').text(title);
+  $(".item2").show();
+}
+
+function boxFlow2(loc, t, sl_al, wave_al)
+{
+  $('.item2').children('p').text(loc);
+  $(".item3").show();
+
+//clear the table
+$('#datatable tr:has(td)').remove();
+for (var i = 0; i < 7; i++) {
+    var dateString = t[i + 8].slice(0, -3);
+    var d = new Date(dateString);
+    var dayName = getDayName(d, "en-US");
+    $('#datatable').append(
+        $('<tr>').append(
+            $('<td>').append(sl_al[i + 8]
+                // $('').attr('href', 'https://www.google.com')
+                // .addClass('selectRow')
+                // .text(i+"N")
+            ),
+            $('<td>').append(wave_al[i]
+                // $('<a>').attr('href', 'https://www.blic.rs')
+                // .addClass('imgurl')
+                // .attr('target', '_blank')
+                // .text(i+"K")
+            ),
+            $('<td>').append(dayName),
+            $('<td>').append(dateString)
+        )
+    );
+}
+}
 function assemblePopup(t, l, alert) {
     console.log(alert);
     return '<h3>' + l + '</h3>';

@@ -5302,10 +5302,70 @@
         "type": "Feature"
     }, {
         "geometry": {
+            "coordinates": [-155.83, 20.033],
+            "type": "Point"
+        },
+        "id": "kawa",
+        "properties": {
+            "some_property": "country name for example"
+        },
+        "type": "Feature"
+    }, {
+        "geometry": {
+            "coordinates": [-157.78, 21.433],
+            "type": "Point"
+        },
+        "id": "moku",
+        "properties": {
+            "some_property": "country name for example"
+        },
+        "type": "Feature"
+    }, {
+        "geometry": {
+            "coordinates": [-156.467, 20.898],
+            "type": "Point"
+        },
+        "id": "kahu",
+        "properties": {
+            "some_property": "country name for example"
+        },
+        "type": "Feature"
+    }, {
+        "geometry": {
+            "coordinates": [-157.86, 21.3],
+            "type": "Point"
+        },
+        "id": "hono",
+        "properties": {
+            "some_property": "country name for example"
+        },
+        "type": "Feature"
+    }, {
+        "geometry": {
+            "coordinates": [-159.35, 21.967],
+            "type": "Point"
+        },
+        "id": "nawi",
+        "properties": {
+            "some_property": "country name for example"
+        },
+        "type": "Feature"
+    }, {
+        "geometry": {
+            "coordinates": [-155.07, 19.73],
+            "type": "Point"
+        },
+        "id": "hilo",
+        "properties": {
+            "some_property": "country name for example"
+        },
+        "type": "Feature"
+    }, {
+        "geometry": {
             "coordinates": [-156.3612155774793, 20.585],
             "type": "Point"
         },
-        "id": "Region_Name_Here",
+        "id": "Hawaiian Islands",
         "properties": {
             "region_master_alert_code": 2,
             "show_on_map": true
