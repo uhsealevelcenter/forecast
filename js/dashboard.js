@@ -6,20 +6,7 @@ var ORANGE = "#FF9A00";
 var RED = "#FF310D";
 var BLACK = "#000000";
 var WHITE = "#FFFFFF";
-// var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-// var states = L.esri.featureLayer({
-//   url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3",
-//   style: function(feature) {
-//     return {
-//       color: '#000000',
-//       "fillOpacity": 1.0,
-//       weight: 2
-//     };
-//   }
-// });
-// var overlays = {
-//   "U.S. States": states
-// }
+
 var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
     maxZoom: 12,
     minZoom: 2,
@@ -61,11 +48,11 @@ var stationsLayer = {};
 // signals when the map is zoomed out
 var mainGeoJSON = new L.GeoJSON.AJAX("TestWaveForecast.geojson");
 
-
 mainGeoJSON.on('data:progress', function() {
     console.log("Progress");
 });
 var coastalWarningsLayer = {};
+var selectedFeature = null;
 // When the GeoJSON is loaded create a Layer of of pulses and add it to the map
 mainGeoJSON.on('data:loaded', function() {
     console.log("Loaded", mainGeoJSON);
@@ -90,10 +77,7 @@ mainGeoJSON.on('data:loaded', function() {
     });
 
     regionAlertLayer = L.geoJSON(geoJsonFormat, {
-        // filter: function(feature, layer) {
-        //
-        //     return feature.properties.show_on_map;
-        // }
+
         pointToLayer: function (feature, latlng) {
 
           if(feature.properties.show_on_map){
@@ -128,28 +112,6 @@ mainGeoJSON.on('data:loaded', function() {
         // return L.circleMarker(latlng, geojsonMarkerOptions);
     }
     });
-
-    // L.geoJSON(geoJsonFormat.features, {
-    //     pointToLayer: function (feature, latlng) {
-          // // create a pulse icon
-          // var pulse = L.icon.pulse({
-          //     iconSize: [20, 20],
-          //     color: alColor,
-          //     fillColor: alColor,
-          // });
-          // // Create a marker at lat,lng that has pulse icon
-          // var mark = new L.marker(latlng, {
-          //     icon: pulse,
-          //     title: feature.id,
-          //     myCustomOption: "Can Insert Data Here",
-          // });
-          // // Added all markers to the markers an array that is added to a Layer to be
-          // // displayed below
-          // markers.push(mark);
-    //       console.log("POINT FEATURE", feature);
-    //         return L.circleMarker(latlng, geojsonMarkerOptions);
-    //     }
-    // });
 
     coastalWarningsLayer.getLayers().forEach(function(layer) {
 
@@ -300,24 +262,23 @@ mainGeoJSON.on('data:loaded', function() {
           // console.log("json respom",data.display_name);
 
           var location = data.display_name;
+          selectedFeature = closestLayer.layer.feature;
           var wave = closestLayer.layer.feature.properties.wave_component_alert_code
           // Remove plotting for now
           // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
           // console.log("LOCATION: ", location);
 
           boxFlow2(location, time, sl_alerts, wave);
+          updateDetailsBox(0);
           // popup.setContent(assemblePopup(time, location, sl_alerts))
       });
     });
 
 });
 
-
 mainGeoJSON.on('data:loading', function() {
     console.log("Loading");
 });
-
-
 
 // Loading the positron map
 // Map and label are separate so that we can put the map labels on top of the
@@ -334,7 +295,6 @@ var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_la
 });
 
 var positronGroup = L.layerGroup([positron, positronLabels]);
-
 
 // Create map and add a default layer to it
 var map = new L.Map('mapid', {
@@ -362,10 +322,7 @@ var baseMaps = {
     "Dark": streets_d,
     "Satellite": streets_s,
     "Positron": positronGroup,
-
 };
-
-
 
 function showCoastWarnings() {
     // wavesLayer.addTo(map);
@@ -373,14 +330,9 @@ function showCoastWarnings() {
     stationsLayer.addTo(map);
 }
 
-
-
 // Create an instance of Map Controller which controls the display and removal
 // of pulsating warning and coastal data based on the map zoom level
 var myMapController = new MapController(map);
-
-// Data plotting with plotly
-
 
 function stackedArea(traces) {
     for (var i = 1; i < traces.length; i++) {
@@ -407,7 +359,6 @@ function minWaterLevel(tracer, minLevel) {
     return result;
 }
 
-
 function sumTwoArrays(a1, a2) {
     // get indices that have 9999 and give it a value of 0
     nans_indices_a1 = getAllIndexes(a1, 9999);
@@ -433,38 +384,29 @@ function getAllIndexes(arr, val) {
     return indexes;
 }
 
-
-function getData(feature, layer) {
-  // console.log("GETDATA");
-    var time = feature.properties.sl_component.time;
-    var tide = feature.properties.tide_values;
-    var msl_obs = feature.properties.sealevel_obs;
-    var msl_for = feature.properties.sealevel_for;
-    var location = feature.id;
-    var sl_alerts = feature.properties.sl_component.sea_level_forecast;
-    var extremeHigh = feature.properties.extreme_high;
-    // var wave = [17,18,19,20,18,17,16,15,16,17,18,15,16,17]
-
-    // layer.bindPopup('<h2>' +location + '</h2> <br>'+feature.properties.alert_sealevel+'<br>'+time);
-
-    // layer.bindPopup('<iframe id="ifr" src="./myPopup.html"></iframe>');
-    // $('#ifr').contents().find('body').find('h1').innerText = "NEMA"
-    // layer.bindPopup()
-
-    // var popup = new L.Popup();
-
-    // layer.bindPopup(popup);
-
-
-};
 $(document).ready(function() {
-    $("#datatable").delegate("tr", "click", function() {
+    $("#datatable").delegate("td", "click", function(e) {
         $(".item4").show();
+        // console.log("Tide value", $(this).find("td")["0"].innerHTML);
+        // console.log("Wave value", $(this).find("td")["1"].innerHTML);
+        // console.log("parent", $(this).parent());
+        var rowClicked = $(this).parent().index()-1;
+        updateDetailsBox(rowClicked);
+
+
     });
 });
+
+function updateDetailsBox(row){
+  $("#swellH").text(selectedFeature.properties.swell_height[row]);
+  $("#swellP").text(selectedFeature.properties.swell_period[row]);
+  $("#swellD").text(selectedFeature.properties.swell_direction[row]);
+  $("#waveLow").text(selectedFeature.properties.wave_component_water_level[row][0]);
+  $("#waveHigh").text(selectedFeature.properties.wave_component_water_level[row][1]);
+}
+
 var theParent = document.getElementById("overlayParent");
 theParent.addEventListener("click", closeBox, false);
-
 
 function closeBox(e) {
     var parentContainer = $(e.target.parentNode);
@@ -482,6 +424,7 @@ function closeBox(e) {
         }
     }
 }
+
 function boxClose2(){
   $('.item2').children('p').text("Choose from map");
   $(".item3").hide();
@@ -524,18 +467,18 @@ for (var i = 0; i < 7; i++) {
                 // .attr('target', '_blank')
                 // .text(i+"K")
             ),
-            $('<td>').append(dayName),
+            $('<td>').append(dayName).addClass('dayColumn'),
             $('<td>').append(dateString)
         )
     );
 }
+
 }
 function assemblePopup(t, l, alert) {
     console.log(alert);
     return '<h3>' + l + '</h3>';
     // return '<h1>' + l + '</h1> <br> <div class="textCircle">' + t[0] + '</div><div class="textCircle">' + t[1] + '</div>' + '</div><div class="textCircle">' + t[2] + '</div>' + '</div><div class="textCircle">' + t[3] + '</div>' + '</div><div class="textCircle">' + t[4] + '</div>' + '</div><div class="textCircle">' + t[5] + '</div>' + '</div><div class="textCircle">' + t[6] + '</div>'
 }
-
 
 String.prototype.replaceAt = function(index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);

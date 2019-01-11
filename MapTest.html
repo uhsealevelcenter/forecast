@@ -28,38 +28,75 @@
         <!-- <div class="fill"> -->
         <!-- <div class="left"> LEFT CONTENT</div> -->
         <div class="mymap" id="mapid">
-          <div id="overlayParent">
-            <div class="item1 smallBoxStyle">
-                <!--<span class='close'>x</span>-->
-                <h3>ISLAND</h3>
-                <p style="font-style: italic;">Choose from map</p>
+            <div id="overlayParent">
+                <div class="item1 smallBoxStyle">
+                    <!--<span class='close'>x</span>-->
+                    <h3>ISLAND</h3>
+                    <p style="font-style: italic;">Choose from map</p>
+                </div>
+                <div class="item2 smallBoxStyle"><span class='close'>x</span>
+                    <h3>COASTLINE</h3>
+                    <p style="font-style: italic;">Choose from map</p>
+                </div>
+                <div class="item3"><span class='close'>x</span>
+                    <h3>7-DAY OUTLOOK</h3>
+                    <table id="datatable" align="center">
+                      <thead>
+                          <tr style="pointer-events: none;">
+                              <th width=50px;>TIDE</th>
+                              <th width=50px;>WAVE</th>
+                              <th>DAY</th>
+                              <th>DATE</th>
+                          </tr>
+                      </thead>
+                    </table>
+                </div>
+                <div class="item4"><span class='close'>x</span>
+                    <div id="tideAlert" class="boxElement">
+                        <h3>ALERT DETAILS</h3>
+                        <h2>HIGH TIDE</h2>
+                        <h3 id="tideWarning">WARNING LEVEL</h3>
+                        <p> No signifcant impact is
+                            expected in areas vulnerable to
+                            tidal fooding.
+                        </p>
+                    </div>
+                    <div id="tideInfo" class="boxElement">
+                        <h3>Astronomical highest tide:</h3>
+                        <h4>5 cm below average</h4>
+                        <p style="font-size: 28px; margin-top:0px;">+</p>
+                        <h3>Mean sea level:</h3>
+                        <p>About average</p>
+                    </div>
+                    <div id="waveAlert" class="boxElement">
+                        <h2>WAVE RUNUP</h2>
+                        <h3 id="waveWarning">WARNING LEVEL</h3>
+                        <p> Signifcant coastal erosion and
+                            over wash is possible in
+                            vulnerable areas; worsened by
+                            higher tides.
+                        </p>
+                    </div>
+                    <div id="waveInfo" class="boxElement">
+                        <h3>Primary swell:</h3>
+                        <h4><span id="swellH">3.5</span>m @<span id="swellP">15</span>s from <span id="swellD">NNW</span></h4>
+                        <p style="font-size: 28px; margin-top:0px;">&darr;</p>
+                        <h3>Height above still water:</h3>
+                        <h4><span id="waveLow">80</span>-<span id="waveHigh">120</span>cm</h4>
+                    </div>
+                    <div id="detailLink" class="boxElement">
+                        <p>7-day detail forecasts</p>
+                    </div>
+                </div>
+                <div id="alertlegend">
+                    <h3 style="padding-left:25px;">ALERT LEVEL</h3>
+                    <ul>
+                        <li><span>Typical or below</span></li>
+                        <li><span>Moderate high</span></li>
+                        <li><span>Extreme high</span></li>
+                    </ul>
+                </div>
             </div>
-            <div class="item2 smallBoxStyle"><span class='close'>x</span>
-                <h3>COASTLINE</h3>
-                <p style="font-style: italic;">Choose from map</p>
-            </div>
-            <div class="item3"><span class='close'>x</span>
-                <h3>7-DAY OUTLOOK</h3>
-                <table id="datatable" align="center">
-                    <tr>
-                        <th width=50px;>TIDE</th>
-                        <th width=50px;>WAVE</th>
-                        <th>DAY</th>
-                        <th>DATE</th>
-                    </tr>
-                </table>
-            </div>
-            <div class="item4"><span class='close'>x</span>
-                <h3>ITEM4</h3>ITEM4 CONTENT</div>
-            <div id="alertlegend">
-                <h3 style="padding-left:25px;">ALERT LEVEL</h3>
-                <ul>
-                    <li><span>Typical or below</span></li>
-                    <li><span>Moderate high</span></li>
-                    <li><span>Extreme high</span></li>
-                </ul>
-            </div>
-          </div>
         </div>
         <!-- </div> -->
         <!-- </div> -->
