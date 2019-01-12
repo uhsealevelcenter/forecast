@@ -20,6 +20,7 @@ var MapController = (function(m,pulse,coast,waves){
           boxFlow1(l.options.title);
       });
       m.addLayer(coastalWarningsLayer);
+      m.addLayer(stationsLayer);
       m.removeLayer(allPulsesGroup);
     }
   }

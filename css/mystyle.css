@@ -31,7 +31,22 @@ h1 {
   height: 7%;*/
   background-color: white;
   border-radius: 15px;
+  position: relative;
 }
+/*.item1::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 18px solid transparent;
+	border-top-color: white;
+	border-bottom: 0;
+	margin-left: -18px;
+	margin-bottom: -18px;
+  display: none;
+}*/
 
 .item2 {
   padding-left: 15px;
@@ -41,7 +56,22 @@ h1 {
   grid-row-start: 2;
   grid-row-end: 3;
   display: none;
+  position: relative;
 }
+
+/*.item2::after{
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 18px solid transparent;
+  border-left-color: white;
+  border-right: 0;
+  margin-top: -18px;
+  margin-right: -18px;
+}*/
 
 .item3 {
   padding-left: 15px;
@@ -51,9 +81,22 @@ h1 {
   grid-row-start: 1;
   grid-row-end: 5;
   display: none;
-
-
+  position: relative;
 }
+
+/*.item3::after{
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 18px solid transparent;
+  border-left-color: white;
+  border-right: 0;
+  margin-top: -18px;
+  margin-right: -18px;
+}*/
 
 .item4 {
   padding-left: 15px;
@@ -184,6 +227,7 @@ td {
 table {
   margin-left: -15px;
   width: 340px;
+  position:relative;
 }
 
 th {
@@ -191,12 +235,39 @@ th {
 }
 
 tr:hover {
-  background-color: #ffff99;
+  /*background-color: #ffff99;*/
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   font-size: 16px;
   /*transform: scale(1.1);*/
 }
+
+tr:hover::after {
+  content: '';
+	position: absolute;
+
+	border: 18px solid transparent;
+	border-left-color: white;
+	border-right: 0px;
+	margin-top: -0px;
+	margin-right: -0px;
+}
+
+.specialarrow{
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.specialarrow::after{
+  content: '';
+  position: absolute;
+
+  border: 16px solid transparent;
+  border-left-color: white;
+  border-right: 0px;
+  margin-top: -0px;
+  margin-right: -0px;
+}
+
 
 /*fixed column width so it stays constant on hover events*/
 td.dayColumn{

@@ -53,6 +53,7 @@ mainGeoJSON.on('data:progress', function() {
 });
 var coastalWarningsLayer = {};
 var selectedFeature = null;
+var control = null;
 // When the GeoJSON is loaded create a Layer of of pulses and add it to the map
 mainGeoJSON.on('data:loaded', function() {
     console.log("Loaded", mainGeoJSON);
@@ -225,11 +226,10 @@ mainGeoJSON.on('data:loaded', function() {
         "Tide+SLA Warning": coastalWarningsLayer,
         "Wave Warning": wavesLayer,
         "Tide Gauge Locations": stationsLayer,
-        // "Positron Label": positronLabels
     };
     //
     //
-    L.control.layers(baseMaps, overlayMaps).addTo(map);
+    control = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
     allPulsesGroup = L.layerGroup(markers);
     allPulsesGroup.addTo(map);
@@ -387,15 +387,17 @@ function getAllIndexes(arr, val) {
 $(document).ready(function() {
     $("#datatable").delegate("td", "click", function(e) {
         $(".item4").show();
-        // console.log("Tide value", $(this).find("td")["0"].innerHTML);
-        // console.log("Wave value", $(this).find("td")["1"].innerHTML);
-        // console.log("parent", $(this).parent());
+        // Remove existing arrow befor adding new one
+        $("#datatable tr").removeClass("specialarrow")
+        $(this).parent().addClass('specialarrow');
         var rowClicked = $(this).parent().index()-1;
         updateDetailsBox(rowClicked);
-
-
     });
-});
+}
+
+
+);
+
 
 function updateDetailsBox(row){
   $("#swellH").text(selectedFeature.properties.swell_height[row]);
@@ -441,12 +443,37 @@ function resetAllBoxes(){
 function boxFlow1(title){
   $('.item1').children('p').text(title);
   $(".item2").show();
+  $(`<style>.item1:after{
+    content:"";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 18px solid transparent;
+    border-top-color: white;
+    border-bottom: 0;
+    margin-left: -18px;
+    margin-bottom: -18px;
+  }</style>`).appendTo('head');
 }
 
 function boxFlow2(loc, t, sl_al, wave_al)
 {
   $('.item2').children('p').text(loc);
   $(".item3").show();
+  $(`<style>.item2:after{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 18px solid transparent;
+    border-left-color: white;
+    border-right: 0;
+    margin-top: -18px;
+    margin-right: -18px;}</style>`).appendTo('head');
 
 //clear the table
 $('#datatable tr:has(td)').remove();
@@ -490,3 +517,27 @@ function getDayName(dateStr, locale) {
         weekday: 'long'
     });
 }
+
+L.Control.Layers.include({
+  getOverlays: function() {
+    // create hash to hold all layers
+    var control, layers;
+    layers = {};
+    control = this;
+
+    // loop thru all layers in control
+    control._layers.forEach(function(obj) {
+      var layerName;
+
+      // check if layer is an overlay
+      if (obj.overlay) {
+        // get name of overlay
+        layerName = obj.name;
+        // store whether it's present on the map or not
+        return layers[layerName] = control._map.hasLayer(obj.layer);
+      }
+    });
+
+    return layers;
+  }
+});
