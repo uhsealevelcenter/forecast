@@ -9,6 +9,8 @@ var MapController = (function(m,pulse,coast,waves){
       console.log("Zoom Level: less than", zoomCutOff);
       m.removeLayer(coastalWarningsLayer);
       m.removeLayer(stationsLayer);
+      m.removeLayer(wavesLayer);
+      myControl.getOverlays()["Tide+SLA"] = true;
         // m.removeLayer(wavesLayer);
       m.addLayer(allPulsesGroup);
       resetAllBoxes();
@@ -19,8 +21,10 @@ var MapController = (function(m,pulse,coast,waves){
       if( l instanceof L.Marker && map.getBounds().contains(l.getLatLng()) )
           boxFlow1(l.options.title);
       });
-      m.addLayer(coastalWarningsLayer);
-      m.addLayer(stationsLayer);
+      if(myControl.getOverlays()["Tide+SLA"])
+        m.addLayer(coastalWarningsLayer);
+      if(myControl.getOverlays()["Tide"])
+        m.addLayer(stationsLayer);
       m.removeLayer(allPulsesGroup);
     }
   }

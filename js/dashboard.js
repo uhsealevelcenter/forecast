@@ -53,7 +53,7 @@ mainGeoJSON.on('data:progress', function() {
 });
 var coastalWarningsLayer = {};
 var selectedFeature = null;
-var control = null;
+var myControl = null;
 // When the GeoJSON is loaded create a Layer of of pulses and add it to the map
 mainGeoJSON.on('data:loaded', function() {
     console.log("Loaded", mainGeoJSON);
@@ -229,7 +229,7 @@ mainGeoJSON.on('data:loaded', function() {
     };
     //
     //
-    control = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    myControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
     allPulsesGroup = L.layerGroup(markers);
     allPulsesGroup.addTo(map);
@@ -400,11 +400,20 @@ $(document).ready(function() {
 
 
 function updateDetailsBox(row){
-  $("#swellH").text(selectedFeature.properties.swell_height[row]);
-  $("#swellP").text(selectedFeature.properties.swell_period[row]);
-  $("#swellD").text(selectedFeature.properties.swell_direction[row]);
-  $("#waveLow").text(selectedFeature.properties.wave_component_water_level[row][0]);
-  $("#waveHigh").text(selectedFeature.properties.wave_component_water_level[row][1]);
+  if(selectedFeature.properties.swell_height !== null)
+  {
+    $("#swellH").text(selectedFeature.properties.swell_height[row]);
+    $("#swellP").text(selectedFeature.properties.swell_period[row]);
+    $("#swellD").text(selectedFeature.properties.swell_direction[row]);
+    $("#waveLow").text(selectedFeature.properties.wave_component_water_level[row][0]);
+    $("#waveHigh").text(selectedFeature.properties.wave_component_water_level[row][1]);
+  }else{
+    $("#swellH").text("-");
+    $("#swellP").text("-");
+    $("#swellD").text("-");
+    $("#waveLow").text("-");
+    $("#waveHigh").text("-");
+  }
 }
 
 var theParent = document.getElementById("overlayParent");
@@ -474,16 +483,19 @@ function boxFlow2(loc, t, sl_al, wave_al)
     border-right: 0;
     margin-top: -18px;
     margin-right: -18px;}</style>`).appendTo('head');
-
+if(wave_al===null){
+  wave_al = ['-','-','-','-','-','-','-'];
+}
 //clear the table
 $('#datatable tr:has(td)').remove();
 for (var i = 0; i < 7; i++) {
-    var dateString = t[i + 8].slice(0, -3);
+    var dateString = t[i].slice(0, -3);
     var d = new Date(dateString);
     var dayName = getDayName(d, "en-US");
+
     $('#datatable').append(
         $('<tr>').append(
-            $('<td>').append(sl_al[i + 8]
+            $('<td>').append(sl_al[i]
                 // $('').attr('href', 'https://www.google.com')
                 // .addClass('selectRow')
                 // .text(i+"N")
@@ -531,8 +543,8 @@ L.Control.Layers.include({
 
       // check if layer is an overlay
       if (obj.overlay) {
-        // get name of overlay
-        layerName = obj.name;
+        // get name of overlay, only first word
+        layerName = obj.name.split(" ")[0];
         // store whether it's present on the map or not
         return layers[layerName] = control._map.hasLayer(obj.layer);
       }
