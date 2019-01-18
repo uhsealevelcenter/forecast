@@ -258,12 +258,16 @@ mainGeoJSON.on('data:loaded', function() {
 
   // Display tide gauge info on hover
   stationsLayer.eachLayer(function(layer) {
-    layer.bindPopup("Some tide gauge info: " + layer.feature.id);
+    layer.bindPopup("Some tide gauge info: " + layer.feature.id +"<br>" + "Click for more info");
     layer.on('mouseover', function(e) {
       this.openPopup();
     });
     layer.on('mouseout', function(e) {
       this.closePopup();
+    });
+
+    layer.on('click', function() {
+      sidebar.toggle();
     });
 
   });
