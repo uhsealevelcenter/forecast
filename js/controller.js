@@ -10,7 +10,7 @@ var MapController = (function(m,pulse,coast,waves){
       m.removeLayer(coastalWarningsLayer);
       m.removeLayer(stationsLayer);
       m.removeLayer(wavesLayer);
-      myControl.getOverlays()["Tide+SLA"] = true;
+      // myControl.getOverlays()["Tide+SLA"] = true;
         // m.removeLayer(wavesLayer);
       m.addLayer(allPulsesGroup);
       resetAllBoxes();
@@ -21,9 +21,9 @@ var MapController = (function(m,pulse,coast,waves){
       if( l instanceof L.Marker && map.getBounds().contains(l.getLatLng()) )
           boxFlow1(l.options.title);
       });
-      if(myControl.getOverlays()["Tide+SLA"])
+      // if(myControl.getOverlays()["Tide+SLA"])
         m.addLayer(coastalWarningsLayer);
-      if(myControl.getOverlays()["Tide"])
+      // if(myControl.getOverlays()["Tide"])
         m.addLayer(stationsLayer);
       m.removeLayer(allPulsesGroup);
     }

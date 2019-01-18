@@ -77,6 +77,7 @@ mainGeoJSON.on('data:loaded', function() {
         }
     });
 
+
     regionAlertLayer = L.geoJSON(geoJsonFormat, {
 
         pointToLayer: function (feature, latlng) {
@@ -248,6 +249,21 @@ mainGeoJSON.on('data:loaded', function() {
     });
 
 
+    // Display tide gauge info on hover
+    stationsLayer.eachLayer(function(layer) {
+        layer.bindPopup("Some tide gauge info: "+ layer.feature.id);
+        layer.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        layer.on('mouseout', function (e) {
+            this.closePopup();
+        });
+
+    });
+
+    var popup = new L.Popup();
+
+    coastalWarningsLayer.bindPopup(popup);
     // Layer click handler
     coastalWarningsLayer.on('click', function(e) {
       var time = e.layer.feature.properties.sl_component.time;
@@ -261,16 +277,17 @@ mainGeoJSON.on('data:loaded', function() {
           //data is the JSON string
           // console.log("json respom",data.display_name);
 
-          var location = data.display_name;
+          var location = data.display_name.split(",").slice(0,3);
+          console.log(data.display_name);
           selectedFeature = closestLayer.layer.feature;
           var wave = closestLayer.layer.feature.properties.wave_component_alert_code
           // Remove plotting for now
           // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
           // console.log("LOCATION: ", location);
-
+          // var newMarker = new L.marker(e.latlng).addTo(map);
           boxFlow2(location, time, sl_alerts, wave);
           updateDetailsBox(0);
-          // popup.setContent(assemblePopup(time, location, sl_alerts))
+          popup.setContent(assemblePopup(time, location, sl_alerts))
       });
     });
 
@@ -384,19 +401,30 @@ function getAllIndexes(arr, val) {
     return indexes;
 }
 
-$(document).ready(function() {
+$(document).ready(function(e) {
     $("#datatable").delegate("td", "click", function(e) {
+      // Stop click propagation so that the popup stays on the map when different
+      // days are selected
+      e.stopPropagation();
         $(".item4").show();
         // Remove existing arrow befor adding new one
-        $("#datatable tr").removeClass("specialarrow")
-        $(this).parent().addClass('specialarrow');
+        $("#datatable tr").removeClass("selectedRow")
+        $(this).parent().addClass('selectedRow');
+
+        // Fade out unselected rows
+        $('#datatable').children('tr').each(function(i, obj) {
+            if(obj.classList.contains("selectedRow"))
+              $(this).css("opacity","1.0");
+            else
+              $(this).css("opacity","0.3");
+        });
+
+
         var rowClicked = $(this).parent().index()-1;
         updateDetailsBox(rowClicked);
     });
-}
+});
 
-
-);
 
 
 function updateDetailsBox(row){
@@ -407,6 +435,42 @@ function updateDetailsBox(row){
     $("#swellD").text(selectedFeature.properties.swell_direction[row]);
     $("#waveLow").text(selectedFeature.properties.wave_component_water_level[row][0]);
     $("#waveHigh").text(selectedFeature.properties.wave_component_water_level[row][1]);
+
+    switch (selectedFeature.properties.wave_component_alert_code[row]) {
+      case 0:
+        $("#waveWarning").css("background-color", "grey");
+        $("#waveAlert h2").css("color", "grey");
+        break;
+      case 1:
+        $("#waveWarning").css("background-color", ORANGE);
+        $("#waveAlert h2").css("color", ORANGE);
+        break;
+      case 2:
+        $("#waveWarning").css("background-color", RED);
+        $("#waveAlert h2").css("color", RED);
+        break;
+    default:
+
+    }
+
+    switch (selectedFeature.properties.sl_component.sea_level_forecast[row]) {
+      case 0:
+        $("#tideWarning").css("background-color", "grey");
+        $("#tideAlert h2").css("color", "grey");
+        break;
+      case 1:
+        $("#tideWarning").css("background-color", ORANGE);
+        $("#tideAlert h2").css("color", ORANGE);
+        break;
+      case 2:
+        $("#tideWarning").css("background-color", RED);
+        $("#tideAlert h2").css("color", RED);
+        break;
+    default:
+
+    }
+
+
   }else{
     $("#swellH").text("-");
     $("#swellP").text("-");
@@ -414,6 +478,8 @@ function updateDetailsBox(row){
     $("#waveLow").text("-");
     $("#waveHigh").text("-");
   }
+
+
 }
 
 var theParent = document.getElementById("overlayParent");
@@ -492,15 +558,46 @@ for (var i = 0; i < 7; i++) {
     var dateString = t[i].slice(0, -3);
     var d = new Date(dateString);
     var dayName = getDayName(d, "en-US");
+    var srcStringT = "";
+    var srcStringW = "";
+    switch (sl_al[i]) {
+      case 0:
+        srcStringT = "css/circle.png";
+        break;
+      case 1:
+        srcStringT = "css/circleO.png";
+        break;
+      case 2:
+        srcStringT = "css/circleR.png";
+        break;
+      default:
+        srcStringT = "css/circle.png";
+    }
+
+    switch (wave_al[i]) {
+      case 0:
+        srcStringW = "css/circle.png";
+        break;
+      case 1:
+        srcStringW = "css/circleO.png";
+        break;
+      case 2:
+        srcStringW = "css/circleR.png";
+        break;
+      default:
+        srcStringW = "css/circle.png";
+    }
+
 
     $('#datatable').append(
         $('<tr>').append(
-            $('<td>').append(sl_al[i]
-                // $('').attr('href', 'https://www.google.com')
+            $('<td>').append(
+                $('<img>').attr('src', srcStringT)
                 // .addClass('selectRow')
                 // .text(i+"N")
             ),
-            $('<td>').append(wave_al[i]
+            $('<td>').append(
+              $('<img>').attr('src', srcStringW)
                 // $('<a>').attr('href', 'https://www.blic.rs')
                 // .addClass('imgurl')
                 // .attr('target', '_blank')
