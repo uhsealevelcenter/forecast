@@ -132,19 +132,24 @@ h1 {
   margin-top: -10px;
 }
 
+
 li#typical {
-  list-style-image: url('circle.png');
+  /* list-style-image: url('circle.png'); */
 }
 li#moderate {
-  list-style-image: url('circleO.png');
+  /* list-style-image: url('circleO.png'); */
 }
 li#extreme {
-  list-style-image: url('circleR.png');
+  /* list-style-image: url('circleR.png'); */
 }
-
+ul {
+  list-style-type: none;
+  line-height: 22px;
+}
 #alertlegend > ul > li
 {
  /* color: red; */
+ margin-left: -18px;
 }
 
 #alertlegend ul li span {
@@ -217,10 +222,11 @@ li#extreme {
   grid-area: g;
 }
 
-.close {
+.myclose {
     float:right;
     display:inline-block;
     padding:2px 5px;
+    font-size: large;
     /*background:#ccc;*/
 }
 /* .title{

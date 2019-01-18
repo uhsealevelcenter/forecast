@@ -11,11 +11,15 @@
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
     <link href="css/mystyle.css" rel="stylesheet">
     <link href="css/L.Icon.Pulse.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/L.Control.Sidebar.css" />
 
 </head>
 
 <body>
     <!-- <h1>Dashboard Prototype</h1> -->
+    <div id="sidebar">
+    <h1 style="color: grey">INFO</h1>
+  </div>
     <div class="container">
 
 
@@ -34,11 +38,11 @@
                     <h3>ISLAND</h3>
                     <p class="truncate" style="font-style: italic; font-size: 14px;">Choose from map</p>
                 </div>
-                <div class="item2 smallBoxStyle"><span class='close'>x</span>
+                <div class="item2 smallBoxStyle"><span class='myclose'>&times;</span>
                     <h3>COASTLINE</h3>
                     <p class="truncate" style="font-style: italic; font-size: 14px;">Choose from map</p>
                 </div>
-                <div class="item3"><span class='close'>x</span>
+                <div class="item3"><span class='myclose'>&times;</span>
                     <h3>7-DAY OUTLOOK</h3>
                     <table id="datatable" align="center">
                       <thead>
@@ -51,7 +55,7 @@
                       </thead>
                     </table>
                 </div>
-                <div class="item4"><span class='close'>x</span>
+                <div class="item4"><span class='myclose'>&times;</span>
                     <div id="tideAlert" class="boxElement">
                         <h3>ALERT DETAILS</h3>
                         <h2 style="font-weight: normal;">HIGH TIDE</h2>
@@ -89,11 +93,11 @@
                     </div>
                 </div>
                 <div id="alertlegend">
-                    <h3 style="padding-left:25px;">ALERT LEVEL</h3>
+                    <h3 style="padding-left:25px;margin-bottom:-10px;">ALERT LEVEL</h3>
                     <ul>
-                        <li id="typical"><span>Typical or below</span></li>
-                        <li id="moderate"><span>Moderate high</span></li>
-                        <li id="extreme"><span>Extreme high</span></li>
+                        <li id="typical"><span><img src="css/circle.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Typical or below</span></li>
+                        <li id="moderate"><span><img src="css/circleO.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Moderate high</span></li>
+                        <li id="extreme"><span><img src="css/circleR.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Extreme high</span></li>
                     </ul>
                 </div>
             </div>
@@ -142,6 +146,7 @@
 <p>CustomPane.js</p>-->
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="js/L.Control.Sidebar.js"></script>
 </body>
 
 </html>
