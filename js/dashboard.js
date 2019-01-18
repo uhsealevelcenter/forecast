@@ -417,11 +417,11 @@ $(document).ready(function(e) {
     // days are selected
     e.stopPropagation();
     // Move map when big table is open
-    if($(".item4").is(":hidden")){
-      map.panBy([-485, 0], {
-        duration: 0.5
-      });
-  }
+  //   if($(".item4").is(":hidden")){
+  //     map.panBy([-485, 0], {
+  //       duration: 0.5
+  //     });
+  // }
     $(".item4").show();
 
     // Remove existing arrow befor adding new one
@@ -513,9 +513,9 @@ function closeBox(e) {
         boxClose2();
       }
       if (parentContainer.hasClass("item4")) {
-        map.panBy([$(".item4").width(), 0], {
-          duration: 0.5
-        });
+        // map.panBy([$(".item4").width(), 0], {
+        //   duration: 0.5
+        // });
         $(".item4").hide();
 
       }
@@ -531,7 +531,7 @@ function boxClose2() {
       });
     }
     if($(".item3").is(":visible") & $(".item3").is(":visible")){
-      map.panBy([$(".item3").width()+$(".item4").width(), 0], {
+      map.panBy([$(".item3").width(), 0], {
         duration: 0.5
       });
     }
