@@ -327,7 +327,7 @@ tr:not(.selectedRow):hover{
 
 .selectedRow::after{
   content: '';
-  position: absolute;
+  position: fixed;
 
   border: 16px solid transparent;
   border-left-color: white;
