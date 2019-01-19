@@ -54,7 +54,7 @@ mainGeoJSON.on('data:progress', function() {
 var coastalWarningsLayer = {};
 var selectedFeature = null;
 var myControl = null;
-var sidebar = null;
+// var sidebar = null;
 // When the GeoJSON is loaded create a Layer of of pulses and add it to the map
 mainGeoJSON.on('data:loaded', function() {
   console.log("Loaded", mainGeoJSON);
@@ -233,10 +233,10 @@ mainGeoJSON.on('data:loaded', function() {
   //
   myControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-  sidebar = L.control.sidebar('sidebar', {
-    position: 'right'
-  });
-  map.addControl(sidebar);
+  // sidebar = L.control.sidebar('sidebar', {
+  //   position: 'right'
+  // });
+  // map.addControl(sidebar);
 
 
   allPulsesGroup = L.layerGroup(markers);
@@ -258,7 +258,7 @@ mainGeoJSON.on('data:loaded', function() {
 
   // Display tide gauge info on hover
   stationsLayer.eachLayer(function(layer) {
-    layer.bindPopup("Some tide gauge info: " + layer.feature.id +"<br>" + "Click for more info");
+    layer.bindPopup("Some tide gauge info: " + layer.feature.id);
     layer.on('mouseover', function(e) {
       this.openPopup();
     });
@@ -266,9 +266,9 @@ mainGeoJSON.on('data:loaded', function() {
       this.closePopup();
     });
 
-    layer.on('click', function() {
-      sidebar.toggle();
-    });
+    // layer.on('click', function() {
+    //   sidebar.toggle();
+    // });
 
   });
 
