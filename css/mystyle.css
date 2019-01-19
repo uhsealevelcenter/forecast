@@ -274,7 +274,7 @@ tr:hover:nth-child(8) {
 
 tr:hover::after {
   content: '';
-	position: absolute;
+	position: fixed;
 
 	border: 18px solid transparent;
 	border-left-color: white;
