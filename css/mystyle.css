@@ -368,7 +368,7 @@ div#tideAlert{
 }
 
 div#tideInfo{
-  right: 10px;
+  right: 20px;
   top: 35px;
   width: 45%;
   line-height: 5px;
@@ -389,7 +389,7 @@ div#waveAlert{
 
 div#waveInfo{
   /*float:none;*/
-  right: 10px;
+  right: 20px;
   bottom: 20px;
   width: 45%;
   height: 38%;
@@ -412,8 +412,8 @@ div#waveInfo{
 
 
 div#detailLink{
-  top: 5px;
-  right: 10px;
+  top: 0px;
+  right: 30px;
   width: 45%;
   height: 15px;
 }
@@ -425,6 +425,23 @@ div#detailLink{
   line-height: 0px;
   padding: 0 0 0 15px;
   margin-top: -10px;
+}
+
+#arrowTide, #arrowWave{
+  width: 30px;
+  height: 30px;
+  float: left;
+  margin-left: -50px;
+  margin-top: 45px;
+}
+
+#arrowDown{
+  width: 15px;
+  height: 15px;
+  transform: rotate(-90deg);
+  padding-left: 15px;
+  padding-top: 10px;
+  margin-bottom: -10px;
 }
 
 
