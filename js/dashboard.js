@@ -7,30 +7,30 @@ var RED = "#FF310D";
 var BLACK = "#000000";
 var WHITE = "#FFFFFF";
 
-var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-  maxZoom: 12,
-  minZoom: 2,
-  // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-  // 	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-  // 	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  id: 'mapbox.light'
-});
-
-var streets_d = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-  maxZoom: 12,
-  minZoom: 2,
-  // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-  // 	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-  // 	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  id: 'mapbox.dark'
-});
+// var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+//   maxZoom: 12,
+//   minZoom: 2,
+//   // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+//   // 	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+//   // 	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+//   id: 'mapbox.light'
+// });
+//
+// var streets_d = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+//   maxZoom: 12,
+//   minZoom: 2,
+//   // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+//   // 	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+//   // 	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+//   id: 'mapbox.dark'
+// });
 
 var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
   maxZoom: 12,
   minZoom: 2,
-  // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-  // 	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-  // 	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+  	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+  	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
   id: 'mapbox.satellite'
 });
 
@@ -225,7 +225,7 @@ mainGeoJSON.on('data:loaded', function() {
   // Map overlays (SLA, Waves layer)
   // Can have multiple active at a time
   var overlayMaps = {
-    "Tide+SLA Warning": coastalWarningsLayer,
+    // "Tide+SLA Warning": coastalWarningsLayer,
     "Wave Warning": wavesLayer,
     "Tide Gauge Locations": stationsLayer,
   };
@@ -313,10 +313,14 @@ mainGeoJSON.on('data:loading', function() {
 var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
 var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+  maxZoom: 12,
+  minZoom: 2,
   attribution: cartodbAttribution
 });
 
 var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+  maxZoom: 12,
+  minZoom: 2,
   attribution: cartodbAttribution,
   pane: 'labels'
 });
@@ -345,10 +349,10 @@ map.getPane('labels').style.pointerEvents = 'none';
 // Creating a selection of maps
 // Only one can be active at a time
 var baseMaps = {
-  "Light": streets_l,
-  "Dark": streets_d,
+  // "Light": streets_l,
+  // "Dark": streets_d,
   "Satellite": streets_s,
-  "Positron": positronGroup,
+  "Light": positronGroup,
 };
 
 function showCoastWarnings() {

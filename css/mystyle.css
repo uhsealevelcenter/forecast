@@ -249,6 +249,7 @@ td {
 
 table {
   margin-left: -15px;
+  margin-top: -5px;
   width: 340px;
   position:relative;
 }
@@ -349,7 +350,7 @@ table#datatable tbody  tr {
 .boxElement{
   /*background: #2db34a;*/
    height: 80px;
-   line-height: 14px;
+   line-height: 12px;
    position: absolute;
    text-align: left;
    width: 80px;
@@ -444,7 +445,9 @@ div#detailLink{
   margin-bottom: -10px;
 }
 
-
+h3, h4, th{
+  color: #5d5959;
+}
 .myCSSClass{
   color: pink;
 }
