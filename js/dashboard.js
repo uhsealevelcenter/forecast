@@ -277,7 +277,7 @@ mainGeoJSON.on('data:loaded', function() {
   coastalWarningsLayer.bindPopup(popup);
   // Layer click handler
   coastalWarningsLayer.on('click', function(e) {
-    var time = e.layer.feature.properties.sl_component.time;
+    var time = e.layer.feature.properties.sl_component.time.slice(-7,e.layer.feature.properties.sl_component.time.length);
     // // var location = feature.id;
     var sl_alerts = e.layer.feature.properties.sl_component.sea_level_forecast;
 
@@ -445,24 +445,28 @@ $(document).ready(function(e) {
 
 function updateDetailsBox(row) {
   if (selectedFeature.properties.swell_height !== null) {
-    $("#swellH").text(selectedFeature.properties.swell_height[row]);
-    $("#swellP").text(selectedFeature.properties.swell_period[row]);
-    $("#swellD").text(selectedFeature.properties.swell_direction[row]);
-    $("#waveLow").text(selectedFeature.properties.wave_component_water_level[row][0]);
-    $("#waveHigh").text(selectedFeature.properties.wave_component_water_level[row][1]);
+    var sh = selectedFeature.properties.swell_height[row];
+    var sp = selectedFeature.properties.swell_period[row];
+    var sd = selectedFeature.properties.swell_direction[row];
+    $("#swellValues").text("{0} m @ {1}s from {2}".format(sh, sp, sd));
+    var waveValueAr = selectedFeature.properties.wave_component_water_level[row];
+    $("#waveValue").text("{0}-{1} cm".format(waveValueAr[0], waveValueAr[1]));
 
     switch (selectedFeature.properties.wave_component_alert_code[row]) {
       case 0:
         $("#waveWarning").css("background-color", "grey");
         $("#waveAlert h2").css("color", "grey");
+        $("#waveWarningText").text("Waiting for text description.");
         break;
       case 1:
         $("#waveWarning").css("background-color", ORANGE);
         $("#waveAlert h2").css("color", ORANGE);
+        $("#waveWarningText").text("Minor coastal erosion and over wash is possible in vulnerable areas; worsened by higher tides.");
         break;
       case 2:
         $("#waveWarning").css("background-color", RED);
         $("#waveAlert h2").css("color", RED);
+        $("#waveWarningText").text("Significant coastal erosion and over wash is possible in vulnerable areas; worsened by higher tides.");
         break;
       default:
 
@@ -472,14 +476,17 @@ function updateDetailsBox(row) {
       case 0:
         $("#tideWarning").css("background-color", "grey");
         $("#tideAlert h2").css("color", "grey");
+        $("#tideWarningText").text("No significant impact is expected in areas vulnerable to tidal fooding.");
         break;
       case 1:
         $("#tideWarning").css("background-color", ORANGE);
         $("#tideAlert h2").css("color", ORANGE);
+        $("#tideWarningText").text("Minor impacts possible during brief periods around high tide in areas vulnerable to tidal fooding.");
         break;
       case 2:
         $("#tideWarning").css("background-color", RED);
         $("#tideAlert h2").css("color", RED);
+        $("#tideWarningText").text("Waiting for text description.");
         break;
       default:
 
@@ -487,11 +494,30 @@ function updateDetailsBox(row) {
 
 
   } else {
-    $("#swellH").text("-");
-    $("#swellP").text("-");
-    $("#swellD").text("-");
-    $("#waveLow").text("-");
-    $("#waveHigh").text("-");
+    $("#swellValues").text("-");
+    $("#waveValue").text("-");
+  }
+
+
+
+  var tideValue = selectedFeature.properties.sl_component.tide_values[row];
+  $("#tideValue").text(selectedFeature.properties.sl_component.tide_values[row]+" cm");
+  if(selectedFeature.properties.sl_component.tide_values[row]>0){
+    $("#tideValue").text(tideValue + " cm above average");
+  }else if (selectedFeature.properties.sl_component.tide_values[row]<0) {
+    $("#tideValue").text(tideValue + " cm below average");
+  }else{
+    $("#tideValue").text("About average");
+  }
+
+  var mslValue = selectedFeature.properties.sl_component.msl_values[row];
+  $("#mslValue").text(selectedFeature.properties.sl_component.msl_values[row]+" cm");
+  if(selectedFeature.properties.sl_component.msl_values[row]>0){
+    $("#mslValue").text(mslValue + " cm above average");
+  }else if (selectedFeature.properties.sl_component.msl_values[row]<0) {
+    $("#mslValue").text(mslValue + " cm below average");
+  }else{
+    $("#mslValue").text("About average");
   }
 
 
@@ -592,7 +618,7 @@ function boxFlow2(loc, t, sl_al, wave_al) {
   $('#datatable tr:has(td)').remove();
   for (var i = 0; i < 7; i++) {
     var dateString = t[i].slice(0, -3);
-    var d = new Date(dateString);
+    var d = new Date(dateString).toLocaleString("en-US", {timeZone: "Europe/London"});
     var dayName = getDayName(d, "en-US");
     var srcStringT = "";
     var srcStringW = "";
@@ -657,6 +683,20 @@ function assemblePopup(t, l, alert) {
 
 String.prototype.replaceAt = function(index, replacement) {
   return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+// For string formating as per :
+// https://stackoverflow.com/questions/610406/javascript-equivalent-to-printf-string-format
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
 }
 
 function getDayName(dateStr, locale) {
