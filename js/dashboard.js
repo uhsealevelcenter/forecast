@@ -26,7 +26,7 @@ var WHITE = "#FFFFFF";
 // });
 
 var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-  maxZoom: 12,
+  maxZoom: 10,
   minZoom: 2,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
   	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -41,6 +41,8 @@ var seaLevelLayer = {};
 var wavesLayer = {};
 var regionAlertLayer = {};
 var stationsLayer = {};
+var selectedDayIndex = 0;
+var firstTimeClicked = false;
 
 // Loading a geojson file with Sea Level and tide prediction for Oahu coastline
 // encoded in LineString
@@ -295,8 +297,19 @@ mainGeoJSON.on('data:loaded', function() {
       // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
       // console.log("LOCATION: ", location);
       // var newMarker = new L.marker(e.latlng).addTo(map);
+      var highestAlerts = [];
+      var highInd;
+
+      if(!firstTimeClicked){
+          highestAlerts = wave.map(function (item, i) {
+          return Math.max(item, sl_alerts[i])
+        });
+        selectedDayIndex = indexOfMax(highestAlerts);
+        firstTimeClicked = true;
+      }
+
       boxFlow2(location, time, sl_alerts, wave);
-      updateDetailsBox(0);
+      updateDetailsBox(selectedDayIndex);
       popup.setContent(assemblePopup(time, location, sl_alerts))
     });
   });
@@ -313,13 +326,13 @@ mainGeoJSON.on('data:loading', function() {
 var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
 var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-  maxZoom: 12,
+  maxZoom: 10,
   minZoom: 2,
   attribution: cartodbAttribution
 });
 
 var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
-  maxZoom: 12,
+  maxZoom: 10,
   minZoom: 2,
   attribution: cartodbAttribution,
   pane: 'labels'
@@ -441,6 +454,7 @@ $(document).ready(function(e) {
     });
 
     var rowClicked = $(this).parent().index() - 1;
+    selectedDayIndex = rowClicked;
     updateDetailsBox(rowClicked);
   });
 });
@@ -500,6 +514,7 @@ function updateDetailsBox(row) {
   } else {
     $("#swellValues").text("-");
     $("#waveValue").text("-");
+    $("#waveWarningText").text("No forecast available for this coastline segment.");
   }
 
 
@@ -511,7 +526,11 @@ function updateDetailsBox(row) {
   }else if (selectedFeature.properties.sl_component.tide_values[row]<0) {
     $("#tideValue").text(tideValue + " cm below average");
   }else{
+    if (selectedFeature.properties.sl_component.tide_values[row]==0)
     $("#tideValue").text("About average");
+    else {
+      $("#tideValue").text("No data");
+    }
   }
 
   var mslValue = selectedFeature.properties.sl_component.msl_values[row];
@@ -521,7 +540,11 @@ function updateDetailsBox(row) {
   }else if (selectedFeature.properties.sl_component.msl_values[row]<0) {
     $("#mslValue").text(mslValue + " cm below average");
   }else{
-    $("#mslValue").text("About average");
+    if (selectedFeature.properties.sl_component.msl_values[row]==0)
+      $("#mslValue").text("About average");
+    else {
+      $("#mslValue").text("No data");
+    }
   }
 
 
@@ -615,9 +638,13 @@ function boxFlow2(loc, t, sl_al, wave_al) {
     border-right: 0;
     margin-top: -18px;
     margin-right: -18px;}</style>`).appendTo('head');
+
   if (wave_al === null) {
     wave_al = ['-', '-', '-', '-', '-', '-', '-'];
+  }else{
+
   }
+
   //clear the table
   $('#datatable tr:has(td)').remove();
   for (var i = 0; i < 7; i++) {
@@ -651,7 +678,7 @@ function boxFlow2(loc, t, sl_al, wave_al) {
         srcStringW = "css/circleR.svg";
         break;
       default:
-        srcStringW = "css/circle.svg";
+        srcStringW = "css/none.svg";
     }
 
 
@@ -675,7 +702,17 @@ function boxFlow2(loc, t, sl_al, wave_al) {
     );
   }
 
-
+  // Have a day automatically selected
+  //The css child index is 1 based
+  var index = selectedDayIndex+1;
+  $( "#datatable tr:eq("+index+")" ).addClass('selectedRow');
+  // Fade out unselected rows
+  $('#datatable').children('tr').each(function(i, obj) {
+    if (obj.classList.contains("selectedRow"))
+      $(this).css("opacity", "1.0");
+    else
+      $(this).css("opacity", "0.3");
+  });
 
 }
 
@@ -708,6 +745,24 @@ function getDayName(dateStr, locale) {
   return date.toLocaleDateString(locale, {
     weekday: 'long'
   });
+}
+
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+
+    var max = arr[0];
+    var maxIndex = 0;
+
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+
+    return maxIndex;
 }
 
 function panMap(dir, distance){
