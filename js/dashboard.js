@@ -301,9 +301,14 @@ mainGeoJSON.on('data:loaded', function() {
       var highInd;
 
       if(!firstTimeClicked){
+        if(wave===null){
+          highestAlerts = sl_alerts;
+        }else{
           highestAlerts = wave.map(function (item, i) {
           return Math.max(item, sl_alerts[i])
         });
+        }
+
         selectedDayIndex = indexOfMax(highestAlerts);
         firstTimeClicked = true;
       }
@@ -490,34 +495,33 @@ function updateDetailsBox(row) {
 
     }
 
-    switch (selectedFeature.properties.sl_component.sea_level_forecast[row]) {
-      case 0:
-        $("#tideWarning").css("background-color", "grey");
-        $("#tideAlert h2").css("color", "grey");
-        $("#tideWarningText").text("No significant impact is expected in areas vulnerable to tidal fooding.");
-        break;
-      case 1:
-        $("#tideWarning").css("background-color", ORANGE);
-        $("#tideAlert h2").css("color", ORANGE);
-        $("#tideWarningText").text("Minor impacts possible during brief periods around high tide in areas vulnerable to tidal fooding.");
-        break;
-      case 2:
-        $("#tideWarning").css("background-color", RED);
-        $("#tideAlert h2").css("color", RED);
-        $("#tideWarningText").text("Waiting for text description.");
-        break;
-      default:
-
-    }
-
-
   } else {
+
     $("#swellValues").text("-");
     $("#waveValue").text("-");
     $("#waveWarningText").text("No forecast available for this coastline segment.");
   }
 
 
+  switch (selectedFeature.properties.sl_component.sea_level_forecast[row]) {
+    case 0:
+      $("#tideWarning").css("background-color", "grey");
+      $("#tideAlert h2").css("color", "grey");
+      $("#tideWarningText").text("No significant impact is expected in areas vulnerable to tidal fooding.");
+      break;
+    case 1:
+      $("#tideWarning").css("background-color", ORANGE);
+      $("#tideAlert h2").css("color", ORANGE);
+      $("#tideWarningText").text("Minor impacts possible during brief periods around high tide in areas vulnerable to tidal fooding.");
+      break;
+    case 2:
+      $("#tideWarning").css("background-color", RED);
+      $("#tideAlert h2").css("color", RED);
+      $("#tideWarningText").text("Waiting for text description.");
+      break;
+    default:
+
+  }
 
   var tideValue = selectedFeature.properties.sl_component.tide_values[row];
   $("#tideValue").text(selectedFeature.properties.sl_component.tide_values[row]+" cm");
