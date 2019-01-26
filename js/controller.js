@@ -7,14 +7,17 @@ var MapController = (function(m,pulse,coast,waves){
   function zoomLogic(zoom){
     if(zoom<zoomCutOff){
       console.log("Zoom Level: less than", zoomCutOff);
+      resetSegments();
+      resetAllBoxes();
       m.removeLayer(coastalWarningsLayer);
       m.removeLayer(stationsLayer);
       m.removeLayer(wavesLayer);
       firstTimeClicked = false;
+
       // myControl.getOverlays()["Tide+SLA"] = true;
         // m.removeLayer(wavesLayer);
       m.addLayer(allPulsesGroup);
-      resetAllBoxes();
+
     }else{
       console.log("Zoom Level: more than", zoomCutOff);
       // m.addLayer(wavesLayer);

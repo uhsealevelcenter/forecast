@@ -437,12 +437,11 @@ div#detailLink{
 }
 
 #arrowDown{
-  width: 15px;
-  height: 15px;
-  transform: rotate(-90deg);
-  padding-left: 15px;
-  padding-top: 10px;
-  margin-bottom: -10px;
+  width: 20px;
+  padding-left: 12px;
+  padding-top: 0px;
+  margin-bottom: -6px;
+  margin-top: -6px;
 }
 
 h3, h4, th{

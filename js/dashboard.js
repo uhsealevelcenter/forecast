@@ -29,8 +29,8 @@ var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.pn
   maxZoom: 10,
   minZoom: 2,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-  	'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-  	'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
   id: 'mapbox.satellite'
 });
 
@@ -118,41 +118,43 @@ mainGeoJSON.on('data:loaded', function() {
     }
   });
 
-  coastalWarningsLayer.getLayers().forEach(function(layer) {
+  // coastalWarningsLayer.getLayers().forEach(function(layer) {
+  //
+  //   switch (Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast)) {
+  //     case 0:
+  //       layer.setStyle({
+  //         color: GREEN,
+  //         weight: lineWeight,
+  //         opacity: 0.75,
+  //         lineCap: 'round',
+  //         lineJoin: 'round',
+  //         pane: 'sealevel'
+  //       });
+  //       break;
+  //     case 2:
+  //       layer.setStyle({
+  //         color: RED,
+  //         weight: lineWeight,
+  //         opacity: 0.75,
+  //         lineCap: 'round',
+  //         lineJoin: 'round',
+  //         pane: 'sealevel'
+  //       });
+  //       break;
+  //     case 1:
+  //       layer.setStyle({
+  //         color: ORANGE,
+  //         weight: lineWeight,
+  //         opacity: 0.75,
+  //         lineCap: 'round',
+  //         lineJoin: 'round',
+  //         pane: 'sealevel'
+  //       });
+  //       break;
+  //   }
+  // });
 
-    switch (Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast)) {
-      case 0:
-        layer.setStyle({
-          color: GREEN,
-          weight: lineWeight,
-          opacity: 0.75,
-          lineCap: 'round',
-          lineJoin: 'round',
-          pane: 'sealevel'
-        });
-        break;
-      case 2:
-        layer.setStyle({
-          color: RED,
-          weight: lineWeight,
-          opacity: 0.75,
-          lineCap: 'round',
-          lineJoin: 'round',
-          pane: 'sealevel'
-        });
-        break;
-      case 1:
-        layer.setStyle({
-          color: ORANGE,
-          weight: lineWeight,
-          opacity: 0.75,
-          lineCap: 'round',
-          lineJoin: 'round',
-          pane: 'sealevel'
-        });
-        break;
-    }
-  });
+
 
   wavesLayer.getLayers().forEach(function(layer) {
     // console.log("TST", layer.feature.properties.wave_component_alert_code);
@@ -252,6 +254,7 @@ mainGeoJSON.on('data:loaded', function() {
       map.flyTo([this._latlng.lat, this._latlng.lng], 8);
       map.removeLayer(allPulsesGroup);
       boxFlow1(this.options.title);
+      updateSegmentsColor(selectedDayIndex);
       // plotData();
       setTimeout(showCoastWarnings, 1900);
     });
@@ -274,17 +277,25 @@ mainGeoJSON.on('data:loaded', function() {
 
   });
 
-  var popup = new L.Popup();
-
-  coastalWarningsLayer.bindPopup(popup);
+  // var popup = new L.Popup();
+  //
+  // coastalWarningsLayer.bindPopup(popup);
   // Layer click handler
   coastalWarningsLayer.on('click', function(e) {
-    var time = e.layer.feature.properties.sl_component.time.slice(-7,e.layer.feature.properties.sl_component.time.length);
+    var time = e.layer.feature.properties.sl_component.time.slice(-7, e.layer.feature.properties.sl_component.time.length);
     // // var location = feature.id;
     var sl_alerts = e.layer.feature.properties.sl_component.sea_level_forecast;
 
     // Finds the wave layer closest to the clicked location and gets the wave data
     var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
+    resetSegments();
+    e.layer.setStyle({
+      weight: 40,
+      opacity: 1.0
+    });
+
+    e.layer.feature.properties["selected_layer"] = true;
+
 
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng, function(data) {
       //data is the JSON string
@@ -300,13 +311,13 @@ mainGeoJSON.on('data:loaded', function() {
       var highestAlerts = [];
       var highInd;
 
-      if(!firstTimeClicked){
-        if(wave===null){
+      if (!firstTimeClicked) {
+        if (wave === null) {
           highestAlerts = sl_alerts;
-        }else{
-          highestAlerts = wave.map(function (item, i) {
-          return Math.max(item, sl_alerts[i])
-        });
+        } else {
+          highestAlerts = wave.map(function(item, i) {
+            return Math.max(item, sl_alerts[i])
+          });
         }
 
         selectedDayIndex = indexOfMax(highestAlerts);
@@ -315,7 +326,7 @@ mainGeoJSON.on('data:loaded', function() {
 
       boxFlow2(location, time, sl_alerts, wave);
       updateDetailsBox(selectedDayIndex);
-      popup.setContent(assemblePopup(time, location, sl_alerts))
+      // popup.setContent(assemblePopup(time, location, sl_alerts))
     });
   });
 
@@ -439,11 +450,11 @@ $(document).ready(function(e) {
     // days are selected
     e.stopPropagation();
     // Move map when big table is open
-  //   if($(".item4").is(":hidden")){
-  //     map.panBy([-485, 0], {
-  //       duration: 0.5
-  //     });
-  // }
+    //   if($(".item4").is(":hidden")){
+    //     map.panBy([-485, 0], {
+    //       duration: 0.5
+    //     });
+    // }
     $(".item4").show();
 
     // Remove existing arrow befor adding new one
@@ -460,6 +471,7 @@ $(document).ready(function(e) {
 
     var rowClicked = $(this).parent().index() - 1;
     selectedDayIndex = rowClicked;
+    updateSegmentsColor(selectedDayIndex);
     updateDetailsBox(rowClicked);
   });
 });
@@ -499,6 +511,8 @@ function updateDetailsBox(row) {
 
     $("#swellValues").text("-");
     $("#waveValue").text("-");
+    $("#waveWarning").css("background-color", "black");
+    $("#waveAlert h2").css("color", "black");
     $("#waveWarningText").text("No forecast available for this coastline segment.");
   }
 
@@ -524,27 +538,27 @@ function updateDetailsBox(row) {
   }
 
   var tideValue = selectedFeature.properties.sl_component.tide_values[row];
-  $("#tideValue").text(selectedFeature.properties.sl_component.tide_values[row]+" cm");
-  if(selectedFeature.properties.sl_component.tide_values[row]>0){
+  $("#tideValue").text(selectedFeature.properties.sl_component.tide_values[row] + " cm");
+  if (selectedFeature.properties.sl_component.tide_values[row] > 0) {
     $("#tideValue").text(tideValue + " cm above average");
-  }else if (selectedFeature.properties.sl_component.tide_values[row]<0) {
+  } else if (selectedFeature.properties.sl_component.tide_values[row] < 0) {
     $("#tideValue").text(tideValue + " cm below average");
-  }else{
-    if (selectedFeature.properties.sl_component.tide_values[row]==0)
-    $("#tideValue").text("About average");
+  } else {
+    if (selectedFeature.properties.sl_component.tide_values[row] == 0)
+      $("#tideValue").text("About average");
     else {
       $("#tideValue").text("No data");
     }
   }
 
   var mslValue = selectedFeature.properties.sl_component.msl_values[row];
-  $("#mslValue").text(selectedFeature.properties.sl_component.msl_values[row]+" cm");
-  if(selectedFeature.properties.sl_component.msl_values[row]>0){
+  $("#mslValue").text(selectedFeature.properties.sl_component.msl_values[row] + " cm");
+  if (selectedFeature.properties.sl_component.msl_values[row] > 0) {
     $("#mslValue").text(mslValue + " cm above average");
-  }else if (selectedFeature.properties.sl_component.msl_values[row]<0) {
+  } else if (selectedFeature.properties.sl_component.msl_values[row] < 0) {
     $("#mslValue").text(mslValue + " cm below average");
-  }else{
-    if (selectedFeature.properties.sl_component.msl_values[row]==0)
+  } else {
+    if (selectedFeature.properties.sl_component.msl_values[row] == 0)
       $("#mslValue").text("About average");
     else {
       $("#mslValue").text("No data");
@@ -565,29 +579,29 @@ function closeBox(e) {
         boxClose2();
       }
     }
-      // parentContainer.hide();
-      if (parentContainer.hasClass("item2") || parentContainer.hasClass("item3")) {
-        boxClose2();
-      }
-      if (parentContainer.hasClass("item4")) {
-        // map.panBy([$(".item4").width(), 0], {
-        //   duration: 0.5
-        // });
-        $(".item4").hide();
+    // parentContainer.hide();
+    if (parentContainer.hasClass("item2") || parentContainer.hasClass("item3")) {
+      boxClose2();
+    }
+    if (parentContainer.hasClass("item4")) {
+      // map.panBy([$(".item4").width(), 0], {
+      //   duration: 0.5
+      // });
+      $(".item4").hide();
 
-      }
+    }
 
   }
 }
 
 function boxClose2() {
-  if($('.item2').children('p').text() != "Choose from map"){
-    if($(".item3").is(":visible")){
+  if ($('.item2').children('p').text() != "Choose from map") {
+    if ($(".item3").is(":visible")) {
       map.panBy([$(".item3").width(), 0], {
         duration: 0.5
       });
     }
-    if($(".item3").is(":visible") & $(".item3").is(":visible")){
+    if ($(".item3").is(":visible") & $(".item3").is(":visible")) {
       map.panBy([$(".item3").width(), 0], {
         duration: 0.5
       });
@@ -626,9 +640,11 @@ function boxFlow1(title) {
 function boxFlow2(loc, t, sl_al, wave_al) {
   $('.item2').children('p').text(loc);
   // Move move so that the table doesn't obscure the view
-  if($('.item3').is(":hidden")){map.panBy([-325, 0], {
-    duration: 0.5
-  });}
+  if ($('.item3').is(":hidden")) {
+    map.panBy([-325, 0], {
+      duration: 0.5
+    });
+  }
   $(".item3").show();
   $(`<style>.item2:after{
     content: "";
@@ -645,7 +661,7 @@ function boxFlow2(loc, t, sl_al, wave_al) {
 
   if (wave_al === null) {
     wave_al = ['-', '-', '-', '-', '-', '-', '-'];
-  }else{
+  } else {
 
   }
 
@@ -653,7 +669,9 @@ function boxFlow2(loc, t, sl_al, wave_al) {
   $('#datatable tr:has(td)').remove();
   for (var i = 0; i < 7; i++) {
     var dateString = t[i].slice(0, -3);
-    var d = new Date(dateString).toLocaleString("en-US", {timeZone: "Europe/London"});
+    var d = new Date(dateString).toLocaleString("en-US", {
+      timeZone: "Europe/London"
+    });
     var dayName = getDayName(d, "en-US");
     var srcStringT = "";
     var srcStringW = "";
@@ -708,8 +726,8 @@ function boxFlow2(loc, t, sl_al, wave_al) {
 
   // Have a day automatically selected
   //The css child index is 1 based
-  var index = selectedDayIndex+1;
-  $( "#datatable tr:eq("+index+")" ).addClass('selectedRow');
+  var index = selectedDayIndex + 1;
+  $("#datatable tr:eq(" + index + ")").addClass('selectedRow');
   // Fade out unselected rows
   $('#datatable').children('tr').each(function(i, obj) {
     if (obj.classList.contains("selectedRow"))
@@ -736,10 +754,9 @@ if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
+      return typeof args[number] != 'undefined' ?
+        args[number] :
+        match;
     });
   };
 }
@@ -752,25 +769,98 @@ function getDayName(dateStr, locale) {
 }
 
 function indexOfMax(arr) {
-    if (arr.length === 0) {
-        return -1;
+  if (arr.length === 0) {
+    return -1;
+  }
+
+  var max = arr[0];
+  var maxIndex = 0;
+
+  for (var i = 1; i < arr.length; i++) {
+    if (arr[i] > max) {
+      maxIndex = i;
+      max = arr[i];
     }
+  }
 
-    var max = arr[0];
-    var maxIndex = 0;
-
-    for (var i = 1; i < arr.length; i++) {
-        if (arr[i] > max) {
-            maxIndex = i;
-            max = arr[i];
-        }
-    }
-
-    return maxIndex;
+  return maxIndex;
 }
 
-function panMap(dir, distance){
+function panMap(dir, distance) {
 
+}
+
+function updateSegmentsColor(day) {
+  var highestAlert;
+  var segmentOpacity = 0.75;
+  coastalWarningsLayer.getLayers().forEach(function(layer) {
+  if(!firstTimeClicked){
+    console.log("First time updated");
+    highestAlert = Math.max.apply(layer.feature.properties.wave_component_alert_code, layer.feature.properties.sl_component.sea_level_forecast);
+  }else{
+    if (layer.feature.properties.wave_component_alert_code === null) {
+      highestAlert = Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast);
+    } else {
+      highestAlert =
+        Math.max(layer.feature.properties.sl_component.sea_level_forecast[day],
+          layer.feature.properties.wave_component_alert_code[day]);
+    }
+
+  }
+
+    if (layer.feature.properties["selected_layer"] === true) {
+      lineWeight = 40;
+      segmentOpacity = 1.0;
+    } else {
+      lineWeight = 20;
+      segmentOpacity = 0.75;
+    }
+    switch (highestAlert) {
+      case 0:
+        layer.setStyle({
+          color: GREEN,
+          weight: lineWeight,
+          opacity: segmentOpacity,
+          lineCap: 'round',
+          lineJoin: 'round',
+          pane: 'sealevel'
+        });
+        break;
+      case 2:
+        layer.setStyle({
+          color: RED,
+          weight: lineWeight,
+          opacity: segmentOpacity,
+          lineCap: 'round',
+          lineJoin: 'round',
+          pane: 'sealevel'
+        });
+        break;
+      case 1:
+        layer.setStyle({
+          color: ORANGE,
+          weight: lineWeight,
+          opacity: segmentOpacity,
+          lineCap: 'round',
+          lineJoin: 'round',
+          pane: 'sealevel'
+        });
+        break;
+    }
+  });
+}
+
+function resetSegments(){
+  coastalWarningsLayer.getLayers().forEach(function(layer) {
+    layer.feature.properties["selected_layer"] = false;
+    layer.setStyle({
+      weight: 20,
+      opacity: 0.75,
+      lineCap: 'round',
+      lineJoin: 'round',
+      pane: 'sealevel'
+    });
+  });
 }
 
 L.Control.Layers.include({
