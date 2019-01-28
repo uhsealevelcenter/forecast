@@ -6,6 +6,7 @@ var ORANGE = "#FF9A00";
 var RED = "#FF310D";
 var BLACK = "#000000";
 var WHITE = "#FFFFFF";
+var MAX_ZOOM = 11;
 
 // var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 //   maxZoom: 12,
@@ -26,7 +27,7 @@ var WHITE = "#FFFFFF";
 // });
 
 var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-  maxZoom: 10,
+  maxZoom: MAX_ZOOM,
   minZoom: 2,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
     '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -230,7 +231,7 @@ mainGeoJSON.on('data:loaded', function() {
   // Can have multiple active at a time
   var overlayMaps = {
     // "Tide+SLA Warning": coastalWarningsLayer,
-    "Wave Warning": wavesLayer,
+    // "Wave Warning": wavesLayer,
     "Tide Gauge Locations": stationsLayer,
   };
   //
@@ -254,7 +255,7 @@ mainGeoJSON.on('data:loaded', function() {
       map.flyTo([this._latlng.lat, this._latlng.lng], 8);
       map.removeLayer(allPulsesGroup);
       boxFlow1(this.options.title);
-      updateSegmentsColor(selectedDayIndex);
+
       // plotData();
       setTimeout(showCoastWarnings, 1900);
     });
@@ -297,11 +298,31 @@ mainGeoJSON.on('data:loaded', function() {
     e.layer.feature.properties["selected_layer"] = true;
 
 
-    $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng, function(data) {
+    $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
       //data is the JSON string
       // console.log("json respom",data.display_name);
 
-      var location = data.display_name.split(",").slice(0, 3);
+      // var location = data.display_name.split(",").slice(0, 3);
+      var city = data.address.city;
+      var village = data.address.village;
+      var state = data.address.state;
+      var county = data.address.county;
+      var zip = data.address.postcode;
+      var location = []; //data.address.city + ", " + data.address.state + ", " + data.address.postcode;
+
+      // Show small town name if available, if not show city, if not show county
+      // Always show state and zip (zip might not always be available)
+      if (typeof village !== "undefined")
+        location.push(village);
+      else {
+        if (typeof city !== "undefined") {
+          location.push(city);
+        } else {
+          location.push(county);
+        }
+      }
+      location.push(state);
+      location.push(zip);
       selectedFeature = closestLayer.layer.feature;
       var wave = closestLayer.layer.feature.properties.wave_component_alert_code
       // Remove plotting for now
@@ -324,6 +345,9 @@ mainGeoJSON.on('data:loaded', function() {
         firstTimeClicked = true;
       }
 
+      for (var i = 0; i<location.length; i++){
+        location[i] = " "+location [i] ;
+      }
       boxFlow2(location, time, sl_alerts, wave);
       updateDetailsBox(selectedDayIndex);
       // popup.setContent(assemblePopup(time, location, sl_alerts))
@@ -342,13 +366,13 @@ mainGeoJSON.on('data:loading', function() {
 var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
 var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-  maxZoom: 10,
+  maxZoom: MAX_ZOOM,
   minZoom: 2,
   attribution: cartodbAttribution
 });
 
 var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
-  maxZoom: 10,
+  maxZoom: MAX_ZOOM,
   minZoom: 2,
   attribution: cartodbAttribution,
   pane: 'labels'
@@ -386,6 +410,7 @@ var baseMaps = {
 
 function showCoastWarnings() {
   // wavesLayer.addTo(map);
+  updateSegmentsColor(selectedDayIndex);
   coastalWarningsLayer.addTo(map);
   stationsLayer.addTo(map);
 }
@@ -485,7 +510,12 @@ function updateDetailsBox(row) {
     var sd = selectedFeature.properties.swell_direction[row];
     $("#swellValues").text("{0} m @ {1}s from {2}".format(sh, sp, sd));
     var waveValueAr = selectedFeature.properties.wave_component_water_level[row];
-    $("#waveValue").text("{0}-{1} cm".format(waveValueAr[0], waveValueAr[1]));
+    if(waveValueAr[0]==0 & waveValueAr[1]==0){
+      $("#waveValue").text("0 cm");
+    }else {
+      $("#waveValue").text("{0}-{1} cm".format(waveValueAr[0], waveValueAr[1]));
+    }
+
 
     switch (selectedFeature.properties.wave_component_alert_code[row]) {
       case 0:
@@ -794,19 +824,19 @@ function updateSegmentsColor(day) {
   var highestAlert;
   var segmentOpacity = 0.75;
   coastalWarningsLayer.getLayers().forEach(function(layer) {
-  if(!firstTimeClicked){
-    console.log("First time updated");
-    highestAlert = Math.max.apply(layer.feature.properties.wave_component_alert_code, layer.feature.properties.sl_component.sea_level_forecast);
-  }else{
-    if (layer.feature.properties.wave_component_alert_code === null) {
-      highestAlert = Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast);
+    if (!firstTimeClicked) {
+      console.log("First time updated");
+      highestAlert = Math.max.apply(layer.feature.properties.wave_component_alert_code, layer.feature.properties.sl_component.sea_level_forecast);
     } else {
-      highestAlert =
-        Math.max(layer.feature.properties.sl_component.sea_level_forecast[day],
-          layer.feature.properties.wave_component_alert_code[day]);
-    }
+      if (layer.feature.properties.wave_component_alert_code === null) {
+        highestAlert = Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast);
+      } else {
+        highestAlert =
+          Math.max(layer.feature.properties.sl_component.sea_level_forecast[day],
+            layer.feature.properties.wave_component_alert_code[day]);
+      }
 
-  }
+    }
 
     if (layer.feature.properties["selected_layer"] === true) {
       lineWeight = 40;
@@ -850,7 +880,7 @@ function updateSegmentsColor(day) {
   });
 }
 
-function resetSegments(){
+function resetSegments() {
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     layer.feature.properties["selected_layer"] = false;
     layer.setStyle({

@@ -26,10 +26,12 @@ var MapController = (function(m,pulse,coast,waves){
           boxFlow1(l.options.title);
       });
       // if(myControl.getOverlays()["Tide+SLA"])
+      if(!m.hasLayer(coastalWarningsLayer)){
+        updateSegmentsColor(selectedDayIndex);
         m.addLayer(coastalWarningsLayer);
       // if(myControl.getOverlays()["Tide"])
         m.addLayer(stationsLayer);
-      m.removeLayer(allPulsesGroup);
+      m.removeLayer(allPulsesGroup);}
     }
   }
 
