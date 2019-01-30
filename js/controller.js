@@ -3,6 +3,8 @@ var MapController = (function(m,pulse,coast,waves){
     m.on("zoomend",function(){
       zoomLev = m.getZoom();
       zoomLogic(zoomLev);
+      adjustLineWithZoom(zoomLev);
+      console.log("ZOOM END CALLED");
     });
   function zoomLogic(zoom){
     if(zoom<zoomCutOff){
@@ -27,12 +29,15 @@ var MapController = (function(m,pulse,coast,waves){
       });
       // if(myControl.getOverlays()["Tide+SLA"])
       if(!m.hasLayer(coastalWarningsLayer)){
-        updateSegmentsColor(selectedDayIndex);
+
         m.addLayer(coastalWarningsLayer);
       // if(myControl.getOverlays()["Tide"])
         m.addLayer(stationsLayer);
-      m.removeLayer(allPulsesGroup);}
+      m.removeLayer(allPulsesGroup);
     }
+    updateSegmentsColor(selectedDayIndex);
+    }
+
   }
 
   var clickLogic = function(){

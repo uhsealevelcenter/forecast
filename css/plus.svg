@@ -9,15 +9,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="15mm"
-   height="15mm"
-   viewBox="0 0 15 15"
+   width="33mm"
+   height="33mm"
+   viewBox="0 0 33 33"
    version="1.1"
-   id="svg8073"
+   id="svg6232"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="none.svg">
+   sodipodi:docname="plus.svg">
   <defs
-     id="defs8067" />
+     id="defs6226" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,26 +25,27 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="42.585332"
-     inkscape:cy="40.241304"
+     inkscape:zoom="3.959798"
+     inkscape:cx="73.81748"
+     inkscape:cy="95.523552"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
+     showguides="false"
      inkscape:window-width="2560"
      inkscape:window-height="1377"
      inkscape:window-x="1432"
      inkscape:window-y="483"
      inkscape:window-maximized="1" />
   <metadata
-     id="metadata8070">
+     id="metadata6229">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -52,15 +53,17 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-282)">
-    <rect
-       ry="1.517103"
-       rx="0.78681642"
-       y="286.87387"
-       x="0"
-       height="5.252285"
-       width="15"
-       id="rect5623"
-       style="fill:#aaaaaa;fill-opacity:1;stroke:none;stroke-width:4.08768845;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers" />
+     transform="translate(0,-264)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:69.8181839px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.74545455;"
+       x="-3.8863642"
+       y="305.09659"
+       id="text6779"><tspan
+         sodipodi:role="line"
+         id="tspan6777"
+         x="-3.8863642"
+         y="305.09659"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:1.74545455;fill:#808080;fill-opacity:1;">+</tspan></text>
   </g>
 </svg>

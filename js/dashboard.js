@@ -1,6 +1,6 @@
 var lineWeight = 20;
 var lineWeightWave = 10;
-var GREEN = "#7EFF0D";
+var GREY = "#aaaaaa";
 var YELLOW = "#FCFF05";
 var ORANGE = "#FF9A00";
 var RED = "#FF310D";
@@ -90,7 +90,7 @@ mainGeoJSON.on('data:loaded', function() {
         var alertColor = {};
         switch (feature.properties.region_master_alert_code) {
           case 0:
-            alertColor = GREEN;
+            alertColor = GREY;
             break;
           case 2:
             alertColor = RED;
@@ -124,7 +124,7 @@ mainGeoJSON.on('data:loaded', function() {
   //   switch (Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast)) {
   //     case 0:
   //       layer.setStyle({
-  //         color: GREEN,
+  //         color: GREY,
   //         weight: lineWeight,
   //         opacity: 0.75,
   //         lineCap: 'round',
@@ -192,7 +192,7 @@ mainGeoJSON.on('data:loaded', function() {
             repeat: true,
             offset: 9,
             attributes: {
-              fill: GREEN,
+              fill: GREY,
               'font-weight': 'bold',
               'font-size': '24',
               'rotate': 0,
@@ -204,7 +204,7 @@ mainGeoJSON.on('data:loaded', function() {
             repeat: true,
             offset: 9,
             attributes: {
-              fill: GREEN,
+              fill: GREY,
               'font-weight': 'bold',
               'font-size': '24',
               'rotate': 0,
@@ -392,6 +392,10 @@ var map = new L.Map('mapid', {
 // the waves layer but the labels of the positron maps show all the way on top
 map.createPane('sealevel');
 map.getPane('sealevel').style.zIndex = 399;
+// Creating a slightly higher layer for a selected coastline segment so that
+// the adjacent layer does not overlap the selected layer
+map.createPane('sealeveltop');
+map.getPane('sealeveltop').style.zIndex = 400;
 // map.getPane('sealevel').style.pointerEvents = 'none';
 
 map.createPane('labels');
@@ -410,9 +414,11 @@ var baseMaps = {
 
 function showCoastWarnings() {
   // wavesLayer.addTo(map);
-  updateSegmentsColor(selectedDayIndex);
+
   coastalWarningsLayer.addTo(map);
   stationsLayer.addTo(map);
+  // updateSegmentsColor(selectedDayIndex);
+  console.log("SHOW COAST WARNING CALLED");
 }
 
 // Create an instance of Map Controller which controls the display and removal
@@ -519,17 +525,20 @@ function updateDetailsBox(row) {
 
     switch (selectedFeature.properties.wave_component_alert_code[row]) {
       case 0:
-        $("#waveWarning").css("background-color", "grey");
-        $("#waveAlert h2").css("color", "grey");
+        $("#waveWarning").css("background-color", GREY);
+        $("#waveWarning").text("TYPICAL");
+        $("#waveAlert h2").css("color", GREY);
         $("#waveWarningText").text("Waiting for text description.");
         break;
       case 1:
         $("#waveWarning").css("background-color", ORANGE);
+        $("#waveWarning").text("MODERATE");
         $("#waveAlert h2").css("color", ORANGE);
         $("#waveWarningText").text("Minor coastal erosion and over wash is possible in vulnerable areas; worsened by higher tides.");
         break;
       case 2:
         $("#waveWarning").css("background-color", RED);
+        $("#waveWarning").text("EXTREME");
         $("#waveAlert h2").css("color", RED);
         $("#waveWarningText").text("Significant coastal erosion and over wash is possible in vulnerable areas; worsened by higher tides.");
         break;
@@ -541,25 +550,29 @@ function updateDetailsBox(row) {
 
     $("#swellValues").text("-");
     $("#waveValue").text("-");
-    $("#waveWarning").css("background-color", "black");
-    $("#waveAlert h2").css("color", "black");
+    $("#waveWarning").css("background-color", GREY);
+    $("#waveWarning").text("NO DATA");
+    $("#waveAlert h2").css("color", GREY);
     $("#waveWarningText").text("No forecast available for this coastline segment.");
   }
 
 
   switch (selectedFeature.properties.sl_component.sea_level_forecast[row]) {
     case 0:
-      $("#tideWarning").css("background-color", "grey");
-      $("#tideAlert h2").css("color", "grey");
+      $("#tideWarning").css("background-color", GREY);
+      $("#tideWarning").text("TYPICAL");
+      $("#tideAlert h2").css("color", GREY);
       $("#tideWarningText").text("No significant impact is expected in areas vulnerable to tidal fooding.");
       break;
     case 1:
       $("#tideWarning").css("background-color", ORANGE);
+      $("#tideWarning").text("MODERATE");
       $("#tideAlert h2").css("color", ORANGE);
       $("#tideWarningText").text("Minor impacts possible during brief periods around high tide in areas vulnerable to tidal fooding.");
       break;
     case 2:
       $("#tideWarning").css("background-color", RED);
+      $("#tideWarning").text("EXTREME");
       $("#tideAlert h2").css("color", RED);
       $("#tideWarningText").text("Waiting for text description.");
       break;
@@ -638,12 +651,15 @@ function boxClose2() {
     }
   }
   $('.item2').children('p').text("Choose from map");
+  $('.item2').children('p').css("font-style","italic");
   $(".item3").hide();
   $(".item4").hide();
 }
 
 function resetAllBoxes() {
   $('.item1').children('p').text("Choose from map");
+  $('.item1').children('p').css("font-style","italic");
+  $('.item2').children('p').css("font-style","italic");
   $(".item2").hide();
   $(".item3").hide();
   $(".item4").hide();
@@ -651,6 +667,7 @@ function resetAllBoxes() {
 
 function boxFlow1(title) {
   $('.item1').children('p').text(title);
+  $('.item1').children('p').css("font-style","normal");
   $(".item2").show();
   $(`<style>.item1:after{
     content:"";
@@ -669,6 +686,7 @@ function boxFlow1(title) {
 
 function boxFlow2(loc, t, sl_al, wave_al) {
   $('.item2').children('p').text(loc);
+  $('.item2').children('p').css("font-style","normal");
   // Move move so that the table doesn't obscure the view
   if ($('.item3').is(":hidden")) {
     map.panBy([-325, 0], {
@@ -754,9 +772,11 @@ function boxFlow2(loc, t, sl_al, wave_al) {
     );
   }
 
-  // Have a day automatically selected
+  // Have a day automatically selected in the table
   //The css child index is 1 based
   var index = selectedDayIndex + 1;
+  // Update segment coloring to reflect the automatically selected day
+  updateSegmentsColor(selectedDayIndex);
   $("#datatable tr:eq(" + index + ")").addClass('selectedRow');
   // Fade out unselected rows
   $('#datatable').children('tr').each(function(i, obj) {
@@ -822,7 +842,9 @@ function panMap(dir, distance) {
 
 function updateSegmentsColor(day) {
   var highestAlert;
-  var segmentOpacity = 0.75;
+  var segmentOpacity = 1.0;
+  var layerLevel;
+  var lweight = getLineWeight();
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     if (!firstTimeClicked) {
       console.log("First time updated");
@@ -841,19 +863,21 @@ function updateSegmentsColor(day) {
     if (layer.feature.properties["selected_layer"] === true) {
       lineWeight = 40;
       segmentOpacity = 1.0;
+      layerLevel = 'sealeveltop';
     } else {
-      lineWeight = 20;
-      segmentOpacity = 0.75;
+      lineWeight = lweight;
+      segmentOpacity = 1.0;
+      layerLevel = 'sealevel';
     }
     switch (highestAlert) {
       case 0:
         layer.setStyle({
-          color: GREEN,
+          color: GREY,
           weight: lineWeight,
           opacity: segmentOpacity,
           lineCap: 'round',
           lineJoin: 'round',
-          pane: 'sealevel'
+          pane: layerLevel
         });
         break;
       case 2:
@@ -863,7 +887,7 @@ function updateSegmentsColor(day) {
           opacity: segmentOpacity,
           lineCap: 'round',
           lineJoin: 'round',
-          pane: 'sealevel'
+          pane: layerLevel
         });
         break;
       case 1:
@@ -873,7 +897,7 @@ function updateSegmentsColor(day) {
           opacity: segmentOpacity,
           lineCap: 'round',
           lineJoin: 'round',
-          pane: 'sealevel'
+          pane: layerLevel
         });
         break;
     }
@@ -881,16 +905,34 @@ function updateSegmentsColor(day) {
 }
 
 function resetSegments() {
+  var lweight  = getLineWeight();
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     layer.feature.properties["selected_layer"] = false;
     layer.setStyle({
-      weight: 20,
-      opacity: 0.75,
+      weight: lweight,
+      opacity: 1.0,
       lineCap: 'round',
       lineJoin: 'round',
       pane: 'sealevel'
     });
   });
+}
+
+function adjustLineWithZoom(zoom) {
+  var lweight  = getLineWeight();
+  coastalWarningsLayer.getLayers().forEach(function(layer) {
+    if(layer.feature.properties["selected_layer"] === false)
+    {
+      layer.setStyle({
+      weight: lweight,
+    });
+  }
+
+  });
+}
+
+function getLineWeight(){
+  return (20*(6-map.getZoom())+5*(map.getZoom()-MAX_ZOOM))/(6-MAX_ZOOM)
 }
 
 L.Control.Layers.include({

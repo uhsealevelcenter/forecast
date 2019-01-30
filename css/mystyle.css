@@ -225,8 +225,9 @@ ul {
 .myclose {
     float:right;
     display:inline-block;
-    padding:2px 5px;
+    padding:5px 5px;
     font-size: large;
+    line-height: 12px;
     /*background:#ccc;*/
 }
 /* .title{
@@ -285,7 +286,7 @@ tr:hover::after {
 }
 
 tr img:hover{
-  transform: scale(1.3);
+  transform: scale(1.5);
 }
 /* tr:hover:nth-child(8)::after {
   content: '';
@@ -423,9 +424,6 @@ div#detailLink{
   font-size: 12px;
   font-style: italic;
   color: grey;
-  line-height: 0px;
-  padding: 0 0 0 15px;
-  margin-top: -10px;
 }
 
 #arrowTide, #arrowWave{
@@ -436,15 +434,16 @@ div#detailLink{
   margin-top: 45px;
 }
 
-#arrowDown{
+#arrowDown,#plusSign{
   width: 20px;
   padding-left: 12px;
-  padding-top: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   margin-bottom: -6px;
   margin-top: -6px;
 }
 
-h3, h4, th{
+h3, h4, th, p{
   color: #5d5959;
 }
 .myCSSClass{

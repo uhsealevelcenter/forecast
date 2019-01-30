@@ -41,8 +41,7 @@
           <p class="truncate" style="font-style: italic; font-size: 14px;">Choose from map</p>
         </div>
         <div class="item3"><span class='myclose'>&times;</span>
-          <h3>7-DAY OUTLOOK</h3>
-          <p id="helpText">(select a day)</p>
+          <h3>7-DAY OUTLOOK <span id="helpText">(select a day)</span></h3>
           <table id="datatable" align="center">
             <thead>
               <tr style="pointer-events: none;">
@@ -68,10 +67,11 @@
           <div id="tideInfo" class="boxElement">
             <img alt = "" id="arrowTide" src="css/arrow.svg">
             <h3>Astronomical highest tide:</h3>
-            <h4 id="tideValue">5 cm</h4>
-            <p style="font-size: 28px; margin-top:0px;">+</p>
+            <p id="tideValue">5 cm</p>
+            <!-- <p style="font-size: 28px; margin-top:0px;">+</p> -->
+            <img alt = "" id="plusSign" src="css/plus.svg">
             <h3>Daily sea level:</h3>
-            <h4 id="mslValue">About average</h4>
+            <p id="mslValue">About average</p>
           </div>
           <div id="waveAlert" class="boxElement">
             <h2 style="font-weight: normal; font-size: 26px;">WAVE RUNUP</h2>
@@ -85,13 +85,13 @@
           <div id="waveInfo" class="boxElement">
             <img alt = "" id="arrowWave" src="css/arrow.svg">
             <h3>Primary swell:</h3>
-            <h4 id="swellValues"></h4>
+            <p id="swellValues"></p>
             <img alt = "" id="arrowDown" src="css/equal.svg">
             <h3>Height above still water:</h3>
-            <h4 id="waveValue"></h4>
+            <p id="waveValue"></p>
           </div>
           <div id="detailLink" class="boxElement">
-            <p><span><img alt = "link icon" src="css/link.svg" width="15px" height="15px"> 7-day detail forecasts</span></p>
+            <p><img style="vertical-align: middle;" alt = "link icon" src="css/link.svg" width="15px" height="15px"><span> 7-day detail forecasts</span></p>
           </div>
         </div>
         <div id="alertlegend">
