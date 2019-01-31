@@ -175,7 +175,6 @@ mainGeoJSON.on('data:loaded', function() {
           });
           break;
         case 1:
-          console.log("HERE");
           layer.setText('~', {
             repeat: true,
             offset: 9,
@@ -395,7 +394,7 @@ map.getPane('sealevel').style.zIndex = 399;
 // Creating a slightly higher layer for a selected coastline segment so that
 // the adjacent layer does not overlap the selected layer
 map.createPane('sealeveltop');
-map.getPane('sealeveltop').style.zIndex = 400;
+map.getPane('sealeveltop').style.zIndex = 600;
 // map.getPane('sealevel').style.pointerEvents = 'none';
 
 map.createPane('labels');
@@ -414,11 +413,11 @@ var baseMaps = {
 
 function showCoastWarnings() {
   // wavesLayer.addTo(map);
-
+// updateSegmentsColor(selectedDayIndex);
   coastalWarningsLayer.addTo(map);
   stationsLayer.addTo(map);
-  // updateSegmentsColor(selectedDayIndex);
-  console.log("SHOW COAST WARNING CALLED");
+
+  // console.log("SHOW COAST WARNING CALLED");
 }
 
 // Create an instance of Map Controller which controls the display and removal
@@ -845,10 +844,13 @@ function updateSegmentsColor(day) {
   var segmentOpacity = 1.0;
   var layerLevel;
   var lweight = getLineWeight();
+
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     if (!firstTimeClicked) {
-      console.log("First time updated");
-      highestAlert = Math.max.apply(layer.feature.properties.wave_component_alert_code, layer.feature.properties.sl_component.sea_level_forecast);
+      highestAlert = Math.max(Math.max.apply(null,layer.feature.properties.wave_component_alert_code), Math.max.apply(null,layer.feature.properties.sl_component.sea_level_forecast));
+      // console.log("wave", layer.feature.properties.wave_component_alert_code);
+      // console.log("sl", layer.feature.properties.sl_component.sea_level_forecast);
+      // console.log("HA", highestAlert);
     } else {
       if (layer.feature.properties.wave_component_alert_code === null) {
         highestAlert = Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast);
@@ -857,13 +859,15 @@ function updateSegmentsColor(day) {
           Math.max(layer.feature.properties.sl_component.sea_level_forecast[day],
             layer.feature.properties.wave_component_alert_code[day]);
       }
-
     }
+
+
 
     if (layer.feature.properties["selected_layer"] === true) {
       lineWeight = 40;
       segmentOpacity = 1.0;
       layerLevel = 'sealeveltop';
+      layer.bringToFront();
     } else {
       lineWeight = lweight;
       segmentOpacity = 1.0;
@@ -918,18 +922,18 @@ function resetSegments() {
   });
 }
 
-function adjustLineWithZoom(zoom) {
-  var lweight  = getLineWeight();
-  coastalWarningsLayer.getLayers().forEach(function(layer) {
-    if(layer.feature.properties["selected_layer"] === false)
-    {
-      layer.setStyle({
-      weight: lweight,
-    });
-  }
-
-  });
-}
+// function adjustLineWithZoom(zoom) {
+//   var lweight  = getLineWeight();
+//   coastalWarningsLayer.getLayers().forEach(function(layer) {
+//     if(layer.feature.properties["selected_layer"] === false)
+//     {
+//       layer.setStyle({
+//       weight: lweight,
+//     });
+//   }
+//
+//   });
+// }
 
 function getLineWeight(){
   return (20*(6-map.getZoom())+5*(map.getZoom()-MAX_ZOOM))/(6-MAX_ZOOM)

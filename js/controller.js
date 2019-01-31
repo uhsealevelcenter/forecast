@@ -3,7 +3,7 @@ var MapController = (function(m,pulse,coast,waves){
     m.on("zoomend",function(){
       zoomLev = m.getZoom();
       zoomLogic(zoomLev);
-      adjustLineWithZoom(zoomLev);
+      // adjustLineWithZoom(zoomLev);
       console.log("ZOOM END CALLED");
     });
   function zoomLogic(zoom){
