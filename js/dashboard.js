@@ -527,7 +527,7 @@ function updateDetailsBox(row) {
         $("#waveWarning").css("background-color", GREY);
         $("#waveWarning").text("TYPICAL");
         $("#waveAlert h2").css("color", GREY);
-        $("#waveWarningText").text("Waiting for text description.");
+        $("#waveWarningText").text("No significant impact is expected due to wave runup");
         break;
       case 1:
         $("#waveWarning").css("background-color", ORANGE);
@@ -573,7 +573,7 @@ function updateDetailsBox(row) {
       $("#tideWarning").css("background-color", RED);
       $("#tideWarning").text("EXTREME");
       $("#tideAlert h2").css("color", RED);
-      $("#tideWarningText").text("Waiting for text description.");
+      $("#tideWarningText").text("Beach overwash and/or standing water is possible in vulnerable areas");
       break;
     default:
 
@@ -845,12 +845,11 @@ function updateSegmentsColor(day) {
   var layerLevel;
   var lweight = getLineWeight();
 
+  // var antPoly;
+
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     if (!firstTimeClicked) {
       highestAlert = Math.max(Math.max.apply(null,layer.feature.properties.wave_component_alert_code), Math.max.apply(null,layer.feature.properties.sl_component.sea_level_forecast));
-      // console.log("wave", layer.feature.properties.wave_component_alert_code);
-      // console.log("sl", layer.feature.properties.sl_component.sea_level_forecast);
-      // console.log("HA", highestAlert);
     } else {
       if (layer.feature.properties.wave_component_alert_code === null) {
         highestAlert = Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast);
@@ -861,17 +860,43 @@ function updateSegmentsColor(day) {
       }
     }
 
-
-
     if (layer.feature.properties["selected_layer"] === true) {
       lineWeight = 40;
       segmentOpacity = 1.0;
       layerLevel = 'sealeveltop';
       layer.bringToFront();
+      // layer.setText('-', {
+      //   repeat: true,
+      //   offset: 9,
+      //   attributes: {
+      //     fill: 'white',
+      //     'font-weight': 'bold',
+      //     'font-size': '24',
+      //     'rotate': 0,
+      //   }
+      // });
+//       console.log(layer._latlngs);
+//       antPoly = L.polyline.antPath(layer._latlngs, {
+//   "delay": 250,
+//   "dashArray": [
+//     20,
+//     50
+//   ],
+//   "weight": 40,
+//   "color": "#FFFFFFFF",
+//   "pulseColor": "#FFFFFF",
+//   "paused": false,
+//   "reverse": false,
+//   "hardwareAccelerated": true
+// });
+// antPoly.addTo(map);
     } else {
       lineWeight = lweight;
       segmentOpacity = 1.0;
       layerLevel = 'sealevel';
+      // layer.setText('', {});
+      // if(typeof antPoly != 'undefined')
+      // antPoly.remove();
     }
     switch (highestAlert) {
       case 0:
@@ -921,19 +946,6 @@ function resetSegments() {
     });
   });
 }
-
-// function adjustLineWithZoom(zoom) {
-//   var lweight  = getLineWeight();
-//   coastalWarningsLayer.getLayers().forEach(function(layer) {
-//     if(layer.feature.properties["selected_layer"] === false)
-//     {
-//       layer.setStyle({
-//       weight: lweight,
-//     });
-//   }
-//
-//   });
-// }
 
 function getLineWeight(){
   return (20*(6-map.getZoom())+5*(map.getZoom()-MAX_ZOOM))/(6-MAX_ZOOM)
