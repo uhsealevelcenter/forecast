@@ -253,6 +253,7 @@ mainGeoJSON.on('data:loaded', function() {
       // console.log("Clik " + this._latlng);
       map.flyTo([this._latlng.lat, this._latlng.lng], 8);
       map.removeLayer(allPulsesGroup);
+      map.setMaxZoom(MAX_ZOOM); 
       boxFlow1(this.options.title);
 
       // plotData();
@@ -290,7 +291,7 @@ mainGeoJSON.on('data:loaded', function() {
 
     // Finds the wave layer closest to the clicked location and gets the wave data
     var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
-    map.setMaxZoom(MAX_ZOOM); 
+
     resetSegments();
     e.layer.setStyle({
       weight: 40,
