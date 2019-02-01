@@ -231,7 +231,7 @@ mainGeoJSON.on('data:loaded', function() {
   var overlayMaps = {
     // "Tide+SLA Warning": coastalWarningsLayer,
     // "Wave Warning": wavesLayer,
-    "Tide Gauge Locations": stationsLayer,
+    "All Tide Gauges": stationsLayer,
   };
   //
   //
@@ -308,8 +308,13 @@ mainGeoJSON.on('data:loaded', function() {
     });
 
     e.layer.feature.properties["selected_layer"] = true;
+    var statCode = e.layer.feature.properties.sl_component.station;
+    var singleStation = getStationLayer(statCode);
 
-    getStationLayer(e.layer.feature.properties.sl_component.station).openPopup();
+    singleStation.addTo(map);
+    singleStation.openPopup();
+    closeOtherStations(statCode);
+
 
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
       //data is the JSON string
@@ -430,7 +435,7 @@ function showCoastWarnings() {
   // wavesLayer.addTo(map);
 // updateSegmentsColor(selectedDayIndex);
   coastalWarningsLayer.addTo(map);
-  stationsLayer.addTo(map);
+  // stationsLayer.addTo(map);
   $(".infoBubble").show();
 
   // console.log("SHOW COAST WARNING CALLED");
@@ -1052,4 +1057,12 @@ function getStationLayer(statCode) {
     }
   });
   return my_layer;
+}
+
+function closeOtherStations(currStat){
+  stationsLayer.eachLayer(function(layer) {
+    if (layer.feature.id != currStat) {
+      layer.remove();
+    }
+  });
 }
