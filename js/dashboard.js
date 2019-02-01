@@ -28,7 +28,7 @@ var MAX_ZOOM = 11;
 
 var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
   maxZoom: MAX_ZOOM,
-  minZoom: 2,
+  minZoom: 3,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
     '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
     'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -290,6 +290,7 @@ mainGeoJSON.on('data:loaded', function() {
 
     // Finds the wave layer closest to the clicked location and gets the wave data
     var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
+    map.setMaxZoom(MAX_ZOOM); 
     resetSegments();
     e.layer.setStyle({
       weight: 40,
@@ -386,13 +387,13 @@ var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyrigh
 
 var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
   maxZoom: MAX_ZOOM,
-  minZoom: 2,
+  minZoom: 3,
   attribution: cartodbAttribution
 });
 
 var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
   maxZoom: MAX_ZOOM,
-  minZoom: 2,
+  minZoom: 3,
   attribution: cartodbAttribution,
   pane: 'labels'
 });
@@ -406,6 +407,8 @@ var map = new L.Map('mapid', {
   layers: [streets_s],
   zoomControl: false,
 });
+
+map.setMaxZoom(3);
 
 // Craating panes and assigning zIndex so that Sea Level layer always shows below
 // the waves layer but the labels of the positron maps show all the way on top
@@ -955,7 +958,7 @@ function updateSegmentsColor(day) {
       lineWeight = lweight;
       segmentOpacity = 1.0;
       layerLevel = 'sealevel';
-      layer.setText('', {});
+      // layer.setText('', {});
       // if(typeof antPoly != 'undefined')
       // antPoly.remove();
     }

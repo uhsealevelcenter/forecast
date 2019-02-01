@@ -32,7 +32,7 @@ var MapController = (function(m,pulse,coast,waves){
 
         m.addLayer(coastalWarningsLayer);
       // if(myControl.getOverlays()["Tide"])
-        m.addLayer(stationsLayer);
+        // m.addLayer(stationsLayer);
       m.removeLayer(allPulsesGroup);
     }
     updateSegmentsColor(selectedDayIndex);
