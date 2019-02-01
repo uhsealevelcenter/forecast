@@ -267,10 +267,10 @@ mainGeoJSON.on('data:loaded', function() {
   "<b>Location:</b> "+layer.feature.geometry.coordinates+"<br>"+
 "<b>Data Provider:</b> NOAA");
     layer.on('mouseover', function(e) {
-      this.openPopup();
+      // this.openPopup();
     });
     layer.on('mouseout', function(e) {
-      this.closePopup();
+      // this.closePopup();
     });
 
     // layer.on('click', function() {
@@ -309,7 +309,7 @@ mainGeoJSON.on('data:loaded', function() {
 
     e.layer.feature.properties["selected_layer"] = true;
 
-
+    getStationLayer(e.layer.feature.properties.sl_component.station).openPopup();
 
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
       //data is the JSON string
@@ -1041,4 +1041,15 @@ function getStationName(statCode) {
     }
   });
   return name;
+}
+
+function getStationLayer(statCode) {
+  var my_layer;
+  stationsLayer.eachLayer(function(layer) {
+    if (layer.feature.id == statCode) {
+      my_layer = layer;
+      return;
+    }
+  });
+  return my_layer;
 }
