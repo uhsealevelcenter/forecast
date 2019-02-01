@@ -265,7 +265,7 @@ mainGeoJSON.on('data:loaded', function() {
   stationsLayer.eachLayer(function(layer) {
     layer.bindPopup("<b>Station:</b> " + layer.feature.properties.stat_name+"<br>"+
   "<b>Location:</b> "+layer.feature.geometry.coordinates+"<br>"+
-"<b>Data Provider:</b> NOAA");
+"<b>Data Provider:</b> <a href=\"https://tidesandcurrents.noaa.gov\" target=\"_blank\">NOAA</a>");
     layer.on('mouseover', function(e) {
       // this.openPopup();
     });
