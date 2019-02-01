@@ -135,7 +135,7 @@ h1 {
   /*float:left;*/
   position: absolute;
   z-index: 1000;
-  bottom: 15px;
+  bottom: 140px;
   left: 15px;
   width: 160px;
   height: 120px;
@@ -500,6 +500,66 @@ div#detailLink{
 h3, h4, th, p{
   color: #5d5959;
 }
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 120px;
+  width: 100%;
+  background-color: white;
+  color: white;
+  /* text-align: center; */
+  z-index: 1000;
+}
+
+.column1 {
+  float: left;
+  width: 33%;
+  padding: 20px;
+}
+.column2 {
+  float: left;
+  width: 33%;
+  padding: 20px;
+}
+.column3 {
+  float: left;
+  width: 10%;
+  padding: 35px 50px 0px 50px;
+}
+.column4 {
+  float: left;
+  width: 10%;
+  padding: 35px 50px 0px 50px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+#logo1{
+  float: left;
+  padding-top: 15px;
+}
+
+#logo2{
+  /* padding: 40px 40px 0px 40px; */
+  float: right;
+}
+
+#logo3{
+  float: right;
+}
+.disclaimer{
+  width: 25%;
+  float: left;
+  padding-left: 2%;
+}
+
 .myCSSClass{
   color: pink;
 }

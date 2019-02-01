@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>html,body,.container{height:100%;overflow:hidden;width:100%;margin:auto}#mapid{width:auto;height:100%}.item1{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;position:relative}.item2{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;grid-row-start:2;grid-row-end:3;display:none;position:relative}.truncate{width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item3{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;grid-row-start:1;grid-row-end:5;display:none;position:relative}.item4{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;grid-row-start:1;grid-row-end:5;position:relative;display:none}#alertlegend{position:absolute;z-index:1000;bottom:15px;left:15px;width:160px;height:120px;background-color:white;border-radius:15px}.smallBoxStyle>p{margin-top:-10px}ul{list-style-type:none;line-height:22px}#alertlegend>ul>li{margin-left:-18px}#alertlegend ul li span{color:black}.container{height:100%;display:grid;grid-gap:0px;grid-template-columns:repeat(12,1fr);grid-template-rows:100%;grid-template-areas:"m m m m m m m m m m m m"}.left{grid-area:l;align-self:start}.mymap{grid-area:m;display:grid;grid-gap:20px;padding:0px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 70px}#overlayParent{display:grid;grid-gap:20px;padding:15px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 46px;z-index:1000}.right{grid-area:r;align-self:start}.graph{grid-area:g}.myclose{float:right;display:inline-block;padding:5px 5px;font-size:large;line-height:12px}table,th{border-collapse:collapse;padding:7px 0px 7px 0px;text-align:center}table{margin-left:-15px;margin-top:-5px;width:340px;position:relative}.boxElement{height:80px;line-height:12px;position:absolute;text-align:left;width:80px}.boxElement *{padding-left:10px}div#tideAlert{left:10px;top:5px;width:40%;height:40%;padding:0px}div#tideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:10px}div#waveAlert{top:160px;left:10px;width:40%;height:40%}div#waveInfo{right:20px;bottom:20px;width:45%;height:38%;line-height:5px;border:1px solid rgba(178,178,178,1.0);border-radius:10px}#tideWarning,#waveWarning{background-color:grey;border-radius:5px;padding:5px 12px 5px 12px;margin-top:-12px;display:inline;margin-left:12px;width:inherit;color:white;font-weight:bold}div#detailLink{top:0px;right:30px;width:45%;height:15px}#helpText{font-size:12px;font-style:italic;color:grey}#arrowTide,#arrowWave{width:30px;height:30px;float:left;margin-left:-50px;margin-top:45px}#arrowDown,#plusSign{width:20px;padding-left:12px;padding-top:5px;padding-bottom:5px;margin-bottom:-6px;margin-top:-6px}h3,th,p{color:#5d5959}</style>
+  <style>html,body,.container{height:100%;overflow:hidden;width:100%;margin:auto}#mapid{width:auto;height:100%}.item1{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;position:relative}.item2{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;grid-row-start:2;grid-row-end:3;display:none;position:relative}.truncate{width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item3{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;grid-row-start:1;grid-row-end:5;display:none;position:relative}.item4{padding-left:15px;z-index:1000;background-color:white;border-radius:10px;grid-row-start:1;grid-row-end:5;position:relative;display:none}.infoBubble{position:fixed;width:250px;height:70px;z-index:1000;background-color:white;border-radius:10px;margin:15px auto 0 auto;left:45%;font-family:Arial;font-size:1.0em;text-align:center;display:none}#alertlegend{position:absolute;z-index:1000;bottom:15px;left:15px;width:160px;height:120px;background-color:white;border-radius:15px}.smallBoxStyle>p{margin-top:-10px}ul{list-style-type:none;line-height:22px}#alertlegend>ul>li{margin-left:-18px}#alertlegend ul li span{color:black}.container{height:100%;display:grid;grid-gap:0px;grid-template-columns:repeat(12,1fr);grid-template-rows:100%;grid-template-areas:"m m m m m m m m m m m m"}.left{grid-area:l;align-self:start}.mymap{grid-area:m;display:grid;grid-gap:20px;padding:0px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 70px}#overlayParent{display:grid;grid-gap:20px;padding:15px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 46px;z-index:1000}.right{grid-area:r;align-self:start}.graph{grid-area:g}.myclose{float:right;display:inline-block;padding:5px 5px;font-size:large;line-height:12px}table,th{border-collapse:collapse;padding:7px 0px 7px 0px;text-align:center}table{margin-left:-15px;margin-top:-5px;width:340px;position:relative}.boxElement{height:80px;line-height:12px;position:absolute;text-align:left;width:80px}.boxElement *{padding-left:10px}div#tideAlert{left:10px;top:5px;width:40%;height:40%;padding:0px}div#tideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:10px}div#addTideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:10px;display:none}#noteText{line-height:10px;font-size:10px}div#waveAlert{top:160px;left:10px;width:40%;height:40%}div#waveInfo{right:20px;bottom:20px;width:45%;height:38%;line-height:5px;border:1px solid rgba(178,178,178,1.0);border-radius:10px}#tideWarning,#waveWarning{background-color:grey;border-radius:5px;padding:5px 12px 5px 12px;margin-top:-12px;display:inline;margin-left:12px;width:inherit;color:white;font-weight:bold}div#detailLink{top:0px;right:30px;width:45%;height:15px}#helpText{font-size:12px;font-style:italic;color:grey}#arrowTide,#arrowWave{width:30px;height:30px;float:left;margin-left:-50px;margin-top:45px}#arrowDown{width:20px;padding-left:12px;padding-top:5px;padding-bottom:5px;margin-bottom:-6px;margin-top:-6px}#plusSign{width:20px;padding-left:12px;padding-top:5px;padding-bottom:5px;margin-bottom:-6px;margin-top:-13px}#tideValue,#mslValue,#swellValues,#waveValue{font-size:1.17em}.info{margin-top:-5px}h3,th,p{color:#5d5959}</style>
   <link rel="shortcut icon" href="#" />
 
   <!-- <link rel="stylesheet" href="css/L.Control.Sidebar.css" /> -->
@@ -67,24 +67,24 @@
             </p>
           </div>
           <div id="tideInfo" class="boxElement">
-            <img alt = "" id="arrowTide" src="css/arrow.svg">
+            <img alt="" id="arrowTide" src="css/arrow.svg">
             <h3>Astronomical highest tide:</h3>
             <p class="info" id="tideValue">5 cm</p>
             <!-- <p style="font-size: 28px; margin-top:0px;">+</p> -->
-            <img alt = "" id="plusSign" src="css/plus.svg">
+            <img alt="" id="plusSign" src="css/plus.svg">
             <h3>Daily sea level:</h3>
             <p id="mslValue">About average</p>
           </div>
           <div id="addTideInfo" class="boxElement additional"><span class='myclose'>&times;</span>
             <!-- <img alt = "" id="arrowTide" src="css/arrow.svg"> -->
             <h3 style="font-size: 12px;">Daily max astronomical tide:</h3>
-            <p style="font-size: 12px;"id="tideGaugeValue">5 cm</p>
+            <p style="font-size: 12px;" id="tideGaugeValue">5 cm</p>
             <h3 style="font-size: 12px;">Based on closest tide gauge:</h3>
-            <p style="font-size: 12px;"id="tideGauge">5 cm</p>
-            <p id="noteText">Note:<i>Time of local highest tide will
-              vary ±1 hour depending on distance
-              from tide gauge. MHHW is mean
-              higher high water during 1983-2001.</i></p>
+            <p style="font-size: 12px;" id="tideGauge">5 cm</p>
+            <p id="noteText"><strong>Note:</strong><i>Time of local highest tide will
+                vary &plusmn1 hour depending on distance
+                from tide gauge. MHHW is mean
+                higher high water during 1983-2001.</i></p>
             <!-- <p id="tideValue">5 cm</p>
             <img alt = "" id="plusSign" src="css/plus.svg">
             <h3>Daily sea level:</h3>
@@ -100,24 +100,50 @@
             </p>
           </div>
           <div id="waveInfo" class="boxElement">
-            <img alt = "" id="arrowWave" src="css/arrow.svg">
+            <img alt="" id="arrowWave" src="css/arrow.svg">
             <h3>Primary swell:</h3>
             <p id="swellValues"></p>
-            <img alt = "" id="arrowDown" src="css/equal.svg">
+            <img alt="" id="arrowDown" src="css/equal.svg">
             <h3>Height above still water:</h3>
             <p id="waveValue"></p>
           </div>
           <div id="detailLink" class="boxElement">
-          <!--  <p><img style="vertical-align: middle;" alt = "link icon" src="css/link.svg" width="15px" height="15px"><span> 7-day detail forecasts</span></p>-->
+            <!--  <p><img style="vertical-align: middle;" alt = "link icon" src="css/link.svg" width="15px" height="15px"><span> 7-day detail forecasts</span></p>-->
           </div>
         </div>
         <div id="alertlegend">
           <h3 style="padding-left:25px;margin-bottom:-10px;">ALERT LEVEL</h3>
           <ul>
-            <li id="typical"><span><img alt = "grey circle" src="css/circle.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Typical or below</span></li>
-            <li id="moderate"><span><img alt = "orange circle" src="css/circleO.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Moderate high</span></li>
-            <li id="extreme"><span><img alt = "red circle" src="css/circleR.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Extreme high</span></li>
+            <li id="typical"><span><img alt="grey circle" src="css/circle.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Typical or below</span></li>
+            <li id="moderate"><span><img alt="orange circle" src="css/circleO.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Moderate high</span></li>
+            <li id="extreme"><span><img alt="red circle" src="css/circleR.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Extreme high</span></li>
           </ul>
+        </div>
+        <div class="footer">
+          <!-- <img id="logo1" src="assets/dashboard_footer.png" width="33%">
+          <p class="disclaimer"><strong>Disclaimer:</strong> This outlook is for information purposes only and provided without warranty of any kind.
+            This forecast is not for use in emergency management and is not applicable during a tsunami or when
+            tropical storm or cyclone watches/warnings are in effect. If a flooding event occurs, please consult with
+            local authorities and emergency responders to seek further information and direction.</p>
+          <img id="logo2" src="assets/uhslcLogoFullName.png" width="10%">
+
+          <img id="logo3" src="assets/PI-CASC_logo_standard.png" width="8%"> -->
+
+          <div class="row">
+            <div class="column1">
+              <img src="assets/dashboard_footer.png" alt="footer img1" style="width:100%">
+            </div>
+            <p class="disclaimer column2"><strong>Disclaimer:</strong> This outlook is for information purposes only and provided without warranty of any kind.
+              This forecast is not for use in emergency management and is not applicable during a tsunami or when
+              tropical storm or cyclone watches/warnings are in effect. If a flooding event occurs, please consult with
+              local authorities and emergency responders to seek further information and direction.</p>
+            <div class="column3">
+              <img src="assets/uhslcLogoFullName.png" alt="footer img2" style="width:100%">
+            </div>
+            <div class="column4">
+              <img src="assets/PI-CASC_logo_standard.png" alt="footer img3" style="width:100%">
+            </div>
+          </div>
         </div>
       </div>
     </div>
