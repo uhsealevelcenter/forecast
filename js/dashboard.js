@@ -263,7 +263,9 @@ mainGeoJSON.on('data:loaded', function() {
 
   // Display tide gauge info on hover
   stationsLayer.eachLayer(function(layer) {
-    layer.bindPopup("Some tide gauge info: " + layer.feature.id);
+    layer.bindPopup("<b>Station:</b> " + layer.feature.properties.stat_name+"<br>"+
+  "<b>Location:</b> "+layer.feature.geometry.coordinates+"<br>"+
+"<b>Data Provider:</b> NOAA");
     layer.on('mouseover', function(e) {
       this.openPopup();
     });
@@ -293,8 +295,20 @@ mainGeoJSON.on('data:loaded', function() {
       weight: 40,
       opacity: 1.0
     });
+    e.layer.bringToFront();
+    e.layer.setText('~', {
+      repeat: true,
+      offset: 9,
+      attributes: {
+        fill: 'white',
+        'font-weight': 'bold',
+        'font-size': '24',
+        'rotate': 0,
+      }
+    });
 
     e.layer.feature.properties["selected_layer"] = true;
+
 
 
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
@@ -339,7 +353,6 @@ mainGeoJSON.on('data:loaded', function() {
             return Math.max(item, sl_alerts[i])
           });
         }
-
         selectedDayIndex = indexOfMax(highestAlerts);
         firstTimeClicked = true;
       }
@@ -352,6 +365,8 @@ mainGeoJSON.on('data:loaded', function() {
       // popup.setContent(assemblePopup(time, location, sl_alerts))
     });
   });
+
+
 
 });
 
@@ -416,6 +431,7 @@ function showCoastWarnings() {
 // updateSegmentsColor(selectedDayIndex);
   coastalWarningsLayer.addTo(map);
   stationsLayer.addTo(map);
+  $(".infoBubble").show();
 
   // console.log("SHOW COAST WARNING CALLED");
 }
@@ -485,7 +501,7 @@ $(document).ready(function(e) {
     //       duration: 0.5
     //     });
     // }
-    $(".item4").show();
+
 
     // Remove existing arrow befor adding new one
     $("#datatable tr").removeClass("selectedRow")
@@ -504,11 +520,20 @@ $(document).ready(function(e) {
     updateSegmentsColor(selectedDayIndex);
     updateDetailsBox(rowClicked);
   });
+
+  $('.info').click(function(e){
+    $("#tideInfo").hide();
+    $("#addTideInfo").show();
+  });
 });
 
 
 
+
+
 function updateDetailsBox(row) {
+  $(".infoBubble").hide();
+  $(".item4").show();
   if (selectedFeature.properties.swell_height !== null) {
     var sh = selectedFeature.properties.swell_height[row];
     var sp = selectedFeature.properties.swell_period[row];
@@ -580,18 +605,38 @@ function updateDetailsBox(row) {
   }
 
   var tideValue = selectedFeature.properties.sl_component.tide_values[row];
+  var hour = selectedFeature.properties.sl_component.time[row].slice(-2, selectedFeature.properties.sl_component.time[row].length);
+  var tideGaugeName = selectedFeature.properties.sl_component.station;
+  // add minutes
+  hour = hour + ":00";
+  console.log("HOUR",  hour);
   $("#tideValue").text(selectedFeature.properties.sl_component.tide_values[row] + " cm");
   if (selectedFeature.properties.sl_component.tide_values[row] > 0) {
     $("#tideValue").text(tideValue + " cm above average");
+    $("#tideValue").append(
+      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info.png')
+    );
+    $("#tideGaugeValue").text(tideValue + " cm above MHHW @ "+hour);
   } else if (selectedFeature.properties.sl_component.tide_values[row] < 0) {
     $("#tideValue").text(tideValue + " cm below average");
+    $("#tideValue").append(
+      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info.png')
+    );
+    $("#tideGaugeValue").text(tideValue + " cm below MHHW @ "+hour);
   } else {
-    if (selectedFeature.properties.sl_component.tide_values[row] == 0)
+    if (selectedFeature.properties.sl_component.tide_values[row] == 0){
       $("#tideValue").text("About average");
-    else {
+      $("#tideValue").append(
+        $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info.png')
+      );
+      $("#tideGaugeValue").text("About average @ "+hour);
+    }else {
       $("#tideValue").text("No data");
+      $("#tideGaugeValue").text("No data");
     }
   }
+
+    $("#tideGauge").text(getStationName(tideGaugeName) + " (see blue marker)");
 
   var mslValue = selectedFeature.properties.sl_component.msl_values[row];
   $("#mslValue").text(selectedFeature.properties.sl_component.msl_values[row] + " cm");
@@ -633,6 +678,11 @@ function closeBox(e) {
 
     }
 
+    if (parentContainer.hasClass("additional")) {
+      $("#tideInfo").show();
+      $("#addTideInfo").hide();
+    }
+
   }
 }
 
@@ -651,6 +701,12 @@ function boxClose2() {
   }
   $('.item2').children('p').text("Choose from map");
   $('.item2').children('p').css("font-style","italic");
+  // reset coastline segments to highest alert;
+  $(".infoBubble").show();
+  firstTimeClicked = false;
+  updateSegmentsColor(0);
+  resetSegments();
+
   $(".item3").hide();
   $(".item4").hide();
 }
@@ -864,8 +920,8 @@ function updateSegmentsColor(day) {
       lineWeight = 40;
       segmentOpacity = 1.0;
       layerLevel = 'sealeveltop';
-      layer.bringToFront();
-      // layer.setText('-', {
+      // layer.bringToFront();
+      // layer.setText('~', {
       //   repeat: true,
       //   offset: 9,
       //   attributes: {
@@ -894,7 +950,7 @@ function updateSegmentsColor(day) {
       lineWeight = lweight;
       segmentOpacity = 1.0;
       layerLevel = 'sealevel';
-      // layer.setText('', {});
+      layer.setText('', {});
       // if(typeof antPoly != 'undefined')
       // antPoly.remove();
     }
@@ -944,6 +1000,7 @@ function resetSegments() {
       lineJoin: 'round',
       pane: 'sealevel'
     });
+    layer.setText('', {});
   });
 }
 
@@ -974,3 +1031,14 @@ L.Control.Layers.include({
     return layers;
   }
 });
+
+function getStationName(statCode) {
+  var name;
+  stationsLayer.eachLayer(function(layer) {
+    if (layer.feature.id == statCode) {
+      name = layer.feature.properties.stat_name;
+      return;
+    }
+  });
+  return name;
+}

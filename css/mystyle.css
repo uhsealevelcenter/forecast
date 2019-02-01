@@ -112,7 +112,22 @@ h1 {
   border-radius: 10px;
   grid-row-start: 1;
   grid-row-end: 5;
-    position: relative;
+  position: relative;
+  display: none;
+}
+
+.infoBubble{
+  position: fixed;
+  width: 250px;
+  height: 70px;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 10px;
+  margin: 15px auto 0 auto;
+  left: 45%;
+  font-family: Arial;
+  font-size: 1.0em;
+  text-align: center;
   display: none;
 }
 
@@ -377,8 +392,32 @@ div#tideInfo{
   height: 38%;
   border:1px solid rgba(178,178,178,1.0);
   border-radius: 10px;
+}
 
-  /*float:right;*/
+div#addTideInfo{
+  right: 20px;
+  top: 35px;
+  width: 45%;
+  line-height: 5px;
+  height: 38%;
+  border:1px solid rgba(178,178,178,1.0);
+  border-radius: 10px;
+  display: none;
+}
+
+.infoImg{
+vertical-align: middle;
+
+}
+
+.infoImg:hover{
+  transform: scale(1.5);
+  cursor : pointer;
+}
+
+#noteText{
+  line-height: 10px;
+  font-size: 10px;
 }
 
 div#waveAlert{
@@ -434,7 +473,7 @@ div#detailLink{
   margin-top: 45px;
 }
 
-#arrowDown,#plusSign{
+#arrowDown{
   width: 20px;
   padding-left: 12px;
   padding-top: 5px;
@@ -443,8 +482,20 @@ div#detailLink{
   margin-top: -6px;
 }
 
+#plusSign{
+  width: 20px;
+  padding-left: 12px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: -6px;
+  margin-top: -13px;
+}
+
 #tideValue, #mslValue, #swellValues, #waveValue{
   font-size: 1.17em;
+}
+.info{
+  margin-top: -5px;
 }
 h3, h4, th, p{
   color: #5d5959;

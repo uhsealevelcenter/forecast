@@ -16,8 +16,11 @@
 
 <body>
   <!-- <h1>Dashboard Prototype</h1> -->
-  <div class="container">
 
+  <div class="container">
+    <div class="infoBubble">
+      <p style="padding:0 5px 0 5px;"> Currently showing maximum alert over the next 7 days </p>
+    </div>
 
     <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div id="mapid" class="text-center">
@@ -29,6 +32,7 @@
     <!-- <div class="left"> LEFT CONTENT</div> -->
     <div class="mymap" id="mapid">
       <div id="overlayParent">
+
         <div class="item1 smallBoxStyle">
           <!--<span class='close'>x</span>-->
           <h3>ISLAND</h3>
@@ -51,7 +55,7 @@
             </thead>
           </table>
         </div>
-        <div class="item4"><span class='myclose'>&times;</span>
+        <div class="item4">
           <div id="tideAlert" class="boxElement">
             <h3>ALERT DETAILS</h3>
 
@@ -65,11 +69,26 @@
           <div id="tideInfo" class="boxElement">
             <img alt = "" id="arrowTide" src="css/arrow.svg">
             <h3>Astronomical highest tide:</h3>
-            <p id="tideValue">5 cm</p>
+            <p class="info" id="tideValue">5 cm</p>
             <!-- <p style="font-size: 28px; margin-top:0px;">+</p> -->
             <img alt = "" id="plusSign" src="css/plus.svg">
             <h3>Daily sea level:</h3>
             <p id="mslValue">About average</p>
+          </div>
+          <div id="addTideInfo" class="boxElement additional"><span class='myclose'>&times;</span>
+            <!-- <img alt = "" id="arrowTide" src="css/arrow.svg"> -->
+            <h3 style="font-size: 12px;">Daily max astronomical tide:</h3>
+            <p style="font-size: 12px;"id="tideGaugeValue">5 cm</p>
+            <h3 style="font-size: 12px;">Based on closest tide gauge:</h3>
+            <p style="font-size: 12px;"id="tideGauge">5 cm</p>
+            <p id="noteText">Note:<i>Time of local highest tide will
+              vary ±1 hour depending on distance
+              from tide gauge. MHHW is mean
+              higher high water during 1983-2001.</i></p>
+            <!-- <p id="tideValue">5 cm</p>
+            <img alt = "" id="plusSign" src="css/plus.svg">
+            <h3>Daily sea level:</h3>
+            <p id="mslValue">About average</p> -->
           </div>
           <div id="waveAlert" class="boxElement">
             <h2 style="font-weight: normal; font-size: 26px;">WAVE RUNUP</h2>
