@@ -506,6 +506,7 @@ h3, h4, th, p{
   bottom: 0;
   /* max-height: 140px; */
   width: 100%;
+  min-width: 400px;
   /* background-color: white; */
   /* color: white; */
   z-index: 1000;
@@ -513,7 +514,7 @@ h3, h4, th, p{
 
 /* footer content styles */
 .row{
-  padding: 25px 0px;
+  padding: 25px 0px 10px 0px;
   background-color: white;
   /* max-height: 120px; */
 }
@@ -526,15 +527,15 @@ h3, h4, th, p{
 .column1 {
   float: left;
   width: 35%;
-  min-width: 350px;
-  margin-bottom: 10px;
+  min-width: 385px;
+  margin-bottom: 5px;
   padding: 0px 0px 0px 2%;
 }
 .column2 {
   float: left;
   width: 30%;
   min-width: 240px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   padding: 0px 0px 0px 2%;
 }
 .column3 {
@@ -558,7 +559,7 @@ h3, h4, th, p{
   margin: 0;
   padding-right: 25%;
   font-size: 67%;
-  font-size: calc(5px + 0.25vw);
+  font-size: calc(5px + 0.3vw);
   line-height: 120%;
 }
 .agencyLogo{
@@ -568,7 +569,10 @@ h3, h4, th, p{
 .agencyRole{
   font-size: 85%;
   font-size: calc(5px + 0.25vw);
-  margin: 0px 0px 2px 0px;
+  margin: -3px 0px 2px 0px;
+}
+.leaflet-control-attribution{
+  min-width: 405px;
 }
 /*
 #logo1{
