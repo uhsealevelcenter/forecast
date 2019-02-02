@@ -531,7 +531,7 @@ $(document).ready(function(e) {
       if (obj.classList.contains("selectedRow"))
         $(this).css("opacity", "1.0");
       else
-        $(this).css("opacity", "0.3");
+        $(this).css("opacity", "0.5");
     });
 
     var rowClicked = $(this).parent().index() - 1;
@@ -639,20 +639,20 @@ function updateDetailsBox(row) {
   if (selectedFeature.properties.sl_component.tide_values[row] > 0) {
     $("#tideValue").text(tideValue + " cm above average");
     $("#tideValue").append(
-      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info.png')
+      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.svg')
     );
     $("#tideGaugeValue").text(tideValue + " cm above MHHW @ "+hour);
   } else if (selectedFeature.properties.sl_component.tide_values[row] < 0) {
     $("#tideValue").text(tideValue + " cm below average");
     $("#tideValue").append(
-      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info.png')
+      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.png')
     );
     $("#tideGaugeValue").text(tideValue + " cm below MHHW @ "+hour);
   } else {
     if (selectedFeature.properties.sl_component.tide_values[row] == 0){
       $("#tideValue").text("About average");
       $("#tideValue").append(
-        $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info.png')
+        $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.png')
       );
       $("#tideGaugeValue").text("About average @ "+hour);
     }else {
@@ -720,7 +720,7 @@ function boxClose2(){
   $('.item2').children('p').text("Choose from map");
   $('.item2').children('p').css("font-style","italic");
   // reset coastline segments to highest alert;
-  $(".infoBubble").show();
+  $(".infoBubble").hide();
   firstTimeClicked = false;
   updateSegmentsColor(0);
   resetSegments();
@@ -888,7 +888,7 @@ function boxFlow2(loc, t, sl_al, wave_al) {
     if (obj.classList.contains("selectedRow"))
       $(this).css("opacity", "1.0");
     else
-      $(this).css("opacity", "0.3");
+      $(this).css("opacity", "0.5");
   });
 
 }
@@ -1068,7 +1068,7 @@ function resetSegments() {
 }
 
 function getLineWeight(){
-  return (20*(6-map.getZoom())+5*(map.getZoom()-MAX_ZOOM))/(6-MAX_ZOOM)
+  return (10*(6-map.getZoom())+5*(map.getZoom()-MAX_ZOOM))/(6-MAX_ZOOM)
 }
 
 L.Control.Layers.include({
