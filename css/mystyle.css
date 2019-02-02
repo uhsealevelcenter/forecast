@@ -132,12 +132,11 @@ h1 {
 }
 
 #alertlegend {
-  /*float:left;*/
-  position: absolute;
+  display: block;
+  margin: 0px 0px 20px 15px;
+  padding-top: 3px;
   z-index: 1000;
-  bottom: 140px;
-  left: 15px;
-  width: 160px;
+  width: 155px;
   height: 120px;
   background-color: white;
   border-radius: 15px;
@@ -507,15 +506,16 @@ h3, h4, th, p{
   bottom: 0;
   /* max-height: 140px; */
   width: 100%;
-  background-color: white;
-  color: white;
+  /* background-color: white; */
+  /* color: white; */
   z-index: 1000;
 }
 
 /* footer content styles */
 .row{
-  margin: 25px 0px;
-  max-height: 120px;
+  padding: 25px 0px;
+  background-color: white;
+  /* max-height: 120px; */
 }
 /* Clearfix (clear floats) */
 .row::after {
