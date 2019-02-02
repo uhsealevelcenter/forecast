@@ -14,6 +14,8 @@ var MapController = (function(m,pulse,coast,waves){
       m.removeLayer(coastalWarningsLayer);
       m.removeLayer(stationsLayer);
       m.removeLayer(wavesLayer);
+      removeOutline();
+      closeStations("",true);
       firstTimeClicked = false;
 
       // myControl.getOverlays()["Tide+SLA"] = true;

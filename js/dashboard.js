@@ -157,74 +157,74 @@ mainGeoJSON.on('data:loaded', function() {
 
 
 
-  wavesLayer.getLayers().forEach(function(layer) {
-    // console.log("TST", layer.feature.properties.wave_component_alert_code);
-    if (layer.feature.properties.wave_component_alert_code != null) {
-      switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
-
-        case 2:
-          layer.setText('~', {
-            repeat: true,
-            offset: 9,
-            attributes: {
-              fill: RED,
-              'font-weight': 'bold',
-              'font-size': '24',
-              'rotate': 0,
-            }
-          });
-          break;
-        case 1:
-          layer.setText('~', {
-            repeat: true,
-            offset: 9,
-            attributes: {
-              fill: ORANGE,
-              'font-weight': 'bold',
-              'font-size': '24',
-              'rotate': 0,
-            }
-          });
-          break;
-        case 0:
-          layer.setText('~', {
-            repeat: true,
-            offset: 9,
-            attributes: {
-              fill: GREY,
-              'font-weight': 'bold',
-              'font-size': '24',
-              'rotate': 0,
-            }
-          });
-          break;
-        default:
-          layer.setText('~', {
-            repeat: true,
-            offset: 9,
-            attributes: {
-              fill: GREY,
-              'font-weight': 'bold',
-              'font-size': '24',
-              'rotate': 0,
-            }
-          });
-
-      }
-    } else {
-      // console.log("VALUE IS NULL");
-    }
-
-  });
-
-  wavesLayer.setStyle({
-    color: "white",
-    weight: lineWeightWave,
-    opacity: 1.0,
-    lineCap: 'round',
-    lineJoin: 'round',
-    interactive: false
-  });
+  // wavesLayer.getLayers().forEach(function(layer) {
+  //   // console.log("TST", layer.feature.properties.wave_component_alert_code);
+  //   if (layer.feature.properties.wave_component_alert_code != null) {
+  //     switch (Math.max.apply(null, layer.feature.properties.wave_component_alert_code)) {
+  //
+  //       case 2:
+  //         layer.setText('~', {
+  //           repeat: true,
+  //           offset: 9,
+  //           attributes: {
+  //             fill: RED,
+  //             'font-weight': 'bold',
+  //             'font-size': '24',
+  //             'rotate': 0,
+  //           }
+  //         });
+  //         break;
+  //       case 1:
+  //         layer.setText('~', {
+  //           repeat: true,
+  //           offset: 9,
+  //           attributes: {
+  //             fill: ORANGE,
+  //             'font-weight': 'bold',
+  //             'font-size': '24',
+  //             'rotate': 0,
+  //           }
+  //         });
+  //         break;
+  //       case 0:
+  //         layer.setText('~', {
+  //           repeat: true,
+  //           offset: 9,
+  //           attributes: {
+  //             fill: GREY,
+  //             'font-weight': 'bold',
+  //             'font-size': '24',
+  //             'rotate': 0,
+  //           }
+  //         });
+  //         break;
+  //       default:
+  //         layer.setText('~', {
+  //           repeat: true,
+  //           offset: 9,
+  //           attributes: {
+  //             fill: GREY,
+  //             'font-weight': 'bold',
+  //             'font-size': '24',
+  //             'rotate': 0,
+  //           }
+  //         });
+  //
+  //     }
+  //   } else {
+  //     // console.log("VALUE IS NULL");
+  //   }
+  //
+  // });
+  //
+  // wavesLayer.setStyle({
+  //   color: "white",
+  //   weight: lineWeightWave,
+  //   opacity: 1.0,
+  //   lineCap: 'round',
+  //   lineJoin: 'round',
+  //   interactive: false
+  // });
 
   // Map overlays (SLA, Waves layer)
   // Can have multiple active at a time
@@ -253,7 +253,7 @@ mainGeoJSON.on('data:loaded', function() {
       // console.log("Clik " + this._latlng);
       map.flyTo([this._latlng.lat, this._latlng.lng], 8);
       map.removeLayer(allPulsesGroup);
-      map.setMaxZoom(MAX_ZOOM); 
+      map.setMaxZoom(MAX_ZOOM);
       boxFlow1(this.options.title);
 
       // plotData();
@@ -293,21 +293,30 @@ mainGeoJSON.on('data:loaded', function() {
     var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
 
     resetSegments();
-    e.layer.setStyle({
-      weight: 40,
-      opacity: 1.0
-    });
+    // e.layer.setStyle({
+    //   weight: getLineWeight(),
+    //   opacity: 1.0
+    // });
+
+    // e.layer.setText('~', {
+    //   repeat: true,
+    //   offset: 9,
+    //   attributes: {
+    //     fill: 'white',
+    //     'font-weight': 'bold',
+    //     'font-size': '24',
+    //     'rotate': 0,
+    //   }
+    // });
+
+    // var polyline = L.polyline(e.layer._latlngs, {
+    //   color: 'black',
+    //   weight: getLineWeight()*3
+    // }).addTo(map);
+    // polyline.bringToBack();
+
+    setOutline(e.layer);
     e.layer.bringToFront();
-    e.layer.setText('~', {
-      repeat: true,
-      offset: 9,
-      attributes: {
-        fill: 'white',
-        'font-weight': 'bold',
-        'font-size': '24',
-        'rotate': 0,
-      }
-    });
 
     e.layer.feature.properties["selected_layer"] = true;
     var statCode = e.layer.feature.properties.sl_component.station;
@@ -315,7 +324,7 @@ mainGeoJSON.on('data:loaded', function() {
 
     singleStation.addTo(map);
     singleStation.openPopup();
-    closeOtherStations(statCode);
+    closeStations(statCode,false);
 
 
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
@@ -718,6 +727,9 @@ function boxClose2() {
 
   $(".item3").hide();
   $(".item4").hide();
+
+  closeStations("",true);
+  removeOutline();
 }
 
 function resetAllBoxes() {
@@ -905,6 +917,7 @@ function panMap(dir, distance) {
 }
 
 function updateSegmentsColor(day) {
+  console.log("UPDATE SEGMENTS CALLED");
   var highestAlert;
   var segmentOpacity = 1.0;
   var layerLevel;
@@ -926,7 +939,7 @@ function updateSegmentsColor(day) {
     }
 
     if (layer.feature.properties["selected_layer"] === true) {
-      lineWeight = 40;
+      lineWeight = getLineWeight();
       segmentOpacity = 1.0;
       layerLevel = 'sealeveltop';
       // layer.bringToFront();
@@ -963,6 +976,16 @@ function updateSegmentsColor(day) {
       // if(typeof antPoly != 'undefined')
       // antPoly.remove();
     }
+
+    //update the outline line weight
+    map.eachLayer(function(layer){
+    if(layer instanceof L.Polyline & layer.options.outline)
+      layer.setStyle({
+        weight: getLineWeight()*1.5,
+        pane: 'sealevel'
+      });
+    });
+
     switch (highestAlert) {
       case 0:
         layer.setStyle({
@@ -999,6 +1022,7 @@ function updateSegmentsColor(day) {
 }
 
 function resetSegments() {
+  console.log("RESET CALLED");
   var lweight  = getLineWeight();
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     layer.feature.properties["selected_layer"] = false;
@@ -1009,8 +1033,9 @@ function resetSegments() {
       lineJoin: 'round',
       pane: 'sealevel'
     });
-    layer.setText('', {});
+    // layer.setText('', {});
   });
+
 }
 
 function getLineWeight(){
@@ -1041,6 +1066,7 @@ L.Control.Layers.include({
   }
 });
 
+
 function getStationName(statCode) {
   var name;
   stationsLayer.eachLayer(function(layer) {
@@ -1063,10 +1089,35 @@ function getStationLayer(statCode) {
   return my_layer;
 }
 
-function closeOtherStations(currStat){
+function closeStations(currStat, all){
   stationsLayer.eachLayer(function(layer) {
+    if(all){
+      layer.remove();
+    }else{
     if (layer.feature.id != currStat) {
       layer.remove();
     }
+  }
+  });
+}
+
+function setOutline(layer){
+  map.eachLayer(function(layer){
+  if(layer instanceof L.Polyline & layer.options.outline)
+    layer.remove();
+  });
+  var polyline = L.polyline(layer._latlngs, {
+    color: 'white',
+    outline: true,
+    pane: 'sealevel',
+    weight: getLineWeight()*1.5
+  }).addTo(map);
+  // polyline.bringToBack();
+}
+
+function removeOutline(){
+  map.eachLayer(function(layer){
+  if(layer instanceof L.Polyline & layer.options.outline)
+    layer.remove();
   });
 }
