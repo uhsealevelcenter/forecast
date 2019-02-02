@@ -557,9 +557,9 @@ h3, h4, th, p{
 }
 .disclaimer{
   margin: 0;
-  padding-right: 25%;
+  /* padding-right: 25%; */
   font-size: 67%;
-  font-size: calc(5px + 0.3vw);
+  font-size: calc(5px + 0.38vw);
   line-height: 120%;
 }
 .agencyLogo{
