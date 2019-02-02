@@ -293,6 +293,7 @@ mainGeoJSON.on('data:loaded', function() {
     var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
 
     resetSegments();
+    onAddInfoClose();
     // e.layer.setStyle({
     //   weight: getLineWeight(),
     //   opacity: 1.0
@@ -319,12 +320,12 @@ mainGeoJSON.on('data:loaded', function() {
     e.layer.bringToFront();
 
     e.layer.feature.properties["selected_layer"] = true;
-    var statCode = e.layer.feature.properties.sl_component.station;
-    var singleStation = getStationLayer(statCode);
-
-    singleStation.addTo(map);
-    singleStation.openPopup();
-    closeStations(statCode,false);
+    // var statCode = e.layer.feature.properties.sl_component.station;
+    // var singleStation = getStationLayer(statCode);
+    //
+    // singleStation.addTo(map);
+    // singleStation.openPopup();
+    // closeStations(statCode,false);
 
 
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
@@ -540,6 +541,12 @@ $(document).ready(function(e) {
   });
 
   $('.info').click(function(e){
+    e.stopPropagation();
+    var statCode = $('#tideGauge').text().slice(0,4).toLowerCase();
+    var singleStation = getStationLayer(statCode);
+    singleStation.addTo(map);
+    singleStation.openPopup();
+    closeStations(statCode,false);
     $("#tideInfo").hide();
     $("#addTideInfo").show();
   });
@@ -697,11 +704,16 @@ function closeBox(e) {
     }
 
     if (parentContainer.hasClass("additional")) {
-      $("#tideInfo").show();
-      $("#addTideInfo").hide();
+      onAddInfoClose();
+
     }
 
   }
+}
+function onAddInfoClose(){
+  $("#tideInfo").show();
+  $("#addTideInfo").hide();
+  closeStations("",true);
 }
 
 function boxClose2() {
