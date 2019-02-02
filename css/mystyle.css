@@ -559,14 +559,19 @@ h3, h4, th, p{
   margin: 0;
   /* padding-right: 25%; */
   font-size: 67%;
-  font-size: calc(5px + 0.38vw);
-  line-height: 120%;
+  font-size: calc(5px + 0.3vw);
+  line-height: 130%;
+  padding: 8px;
+  background-color: #52788C;
+  color: white;
+  border: 2px solid #1F4356;
 }
 .agencyLogo{
   /* max-width: 300px; */
   width: 100%;
 }
 .agencyRole{
+  color: #1F4356;
   font-size: 85%;
   font-size: calc(5px + 0.25vw);
   margin: -3px 0px 2px 0px;
