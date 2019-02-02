@@ -692,8 +692,8 @@ function closeBox(e) {
       }
     }
     // parentContainer.hide();
-    if (parentContainer.hasClass("item2") || parentContainer.hasClass("item3")) {
-      boxClose2();
+    if ( parentContainer.hasClass("item3")) {
+      boxClose3();
     }
     if (parentContainer.hasClass("item4")) {
       // map.panBy([$(".item4").width(), 0], {
@@ -716,7 +716,24 @@ function onAddInfoClose(){
   closeStations("",true);
 }
 
-function boxClose2() {
+function boxClose2(){
+  $('.item2').children('p').text("Choose from map");
+  $('.item2').children('p').css("font-style","italic");
+  // reset coastline segments to highest alert;
+  $(".infoBubble").show();
+  firstTimeClicked = false;
+  updateSegmentsColor(0);
+  resetSegments();
+
+  $(".item3").hide();
+  $(".item4").hide();
+
+  closeStations("",true);
+  removeOutline();
+  map.setZoom(3);
+}
+
+function boxClose3() {
   if ($('.item2').children('p').text() != "Choose from map") {
     if ($(".item3").is(":visible")) {
       map.panBy([$(".item3").width(), 0], {
