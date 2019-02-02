@@ -505,60 +505,85 @@ h3, h4, th, p{
   position: fixed;
   left: 0;
   bottom: 0;
-  height: 120px;
+  /* max-height: 140px; */
   width: 100%;
   background-color: white;
   color: white;
-  /* text-align: center; */
   z-index: 1000;
 }
 
-.column1 {
-  float: left;
-  width: 33%;
-  padding: 20px;
+/* footer content styles */
+.row{
+  margin: 25px 0px;
+  max-height: 120px;
 }
-.column2 {
-  float: left;
-  width: 33%;
-  padding: 20px;
-}
-.column3 {
-  float: left;
-  width: 10%;
-  padding: 35px 50px 0px 50px;
-}
-.column4 {
-  float: left;
-  width: 10%;
-  padding: 35px 50px 0px 50px;
-}
-
 /* Clearfix (clear floats) */
 .row::after {
   content: "";
   clear: both;
   display: table;
 }
-
+.column1 {
+  float: left;
+  width: 35%;
+  min-width: 350px;
+  margin-bottom: 10px;
+  padding: 0px 0px 0px 2%;
+}
+.column2 {
+  float: left;
+  width: 30%;
+  min-width: 240px;
+  margin-bottom: 15px;
+  padding: 0px 0px 0px 2%;
+}
+.column3 {
+  float: left;
+  width: 12.5%;
+  min-width: 140px;
+  padding: 0px 0px 0px 2%;
+}
+.column4 {
+  float: left;
+  width: 12.5%;
+  min-width: 140px;
+  margin-bottom: 10px;
+  padding: 0px 0px 0px 2%;
+}
+.siteLogo{
+  /* max-width: 850px; */
+  width: 100%;
+}
+.disclaimer{
+  margin: 0;
+  padding-right: 25%;
+  font-size: 67%;
+  font-size: calc(5px + 0.25vw);
+  line-height: 120%;
+}
+.agencyLogo{
+  /* max-width: 300px; */
+  width: 100%;
+}
+.agencyRole{
+  font-size: 85%;
+  font-size: calc(5px + 0.25vw);
+  margin: 0px 0px 2px 0px;
+}
+/*
 #logo1{
   float: left;
   padding-top: 15px;
 }
-
 #logo2{
-  /* padding: 40px 40px 0px 40px; */
+  padding: 40px 40px 0px 40px;
   float: right;
 }
-
 #logo3{
   float: right;
 }
-.disclaimer{
-  width: 25%;
-  float: left;
-  padding-left: 2%;
-}
+*/
+/* end footer styles */
 
 .myCSSClass{
   color: pink;

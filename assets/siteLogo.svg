@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 395 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g transform="matrix(1,0,0,1,-2506.7,-654.327)">
+        <g transform="matrix(1,0,0,0.512445,1153.71,1.13687e-13)">
+            <g transform="matrix(1,0,0,1,-24,23.8821)">
+                <g transform="matrix(1,0,0,1.95143,-1506.21,-174.142)">
+                    <text x="3146.18px" y="767.874px" style="font-family:'Arial-BoldItalicMT', 'Arial', sans-serif;font-weight:700;font-style:italic;font-size:11px;fill:rgb(35,57,68);">7-day water level outlook</text>
+                </g>
+                <g transform="matrix(0.766114,0,0,1.49502,-614.956,132.53)">
+                    <g transform="matrix(0.936138,0,0,0.928562,169.637,54.8838)">
+                        <text x="2595px" y="764.495px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:20.25px;fill:rgb(82,120,140);">P<tspan x="2607px 2621.63px " y="764.495px 764.495px ">AC</tspan>IFIC</text>
+                        <g transform="matrix(1,0,0,1,-3.18323e-12,19)">
+                            <text x="2595px" y="762.885px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:18px;fill:rgb(82,120,140);">ISLANDS</text>
+                        </g>
+                    </g>
+                    <g transform="matrix(1,0,0,1,-27,5.68434e-14)">
+                        <g>
+                            <text x="2703px" y="781.496px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:44px;fill:rgb(31,67,86);">COAST<tspan x="2853.73px 2885.51px " y="781.496px 781.496px ">AL</tspan></text>
+                            <text x="2912.39px" y="781.496px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:44px;fill:rgb(82,120,140);">FLOODING</text>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
