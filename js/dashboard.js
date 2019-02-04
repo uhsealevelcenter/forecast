@@ -327,12 +327,13 @@ mainGeoJSON.on('data:loaded', function() {
     // singleStation.openPopup();
     // closeStations(statCode,false);
 
-
+    $(".lds-facebook").show();
     $.getJSON('https://nominatim.openstreetmap.org/reverse?format=json&lat=' + e.latlng.lat + '&lon=' + e.latlng.lng + '&zoom=' + 14, function(data) {
       //data is the JSON string
       // console.log("json respom",data.display_name);
 
       // var location = data.display_name.split(",").slice(0, 3);
+      $(".lds-facebook").hide();
       var city = data.address.city;
       var village = data.address.village;
       var state = data.address.state;
@@ -380,6 +381,8 @@ mainGeoJSON.on('data:loaded', function() {
       boxFlow2(location, time, sl_alerts, wave);
       updateDetailsBox(selectedDayIndex);
       // popup.setContent(assemblePopup(time, location, sl_alerts))
+    }).always(function(){
+      // console.log("always");
     });
   });
 
@@ -634,7 +637,6 @@ function updateDetailsBox(row) {
   var tideGaugeName = selectedFeature.properties.sl_component.station;
   // add minutes
   hour = hour + ":00";
-  console.log("HOUR",  hour);
   $("#tideValue").text(selectedFeature.properties.sl_component.tide_values[row] + " cm");
   if (selectedFeature.properties.sl_component.tide_values[row] > 0) {
     $("#tideValue").text(tideValue + " cm above average");
@@ -645,14 +647,14 @@ function updateDetailsBox(row) {
   } else if (selectedFeature.properties.sl_component.tide_values[row] < 0) {
     $("#tideValue").text(tideValue + " cm below average");
     $("#tideValue").append(
-      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.png')
+      $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.svg')
     );
     $("#tideGaugeValue").text(tideValue + " cm below MHHW @ "+hour);
   } else {
     if (selectedFeature.properties.sl_component.tide_values[row] == 0){
       $("#tideValue").text("About average");
       $("#tideValue").append(
-        $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.png')
+        $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.svg')
       );
       $("#tideGaugeValue").text("About average @ "+hour);
     }else {

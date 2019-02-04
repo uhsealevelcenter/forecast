@@ -137,7 +137,7 @@ h1 {
   /* border-radius: 7px; */
   float:left;
   padding: 0px 20px;
-} 
+}
 .infoText p {
   margin: 0px;
   color: white;
@@ -269,7 +269,13 @@ ul {
     padding:5px 5px;
     font-size: large;
     line-height: 12px;
+    cursor : pointer;
+    opacity: 0.5;
     /*background:#ccc;*/
+}
+
+.myclose:hover{
+  opacity: 0.8;
 }
 /* .title{
 grid-column: span 12;
@@ -385,8 +391,9 @@ td.dayColumn{
   width: 120px;
 }
 
-table#datatable tbody  tr {
-    cursor : pointer;
+
+#datatable tr{
+  cursor: pointer;
 }
 
 .boxElement{
@@ -674,6 +681,47 @@ h3, h4, th, p{
       transform: scale(1);}
     to {background: rgba(255,0,0,1.0);
       transform: scale(2);}
+}
+
+
+.lds-facebook {
+  position: fixed;
+  width: 64px;
+  height: 64px;
+  /* margin: 60px auto 0 -245px; */
+  left: 50%;
+  z-index: 10000;
+  display: none;
+}
+.lds-facebook div {
+  display: inline-block;
+  position: absolute;
+  left: 6px;
+  width: 13px;
+  background: #fff;
+  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+  left: 6px;
+  animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+  left: 26px;
+  animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+  left: 45px;
+  animation-delay: 0;
+}
+@keyframes lds-facebook {
+  0% {
+    top: 6px;
+    height: 51px;
+  }
+  50%, 100% {
+    top: 19px;
+    height: 26px;
+  }
 }
 /* @keyframes blink {
       10% {
