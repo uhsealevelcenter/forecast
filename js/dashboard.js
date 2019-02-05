@@ -291,7 +291,7 @@ mainGeoJSON.on('data:loaded', function() {
     var sl_alerts = e.layer.feature.properties.sl_component.sea_level_forecast;
 
     // Finds the wave layer closest to the clicked location and gets the wave data
-    var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
+    // var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng);
 
     // unselectLayer();
     onAddInfoClose();
@@ -319,6 +319,8 @@ mainGeoJSON.on('data:loaded', function() {
     e.layer.feature.properties["selected_layer"] = true;
     setOutline(e.layer);
     e.layer.bringToFront();
+
+    map.panTo(e.layer._latlngs[0]);
 
 
     // var statCode = e.layer.feature.properties.sl_component.station;
@@ -355,8 +357,8 @@ mainGeoJSON.on('data:loaded', function() {
       }
       location.push(state);
       location.push(zip);
-      selectedFeature = closestLayer.layer.feature;
-      var wave = closestLayer.layer.feature.properties.wave_component_alert_code
+      selectedFeature = e.layer.feature;
+      var wave = e.layer.feature.properties.wave_component_alert_code
       // Remove plotting for now
       // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
       // console.log("LOCATION: ", location);
@@ -737,18 +739,19 @@ function boxClose2(){
 }
 
 function boxClose3() {
-  if ($('.item2').children('p').text() != "Choose from map") {
-    if ($(".item3").is(":visible")) {
-      map.panBy([$(".item3").width(), 0], {
-        duration: 0.5
-      });
-    }
-    if ($(".item3").is(":visible") & $(".item3").is(":visible")) {
-      map.panBy([$(".item3").width(), 0], {
-        duration: 0.5
-      });
-    }
-  }
+  // if ($('.item2').children('p').text() != "Choose from map") {
+  //   if ($(".item3").is(":visible")) {
+  //     map.panBy([$(".item3").width(), 0], {
+  //       duration: 0.5
+  //     });
+  //   }
+  //   if ($(".item3").is(":visible") & $(".item3").is(":visible")) {
+  //     map.panBy([$(".item3").width(), 0], {
+  //       duration: 0.5
+  //     });
+  //   }
+  // }
+  map.setZoom(8);
   $('.item2').children('p').text("Choose from map");
   $('.item2').children('p').css("font-style","italic");
   // reset coastline segments to highest alert;
@@ -797,9 +800,11 @@ function boxFlow2(loc, t, sl_al, wave_al) {
   $('.item2').children('p').css("font-style","normal");
   // Move move so that the table doesn't obscure the view
   if ($('.item3').is(":hidden")) {
-    map.panBy([-325, 0], {
-      duration: 0.5
-    });
+    // map.panBy([-325, 0], {
+    //   duration: 0.5
+    // });
+
+
   }
   $(".item3").show();
   $(`<style>.item2:after{
@@ -1162,4 +1167,11 @@ function removeOutline(){
   if(layer instanceof L.Polyline & layer.options.outline)
     layer.remove();
   });
+}
+
+function centerPixelToCoordinates(container){
+  var cX = container.offset().left + container.width()/2;
+  var cY = container.offset().top + container.height()/2;
+
+  return map.containerPointToLatLng([cX,cY]);
 }
