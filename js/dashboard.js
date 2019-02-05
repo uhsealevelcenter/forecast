@@ -751,7 +751,8 @@ function boxClose3() {
   //     });
   //   }
   // }
-  map.setZoom(8);
+  // map.setZoom(8);
+  map.fitBounds(coastalWarningsLayer.getBounds());
   $('.item2').children('p').text("Choose from map");
   $('.item2').children('p').css("font-style","italic");
   // reset coastline segments to highest alert;

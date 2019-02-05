@@ -553,6 +553,7 @@ h3, h4, th, p{
   /* background-color: white; */
   /* color: white; */
   z-index: 1000;
+  pointer-events:none;
 }
 
 /* footer content styles */
@@ -586,6 +587,7 @@ h3, h4, th, p{
   width: 12.5%;
   min-width: 140px;
   padding: 0px 0px 0px 2%;
+  pointer-events:auto;
 }
 .column4 {
   float: left;
@@ -593,6 +595,7 @@ h3, h4, th, p{
   min-width: 140px;
   margin-bottom: 10px;
   padding: 0px 0px 0px 2%;
+  pointer-events:auto;
 }
 .siteLogo{
   /* max-width: 850px; */
