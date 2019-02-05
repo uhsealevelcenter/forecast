@@ -320,7 +320,7 @@ mainGeoJSON.on('data:loaded', function() {
     setOutline(e.layer);
     e.layer.bringToFront();
 
-    map.panTo(e.layer._latlngs[0]);
+    map.setView(e.layer._latlngs[0],MAX_ZOOM-1);
 
 
     // var statCode = e.layer.feature.properties.sl_component.station;
