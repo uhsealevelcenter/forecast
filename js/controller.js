@@ -9,7 +9,7 @@ var MapController = (function(m,pulse,coast,waves){
   function zoomLogic(zoom){
     if(zoom<zoomCutOff){
       console.log("Zoom Level: less than", zoomCutOff);
-      resetSegments();
+      unselectLayer();
       resetAllBoxes();
       m.removeLayer(coastalWarningsLayer);
       m.removeLayer(stationsLayer);

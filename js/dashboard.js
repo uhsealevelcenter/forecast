@@ -7,6 +7,7 @@ var RED = "#FF310D";
 var BLACK = "#000000";
 var WHITE = "#FFFFFF";
 var MAX_ZOOM = 11;
+var MIN_ZOOM = 3;
 
 // var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 //   maxZoom: 12,
@@ -28,7 +29,7 @@ var MAX_ZOOM = 11;
 
 var streets_s = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
   maxZoom: MAX_ZOOM,
-  minZoom: 3,
+  minZoom: MIN_ZOOM,
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
     '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
     'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -292,7 +293,7 @@ mainGeoJSON.on('data:loaded', function() {
     // Finds the wave layer closest to the clicked location and gets the wave data
     var closestLayer = L.GeometryUtil.closestLayer(map, wavesLayer.getLayers(), e.latlng)
 
-    resetSegments();
+    // unselectLayer();
     onAddInfoClose();
     // e.layer.setStyle({
     //   weight: getLineWeight(),
@@ -315,11 +316,11 @@ mainGeoJSON.on('data:loaded', function() {
     //   weight: getLineWeight()*3
     // }).addTo(map);
     // polyline.bringToBack();
-
+    e.layer.feature.properties["selected_layer"] = true;
     setOutline(e.layer);
     e.layer.bringToFront();
 
-    e.layer.feature.properties["selected_layer"] = true;
+
     // var statCode = e.layer.feature.properties.sl_component.station;
     // var singleStation = getStationLayer(statCode);
     //
@@ -401,13 +402,13 @@ var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyrigh
 
 var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
   maxZoom: MAX_ZOOM,
-  minZoom: 3,
+  minZoom: MIN_ZOOM,
   attribution: cartodbAttribution
 });
 
 var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
   maxZoom: MAX_ZOOM,
-  minZoom: 3,
+  minZoom: MIN_ZOOM,
   attribution: cartodbAttribution,
   pane: 'labels'
 });
@@ -725,7 +726,7 @@ function boxClose2(){
   $(".infoBubble").hide();
   firstTimeClicked = false;
   updateSegmentsColor(0);
-  resetSegments();
+  unselectLayer();
 
   $(".item3").hide();
   $(".item4").hide();
@@ -754,7 +755,7 @@ function boxClose3() {
   $(".infoBubble").show();
   firstTimeClicked = false;
   updateSegmentsColor(0);
-  resetSegments();
+  unselectLayer();
 
   $(".item3").hide();
   $(".item4").hide();
@@ -947,6 +948,7 @@ function panMap(dir, distance) {
 
 }
 
+// Updates coastline style based on the day selection,zoom level, and coastline
 function updateSegmentsColor(day) {
   console.log("UPDATE SEGMENTS CALLED");
   var highestAlert;
@@ -957,6 +959,11 @@ function updateSegmentsColor(day) {
   // var antPoly;
 
   coastalWarningsLayer.getLayers().forEach(function(layer) {
+    console.log("FIRST TIME CLICKED",firstTimeClicked);
+    // If a coastline segment hasn't been clicked yet, find the highest alert
+    // for each coastline and style segments accordingly
+    // If a coastline segment is selected, find the highest alert for the day
+    // selected for each of the coastlines
     if (!firstTimeClicked) {
       highestAlert = Math.max(Math.max.apply(null,layer.feature.properties.wave_component_alert_code), Math.max.apply(null,layer.feature.properties.sl_component.sea_level_forecast));
     } else {
@@ -970,9 +977,11 @@ function updateSegmentsColor(day) {
     }
 
     if (layer.feature.properties["selected_layer"] === true) {
+      layer.feature.properties["selected_layer"] = false;
       lineWeight = getLineWeight();
       segmentOpacity = 1.0;
-      layerLevel = 'sealeveltop';
+      layerLevel = 'overlayPane';
+      console.log("LAYER SELECTED");
       // layer.bringToFront();
       // layer.setText('~', {
       //   repeat: true,
@@ -1002,7 +1011,7 @@ function updateSegmentsColor(day) {
     } else {
       lineWeight = lweight;
       segmentOpacity = 1.0;
-      layerLevel = 'sealevel';
+      layerLevel = 'overlayPane';
       // layer.setText('', {});
       // if(typeof antPoly != 'undefined')
       // antPoly.remove();
@@ -1012,8 +1021,8 @@ function updateSegmentsColor(day) {
     map.eachLayer(function(layer){
     if(layer instanceof L.Polyline & layer.options.outline)
       layer.setStyle({
-        weight: getLineWeight()*1.5,
-        pane: 'sealevel'
+        weight: getLineWeight()*1.5
+        // pane: 'sealevel'
       });
     });
 
@@ -1052,18 +1061,19 @@ function updateSegmentsColor(day) {
   });
 }
 
-function resetSegments() {
+// Reset all layers to the original style
+function unselectLayer() {
   console.log("RESET CALLED");
   var lweight  = getLineWeight();
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     layer.feature.properties["selected_layer"] = false;
-    layer.setStyle({
-      weight: lweight,
-      opacity: 1.0,
-      lineCap: 'round',
-      lineJoin: 'round',
-      pane: 'sealevel'
-    });
+    // layer.setStyle({
+    //   weight: lweight,
+    //   opacity: 1.0,
+    //   lineCap: 'round',
+    //   lineJoin: 'round',
+    //   pane: 'sealevel'
+    // });
     // layer.setText('', {});
   });
 
@@ -1140,7 +1150,7 @@ function setOutline(layer){
   var polyline = L.polyline(layer._latlngs, {
     color: 'white',
     outline: true,
-    pane: 'sealevel',
+    pane: 'overlayPane',
     weight: getLineWeight()*1.5
   }).addTo(map);
   // polyline.bringToBack();
