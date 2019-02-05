@@ -690,6 +690,7 @@ h3, h4, th, p{
   height: 64px;
   /* margin: 60px auto 0 -245px; */
   left: 50%;
+  bottom: 50%;
   z-index: 10000;
   display: none;
 }
