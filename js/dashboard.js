@@ -959,7 +959,7 @@ function updateSegmentsColor(day) {
   // var antPoly;
 
   coastalWarningsLayer.getLayers().forEach(function(layer) {
-    console.log("FIRST TIME CLICKED",firstTimeClicked);
+    // console.log("FIRST TIME CLICKED",firstTimeClicked);
     // If a coastline segment hasn't been clicked yet, find the highest alert
     // for each coastline and style segments accordingly
     // If a coastline segment is selected, find the highest alert for the day
@@ -968,7 +968,8 @@ function updateSegmentsColor(day) {
       highestAlert = Math.max(Math.max.apply(null,layer.feature.properties.wave_component_alert_code), Math.max.apply(null,layer.feature.properties.sl_component.sea_level_forecast));
     } else {
       if (layer.feature.properties.wave_component_alert_code === null) {
-        highestAlert = Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast);
+        highestAlert = Math.max(null, layer.feature.properties.sl_component.sea_level_forecast[day]);
+
       } else {
         highestAlert =
           Math.max(layer.feature.properties.sl_component.sea_level_forecast[day],
@@ -981,7 +982,7 @@ function updateSegmentsColor(day) {
       lineWeight = getLineWeight();
       segmentOpacity = 1.0;
       layerLevel = 'overlayPane';
-      console.log("LAYER SELECTED");
+      // console.log("LAYER SELECTED");
       // layer.bringToFront();
       // layer.setText('~', {
       //   repeat: true,
