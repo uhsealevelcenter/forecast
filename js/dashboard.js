@@ -516,6 +516,11 @@ function getAllIndexes(arr, val) {
 }
 
 $(document).ready(function(e) {
+  $('#overlayParent').each(function () {
+    L.DomEvent.on(this,'mousedown',L.DomEvent.stop);
+    L.DomEvent.on(this,'click',L.DomEvent.stop);
+    L.DomEvent.on(this,'touchstart',L.DomEvent.stop);
+});
   $("#datatable").delegate("td", "click", function(e) {
     // Stop click propagation so that the popup stays on the map when different
     // days are selected
@@ -881,7 +886,7 @@ function boxFlow2(loc, t, sl_al, wave_al) {
           // .text(i+"K")
         ),
         $('<td>').append(dayName).addClass('dayColumn'),
-        $('<td>').append(dateString)
+        $('<td>').append(dateString).addClass('dateColumn')
       )
     );
   }
