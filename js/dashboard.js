@@ -237,7 +237,15 @@ mainGeoJSON.on('data:loaded', function() {
   //
   //
   myControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
-
+  if(window.mobilecheck()){
+    myControl.remove();
+    // if(window.mobilecheck())
+    {
+      $('.footer').hide();
+      $('.infoText p').html("<p>Tap on the region of interest</p>");
+      $('.infoText ul').html("<li><strong>&#8680;</strong> Color of each pulse indicates alert level.</li> <li><strong>&#8680;</strong> Click a coastline segment for detailed outlook and alerts for specific days.</li>");
+    }
+  }
   // sidebar = L.control.sidebar('sidebar', {
   //   position: 'right'
   // });
@@ -258,9 +266,12 @@ mainGeoJSON.on('data:loaded', function() {
       map.removeLayer(allPulsesGroup);
       map.setMaxZoom(MAX_ZOOM);
       boxFlow1(this.options.title);
+      if(window.mobilecheck()){
+        document.body.requestFullscreen();
+      }
 
       // plotData();
-      setTimeout(showCoastWarnings, 1900);
+      setTimeout(showCoastWarnings, 300);
     });
   });
 
@@ -794,22 +805,29 @@ function resetAllBoxes() {
 }
 
 function boxFlow1(title) {
+  if(window.mobilecheck())
+  {
+    $('.infoText p').html("<p>The map is showing <strong><i>maximum</i></strong> alert level during the next 7 days.</p>");
+    $('.infoText ul').html("<li><strong>&#8680;</strong> Color of each coastline segment indicates alert level.</li> <li><strong>&#8680;</strong> Click a coastline segment for detailed outlook and alerts for specific days.</li>");
+}else{
   $('.item1').children('p').text(title);
-  $('.item1').children('p').css("font-style","normal");
-  $(".item2").show();
-  $(`<style>.item1:after{
-    content:"";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border: 18px solid transparent;
-    border-top-color: white;
-    border-bottom: 0;
-    margin-left: -18px;
-    margin-bottom: -18px;
-  }</style>`).appendTo('head');
+$('.item1').children('p').css("font-style","normal");
+$(".item2").show();
+$(`<style>.item1:after{
+  content:"";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 18px solid transparent;
+  border-top-color: white;
+  border-bottom: 0;
+  margin-left: -18px;
+  margin-bottom: -18px;
+}</style>`).appendTo('head');
+
+}
 }
 
 function boxFlow2(loc, t, sl_al, wave_al) {

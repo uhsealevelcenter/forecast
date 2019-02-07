@@ -437,6 +437,10 @@ div#tideInfo{
   border-radius: 7px;
 }
 
+#tideWarningText, #waveWarningText{
+  line-height: 15px;
+}
+
 div#addTideInfo{
   right: 20px;
   top: 35px;
@@ -743,11 +747,22 @@ h3, h4, th, p{
     grid-gap: 10px;
     padding: 7px;
     grid-template-columns: 130px 30px 0px 305px;
-    grid-template-rows: 40px 40px 316px;
+    grid-template-rows: 0px 0px 316px;
 }
 
+.infoBubble{
+  position: fixed;
+  width: 100%;
+  /* height: 100px; */
+  z-index: 1000;
+  margin: 0 auto;
+  left: 0%;
+  font-family: Arial;
+  text-align: left;
+  display: unset;
+}
 
-.item1:after {
+/* .item1:after {
 margin-bottom: -9px;
 }
 
@@ -763,6 +778,9 @@ margin-bottom: -9px;
     border-bottom: 0;
     margin-top: 11px;
     margin-bottom: -9px;
+} */
+.item1, .item2{
+  display: none;
 }
 
 .item3{
@@ -788,25 +806,78 @@ margin-bottom: -9px;
   font-size: 14px;
 }
 
+.boxElement{
+  /*background: #2db34a;*/
+   height: 80px;
+   line-height: 12px;
+   position: absolute;
+   text-align: left;
+   width: 80px;
+}
+.boxElement h2, .boxElement h3, .boxElement p {
+    padding-left: 3px;
+}
+
+#tideWarning, #waveWarning {
+    padding: 5px 5px 5px 5px;
+    margin-top: 0px;
+    display: inline;
+    margin-left: 3px;
+}
+
+#tideWarningText, #waveWarningText{
+  line-height: 12px;
+}
+
 #alertlegend{
   -webkit-transform: translateY(135%);
   transform: translateY(135%);
 }
 
 
-div#tideAlert {
-    width: 30%;
+div#tideAlert, div#waveAlert {
+    width: 37%;
+    left: 5px;
 }
 
-div#tideInfo,div#waveInfo {
+div#tideInfo,div#waveInfo,div#addTideInfo {
     right: 12px;
     width: 55%;
   }
 
+  div#tideInfo,div#waveInfo,div#addTideInfo h3{
+    font-size: 11px;
+  }
+
+  div#addTideInfo{
+    line-height: 5px;
+    height: 38%;
+    border:1px solid rgba(178,178,178,1.0);
+    border-radius: 7px;
+    display: none;
+  }
+
+  #addTideInfo h3 {
+    margin: 14px 0px -2px 0px;
+  }
+  #addTideInfo h3, p {
+    font-size: 12px;
+  }
+
+  #arrowTide, #arrowWave{
+    /* width: 15px;
+    height: 15px;
+    float: left;
+    margin-left: -20px;
+    margin-top: 45px; */
+    display:none;
+  }
 
 div#waveAlert {
     width: 37%;
 }
+
+
 
 table{
   width: 180px;
