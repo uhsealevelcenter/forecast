@@ -252,7 +252,9 @@ mainGeoJSON.on('data:loaded', function() {
   allPulsesGroup.eachLayer(function(layer) {
     layer.on('click', function() {
       // console.log("Clik " + this._latlng);
-      map.flyTo([this._latlng.lat, this._latlng.lng], 8);
+      map.flyTo([this._latlng.lat, this._latlng.lng], 8,{
+        duration: 0.5
+      });
       map.removeLayer(allPulsesGroup);
       map.setMaxZoom(MAX_ZOOM);
       boxFlow1(this.options.title);
