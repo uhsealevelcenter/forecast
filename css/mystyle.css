@@ -744,9 +744,9 @@ h3, h4, th, p{
 
 @media only screen and (max-width: 1215px) {
   #overlayParent {
-    grid-gap: 10px;
-    padding: 7px;
-    grid-template-columns: 130px 30px 0px 305px;
+    grid-gap: 0;
+    padding: 0;
+    grid-template-columns:  80px 315px;
     grid-template-rows: 0px 0px 316px;
 }
 
@@ -785,15 +785,15 @@ margin-bottom: -9px;
 
 .item3{
   /* padding-left: 8px; */
-  grid-column: 1/ span 3;
+  grid-column: 1/ span 1;
   grid-row: 3 / span 1;
-  left:-100px;
+  /*left:-100px;*/
 }
 .item4{
   padding-left: 8px;
-  grid-column: 4/ span 1;
+  grid-column: 2/ span 1;
   grid-row: 3 / span 1;
-  left:-100px;
+  /*left:-100px;*/
 }
 
 .row{
@@ -884,16 +884,18 @@ table{
 }
 
 th.dayHeader{
-  display: none;
+  /*display: none;*/
 }
 td.dayColumn{
-  display: none;
+  /*display: none;*/
 }
 th.dateHeader{
-  width: 90px;
+  /*width: 90px;*/
+  display: none;
 }
 td.dateColumn{
-  width: 90px;
+  /*width: 90px;*/
+  display: none;
 }
 
 

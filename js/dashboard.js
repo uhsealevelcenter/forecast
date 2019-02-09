@@ -1223,6 +1223,9 @@ function centerSelectedFeature() {
   if(typeof selectedFeature.geometry !== 'undefined')
   {
     if(window.innerHeight > window.innerWidth){
+      if(window.mobilecheck())
+      $(".lds-facebook").css("bottom","25%");
+      $(".lds-facebook").css("left","50%");
     console.log("Portrait",window.innerHeight);
     targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([0, $(".item4").height()/2]),
     targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
@@ -1233,6 +1236,8 @@ function centerSelectedFeature() {
     // {
       if(window.mobilecheck())
      {
+       $(".lds-facebook").css("left","75%");
+       $(".lds-facebook").css("bottom","50%");
        targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([$(".item4").width()/2, 0]),
     targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
      }else{
