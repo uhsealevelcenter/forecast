@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <style>html,body,.container{height:100%;overflow:hidden;width:100%;margin:auto}#mapid{width:auto;height:100%}.item1{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;position:relative}.item2{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;grid-row-start:2;grid-row-end:3;display:none;position:relative}.truncate{width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item3{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;grid-row-start:1;grid-row-end:5;display:none;position:relative}.item4{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;grid-row-start:1;grid-row-end:5;position:relative;display:none}.infoBubble{position:fixed;z-index:1000;margin:60px auto 0 -245px;left:50%;font-family:Arial;text-align:left;}.infoBubbleIcon{float:left;height:40px;margin:0px}.infoText{float:left;padding:0px 20px}.infoText p{margin:0px;color:white;font-size:90%}.infoText ul{margin-top:5px;padding-left:0px;color:white;font-size:80%}#alertlegend{display:block;margin:0px 0px 20px 15px;padding-top:3px;z-index:1000;width:145px;height:110px;background-color:white;border-radius:7px}#alertlegend h3{margin-top:8px;padding-left:15px}#alertlegend ul{margin-top:-8px;padding-left:33px}.smallBoxStyle>p{margin-top:-10px}ul{list-style-type:none;line-height:22px}#alertlegend>ul>li{margin-left:-18px}#alertlegend ul li span{color:black}.container{height:100%;display:grid;grid-gap:0px;grid-template-columns:repeat(12,1fr);grid-template-rows:100%;grid-template-areas:"m m m m m m m m m m m m"}.left{grid-area:l;align-self:start}.mymap{grid-area:m;display:grid;grid-gap:20px;padding:0px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 70px}#overlayParent{display:grid;grid-gap:20px;padding:15px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 46px;z-index:1000}.right{grid-area:r;align-self:start}.graph{grid-area:g}.myclose{float:right;display:inline-block;padding:5px 5px;font-size:large;line-height:12px;}table,th{border-collapse:collapse;padding:7px 0px 7px 0px;text-align:center}table{margin-left:-15px;margin-top:-5px;width:340px;position:relative}.boxElement{height:80px;line-height:12px;position:absolute;text-align:left;width:80px}.boxElement h2,.boxElement h3,.boxElement p{padding-left:10px}div#tideAlert{left:10px;top:5px;width:40%;height:40%;padding:0px}div#tideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:7px}div#addTideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:7px;display:none}#addTideInfo h3{margin:14px 0px -2px 0px}#addTideInfo h3,p{font-size:12px}#noteText{margin-top:3px;padding:0px 10px;line-height:10px;font-size:9px!important}div#waveAlert{top:160px;left:10px;width:40%;height:40%}div#waveInfo{right:20px;bottom:20px;width:45%;height:38%;line-height:5px;border:1px solid rgba(178,178,178,1.0);border-radius:7px}#tideWarning,#waveWarning{background-color:grey;border-radius:5px;padding:5px 12px 5px 12px;margin-top:-12px;display:inline;margin-left:12px;width:inherit;color:white;font-weight:bold}div#detailLink{top:0px;right:30px;width:45%;height:15px}#helpText{font-size:12px;font-style:italic;font-weight:normal}#arrowTide,#arrowWave{width:30px;height:30px;float:left;margin-left:-40px;margin-top:45px}#arrowDown{width:18px;padding:5px 0px 5px 12px;margin:-5px 0px -5px 0px}#plusSign{width:16px}#tideValue,#mslValue,#swellValues,#waveValue{font-size:1.17em}.info{margin-top:-5px}h3,th,p{color:#5d5959}.footer{position:fixed;left:0;bottom:0;width:100%;min-width:400px;z-index:1000}.row{padding:25px 0px 10px 0px;background-color:white}.row::after{content:"";clear:both;display:table}.column1{float:left;width:35%;min-width:385px;margin-bottom:5px;padding:0px 0px 0px 2%}.column2{float:left;width:30%;min-width:240px;margin-bottom:10px;padding:0px 0px 0px 2%}.column3{float:left;width:12.5%;min-width:140px;padding:0px 0px 0px 2%}.column4{float:left;width:12.5%;min-width:140px;margin-bottom:10px;padding:0px 0px 0px 2%}.siteLogo{width:100%}.disclaimer{margin:0;font-size:67%;font-size:calc(5px + 0.3vw);line-height:130%;padding:8px;background-color:white;color:#1F4356;border:1px solid #1F4356;border-radius:3px}.agencyLogo{width:100%}.agencyRole{color:#1F4356;font-size:85%;font-size:calc(5px + 0.25vw);margin:-3px 0px 2px 0px}.lds-facebook{position:fixed;width:64px;height:64px;left:50%;bottom:50%;z-index:10000;display:none}.lds-facebook div{display:inline-block;position:absolute;left:6px;width:13px;background:#fff;animation:lds-facebook 1.2s cubic-bezier(0,0.5,0.5,1) infinite}.lds-facebook div:nth-child(1){left:6px;animation-delay:-0.24s}.lds-facebook div:nth-child(2){left:26px;animation-delay:-0.12s}.lds-facebook div:nth-child(3){left:45px;animation-delay:0}@keyframes lds-facebook{0%{top:6px;height:51px}50%,100%{top:19px;height:26px}}</style>
+  <style>html,body,.container{height:100%;overflow:hidden;width:100%;margin:auto}#mapid{width:auto;height:100%}.item1{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;position:relative}.item2{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;grid-row-start:2;grid-row-end:3;display:none;position:relative}.truncate{width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item3{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;grid-row-start:1;grid-row-end:5;display:none;position:relative}.item4{padding-left:15px;z-index:1000;background-color:white;border-radius:7px;grid-row-start:1;grid-row-end:5;position:relative;display:none}.infoBubble{position:fixed;z-index:1000;margin:60px auto 0 -245px;left:50%;font-family:Arial;text-align:left;display:none}.infoBubbleIcon{float:left;height:40px;margin:0px}.infoText{float:left;padding:0px 20px}.infoText p{margin:0px;color:white;font-size:90%}.infoText ul{margin-top:5px;padding-left:0px;color:white;font-size:80%}#item3Title{display:unset}#item3TitleMobile{display:none}#alertlegend{display:block;margin:0px 0px 20px 15px;padding-top:3px;z-index:1000;width:145px;height:110px;background-color:white;border-radius:7px}#alertlegend h3{margin-top:8px;padding-left:15px}#alertlegend ul{margin-top:-8px;padding-left:33px}.smallBoxStyle>p{margin-top:-10px}ul{list-style-type:none;line-height:22px}#alertlegend>ul>li{margin-left:-18px}#alertlegend ul li span{color:black}.container{height:100%;display:grid;grid-gap:0px;grid-template-columns:repeat(12,1fr);grid-template-rows:100%;grid-template-areas:"m m m m m m m m m m m m"}.left{grid-area:l;align-self:start}.mymap{grid-area:m;display:grid;grid-gap:20px;padding:0px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 70px}#overlayParent{display:grid;grid-gap:20px;padding:15px;grid-template-columns:250px 340px 500px;grid-template-rows:70px 70px 70px 46px;z-index:1000}.right{grid-area:r;align-self:start}.graph{grid-area:g}.myclose{position:absolute;top:0;right:0;padding:4px 4px 0 0;border:none;text-align:center;width:18px;height:14px;font:16px/14px Tahoma,Verdana,sans-serif;color:#c3c3c3;text-decoration:none;font-weight:bold;background:transparent}table,th{border-collapse:collapse;padding:7px 0px 7px 0px;text-align:center}table{margin-left:-15px;margin-top:-5px;width:340px;position:relative}.boxElement{height:80px;line-height:12px;position:absolute;text-align:left;width:80px}.boxElement h2,.boxElement h3,.boxElement p{padding-left:10px}.alertHeader{font-weight:normal;font-size:26px}div#tideAlert{left:10px;top:5px;width:40%;height:40%;padding:0px}div#tideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:7px}#tideWarningText,#waveWarningText{line-height:15px}div#addTideInfo{right:20px;top:35px;width:45%;line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:7px;display:none}#addTideInfo h3{margin:14px 0px -2px 0px}#addTideInfo h3,p{font-size:12px}#noteText{margin-top:3px;padding:0px 10px;line-height:10px;font-size:9px!important}div#waveAlert{top:160px;left:10px;width:40%;height:40%}div#waveInfo{right:20px;bottom:20px;width:45%;height:38%;line-height:5px;border:1px solid rgba(178,178,178,1.0);border-radius:7px}#tideWarning,#waveWarning{background-color:grey;border-radius:5px;padding:5px 12px 5px 12px;margin-top:-12px;display:inline;margin-left:12px;width:inherit;color:white;font-weight:bold}div#detailLink{top:0px;right:30px;width:45%;height:15px}#helpText{font-size:12px;font-style:italic;font-weight:normal}#arrowTide,#arrowWave{width:30px;height:30px;float:left;margin-left:-40px;margin-top:45px}#arrowDown{width:18px;padding:5px 0px 5px 12px;margin:-5px 0px -5px 0px}#plusSign{width:16px}#tideValue,#mslValue,#swellValues,#waveValue{font-size:1.17em}.info{margin-top:-5px}h3,th,p{color:#5d5959}.footer{position:fixed;left:0;bottom:0;width:100%;min-width:400px;z-index:1000}.row{padding:25px 0px 10px 0px;background-color:white}.row::after{content:"";clear:both;display:table}.column1{float:left;width:35%;min-width:385px;margin-bottom:5px;padding:0px 0px 0px 2%}.column2{float:left;width:30%;min-width:240px;margin-bottom:10px;padding:0px 0px 0px 2%}.column3{float:left;width:12.5%;min-width:140px;padding:0px 0px 0px 2%}.column4{float:left;width:12.5%;min-width:140px;margin-bottom:10px;padding:0px 0px 0px 2%}.siteLogo{width:100%}.disclaimer{margin:0;font-size:67%;font-size:calc(5px + 0.3vw);line-height:130%;padding:8px;background-color:white;color:#1F4356;border:1px solid #1F4356;border-radius:3px}.agencyLogo{width:100%}.agencyRole{color:#1F4356;font-size:85%;font-size:calc(5px + 0.25vw);margin:-3px 0px 2px 0px}.lds-facebook{position:fixed;width:64px;height:64px;left:50%;bottom:50%;z-index:10000;display:none}.lds-facebook div{display:inline-block;position:absolute;left:6px;width:13px;background:#fff;animation:lds-facebook 1.2s cubic-bezier(0,0.5,0.5,1) infinite}.lds-facebook div:nth-child(1){left:6px;animation-delay:-0.24s}.lds-facebook div:nth-child(2){left:26px;animation-delay:-0.12s}.lds-facebook div:nth-child(3){left:45px;animation-delay:0}@keyframes lds-facebook{0%{top:6px;height:51px}50%,100%{top:19px;height:26px}}@media only screen and (max-width:1215px){.mymap{grid-template-columns:auto;grid-template-rows:316px}#overlayParent{grid-gap:1px;padding:2px;grid-template-columns:250px 75px minmax(auto,360px);grid-template-rows:250px;margin-left:-252px}.item3{padding-left:0px}.item2:after{border:0px solid transparent}.infoBubble{position:fixed;width:100%;z-index:1000;margin:0 auto;left:0%;font-family:Arial;text-align:left;display:unset}.row{-webkit-transform:translateY(100%);transform:translateY(100%)}.alertHeader{font-weight:normal;font-size:14px}.boxElement{height:80px;line-height:12px;position:absolute;text-align:left;width:80px}.boxElement h2,.boxElement h3,.boxElement p{padding-left:3px}#tideWarning,#waveWarning{padding:5px 5px 5px 5px;margin-top:0px;display:inline;margin-left:3px}#tideWarningText,#waveWarningText{line-height:12px}#alertlegend{-webkit-transform:translateY(135%);transform:translateY(135%)}div#tideAlert,div#waveAlert{width:37%;left:5px}div#tideInfo,div#waveInfo,div#addTideInfo{right:12px;width:55%}div#tideInfo,div#waveInfo,div#addTideInfo h3{font-size:11px}div#addTideInfo{line-height:5px;height:38%;border:1px solid rgba(178,178,178,1.0);border-radius:7px;display:none}#addTideInfo h3{margin:14px 0px -2px 0px}#addTideInfo h3,p{font-size:12px}#arrowTide,#arrowWave{display:none}div#waveAlert{width:37%}table{width:75px;margin:0}table,th{padding:0px 0px 0px 0px}#helpText{display:none}.removeCol{display:none}th.dayHeader{width:75px}th.dateHeader{display:none}#item3Title{display:none}#item3TitleMobile{display:unset}}</style>
   <link rel="shortcut icon" href="#" />
 
   <!-- <link rel="stylesheet" href="css/L.Control.Sidebar.css" /> -->
@@ -25,15 +25,19 @@
       <div class="infoText">
         <p>The map is showing <strong><i>maximum</i></strong> alert level during the next 7 days.</p>
         <ul>
-          <li><strong>&#8680;</strong> Color of each coastline segment indicates alert level.</li>
-          <li><strong>&#8680;</strong> Click a coastline segment for detailed outlook and alerts for specific days.</li>
+          <li><strong>&#8680;</strong> Color of each location indicates alert level.</li>
+          <li><strong>&#8680;</strong> Click a location for a more detailed view view.</li>
         </ul>
       </div>
 
     </div>
 
 
-      <div class="lds-facebook"><div></div><div></div><div></div></div>
+    <div class="lds-facebook">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
 
 
     <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -57,14 +61,25 @@
           <p class="truncate" style="font-style: italic; font-size: 14px;">Choose from map</p>
         </div>
         <div class="item3"><span class='myclose'>&times;</span>
-          <h3>7-DAY OUTLOOK <span id="helpText">(select a day for details)</span></h3>
+          <div id="item3Title"><h3>7-DAY OUTLOOK <span id="helpText">(select a day for details)</span></h3></div>
+          <div id="item3TitleMobile">
+            <div>
+              <h3 align="center" style="padding: 0 0 0 0; margin: 0;">DAY</h3>
+            </div>
+            <div style="float: left;">
+              <p style="padding: 0; margin: 0;">TIDE<p>
+            </div>
+            <div style="float: right;">
+              <p style="padding: 0 0 0 0; margin: 0;">WAVE</p>
+            </div>
+          </div>
           <table id="datatable" align="center">
             <thead>
               <tr style="pointer-events: none;">
-                <th width=50px;>TIDE</th>
-                <th width=50px;>WAVE</th>
-                <th class="dayHeader">DAY</th>
-                <th class="dateHeader">DATE</th>
+                <th width=50px; class="removeCol">TIDE</th>
+                <th width=50px; class="removeCol">WAVE</th>
+                <th class="dayHeader removeCol">DAY</th>
+                <th class="dateHeader removeCol">DATE</th>
               </tr>
             </thead>
           </table>
@@ -91,9 +106,9 @@
           </div>
           <div id="addTideInfo" class="boxElement additional"><span class='myclose'>&times;</span>
             <!-- <img alt = "" id="arrowTide" src="css/arrow.svg"> -->
-            <h3 >Daily max astronomical tide:</h3>
+            <h3>Daily max astronomical tide:</h3>
             <p id="tideGaugeValue">5 cm</p>
-            <h3 >Based on closest tide gauge:</h3>
+            <h3>Based on closest tide gauge:</h3>
             <p id="tideGauge">5 cm</p>
             <p id="noteText"><b>Note:</b> <i>Time of local highest tide will vary &plusmn1 hour depending on distance from tide gauge. MHHW is mean higher high water during 1983-2001.</i></p>
             <!-- <p id="tideValue">5 cm</p>
@@ -126,7 +141,7 @@
         <div class="footer">
 
           <div id="alertlegend">
-            <h3 >ALERT LEVEL</h3>
+            <h3>ALERT LEVEL</h3>
             <ul>
               <li id="typical"><span><img alt="grey circle" src="css/circle.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Typical or below</span></li>
               <li id="moderate"><span><img alt="orange circle" src="css/circleO.svg" width="12px" height="12px">&nbsp;&nbsp;&nbsp;Moderate high</span></li>
@@ -139,12 +154,14 @@
               <img src="assets/siteLogo.svg" alt="footer img1" class="siteLogo">
             </div>
             <div class="column2">
-              <p class="disclaimer "><strong>Disclaimer:</strong> This outlook is for information purposes only and is provided without warranty of any kind. This outlook is not for use in emergency management and is not applicable during a tsunami or when tropical storm or cyclone watches/warnings are in effect. If a flooding event occurs, please consult with local authorities and emergency responders to seek further information and direction.</p>
+              <p class="disclaimer "><strong>Disclaimer:</strong> This outlook is for information purposes only and is provided without warranty of any kind. This outlook is not for use in emergency management and is not applicable during a tsunami
+                or
+                when tropical storm or cyclone watches/warnings are in effect. If a flooding event occurs, please consult with local authorities and emergency responders to seek further information and direction.</p>
             </div>
             <div class="column3">
               <p class="agencyRole">Developed and maintained by:</p>
               <a href="https://uhslc.soest.hawaii.edu" target="_blank">
-              <img src="assets/uhslcLogoFullName.svg" alt="footer img2" class="agencyLogo"></a>
+                <img src="assets/uhslcLogoFullName.svg" alt="footer img2" class="agencyLogo"></a>
             </div>
             <div class="column4">
               <p class="agencyRole">Development funded by:</p>

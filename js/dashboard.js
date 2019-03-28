@@ -12,11 +12,13 @@ var MIN_ZOOM = 3;
 
 window.mobilecheck = function() {
   var check = false;
-  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+  (function(a) {
+    if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+  })(navigator.userAgent || navigator.vendor || window.opera);
   return check;
 };
 
-if(window.mobilecheck())
+if (window.mobilecheck())
   MIN_ZOOM = 2;
 // var streets_l = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 //   maxZoom: 12,
@@ -54,6 +56,7 @@ var regionAlertLayer = {};
 var stationsLayer = {};
 var selectedDayIndex = 0;
 var firstTimeClicked = false;
+var allTableData = {};
 
 // Loading a geojson file with Sea Level and tide prediction for Oahu coastline
 // encoded in LineString
@@ -246,7 +249,7 @@ mainGeoJSON.on('data:loaded', function() {
   //
   //
   myControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
-  if(window.mobilecheck()){
+  if (window.mobilecheck()) {
     myControl.remove();
     // if(window.mobilecheck())
     {
@@ -269,15 +272,15 @@ mainGeoJSON.on('data:loaded', function() {
   allPulsesGroup.eachLayer(function(layer) {
     layer.on('click', function() {
       // console.log("Clik " + this._latlng);
-      map.flyTo([this._latlng.lat, this._latlng.lng], 8,{
+      map.flyTo([this._latlng.lat, this._latlng.lng], 8, {
         duration: 0.5
       });
       map.removeLayer(allPulsesGroup);
       map.setMaxZoom(MAX_ZOOM);
       boxFlow1(this.options.title);
-      if(window.mobilecheck()){
-        document.body.requestFullscreen();
-      }
+      // if(window.mobilecheck()){
+      //   document.body.requestFullscreen();
+      // }
 
       // plotData();
       setTimeout(showCoastWarnings, 300);
@@ -287,9 +290,9 @@ mainGeoJSON.on('data:loaded', function() {
 
   // Display tide gauge info on hover
   stationsLayer.eachLayer(function(layer) {
-    layer.bindPopup("<b>Station:</b> " + layer.feature.properties.stat_name+"<br>"+
-  "<b>Location:</b> "+layer.feature.geometry.coordinates+"<br>"+
-"<b>Data Provider:</b> <a href=\"https://tidesandcurrents.noaa.gov\" target=\"_blank\">NOAA</a>");
+    layer.bindPopup("<b>Station:</b> " + layer.feature.properties.stat_name + "<br>" +
+      "<b>Location:</b> " + layer.feature.geometry.coordinates + "<br>" +
+      "<b>Data Provider:</b> <a href=\"https://tidesandcurrents.noaa.gov\" target=\"_blank\">NOAA</a>");
     layer.on('mouseover', function(e) {
       // this.openPopup();
     });
@@ -382,6 +385,8 @@ mainGeoJSON.on('data:loaded', function() {
       location.push(zip);
       selectedFeature = e.layer.feature;
       var wave = e.layer.feature.properties.wave_component_alert_code
+
+
       // Remove plotting for now
       // plotData(time, tide, msl_obs, msl_for, wave, extremeHigh, location);
       // console.log("LOCATION: ", location);
@@ -401,13 +406,15 @@ mainGeoJSON.on('data:loaded', function() {
         firstTimeClicked = true;
       }
 
-      for (var i = 0; i<location.length; i++){
-        location[i] = " "+location [i] ;
+      for (var i = 0; i < location.length; i++) {
+        location[i] = " " + location[i];
       }
-      boxFlow2(location, time, sl_alerts, wave);
+      allTableData = {"time":time,"sl_alerts":sl_alerts, "wave_alerts":wave};
+      boxFlow2(location);
+      populateAlertTable(allTableData);
       updateDetailsBox(selectedDayIndex);
       // popup.setContent(assemblePopup(time, location, sl_alerts))
-    }).always(function(){
+    }).always(function() {
       // console.log("always");
     });
   });
@@ -476,7 +483,7 @@ var baseMaps = {
 
 function showCoastWarnings() {
   // wavesLayer.addTo(map);
-// updateSegmentsColor(selectedDayIndex);
+  // updateSegmentsColor(selectedDayIndex);
   coastalWarningsLayer.addTo(map);
   map.fitBounds(coastalWarningsLayer.getBounds())
   // stationsLayer.addTo(map);
@@ -542,11 +549,11 @@ function getAllIndexes(arr, val) {
 $(document).ready(function(e) {
 
   // Prevent map interaction through overlay boxes
-  $('#overlayParent').each(function () {
-    L.DomEvent.on(this,'mousedown',L.DomEvent.stop);
-    L.DomEvent.on(this,'click',L.DomEvent.stop);
-    L.DomEvent.on(this,'touchstart',L.DomEvent.stop);
-});
+  $('#overlayParent').each(function() {
+    L.DomEvent.on(this, 'mousedown', L.DomEvent.stop);
+    L.DomEvent.on(this, 'click', L.DomEvent.stop);
+    L.DomEvent.on(this, 'touchstart', L.DomEvent.stop);
+  });
   $("#datatable").delegate("td", "click", function(e) {
     // Stop click propagation so that the popup stays on the map when different
     // days are selected
@@ -577,13 +584,13 @@ $(document).ready(function(e) {
     updateDetailsBox(rowClicked);
   });
 
-  $('.info').click(function(e){
+  $('.info').click(function(e) {
     e.stopPropagation();
-    var statCode = $('#tideGauge').text().slice(0,4).toLowerCase();
+    var statCode = $('#tideGauge').text().slice(0, 4).toLowerCase();
     var singleStation = getStationLayer(statCode);
     singleStation.addTo(map);
     singleStation.openPopup();
-    closeStations(statCode,false);
+    closeStations(statCode, false);
     $("#tideInfo").hide();
     $("#addTideInfo").show();
   });
@@ -605,9 +612,9 @@ function updateDetailsBox(row) {
     var sd = selectedFeature.properties.swell_direction[row];
     $("#swellValues").text("{0} m @ {1}s from {2}".format(sh, sp, sd));
     var waveValueAr = selectedFeature.properties.wave_component_water_level[row];
-    if(waveValueAr[0]==0 & waveValueAr[1]==0){
+    if (waveValueAr[0] == 0 & waveValueAr[1] == 0) {
       $("#waveValue").text("0 cm");
-    }else {
+    } else {
       $("#waveValue").text("{0}-{1} cm".format(waveValueAr[0], waveValueAr[1]));
     }
 
@@ -680,27 +687,27 @@ function updateDetailsBox(row) {
     $("#tideValue").append(
       $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.svg')
     );
-    $("#tideGaugeValue").text(tideValue + " cm above MHHW @ "+hour);
+    $("#tideGaugeValue").text(tideValue + " cm above MHHW @ " + hour);
   } else if (selectedFeature.properties.sl_component.tide_values[row] < 0) {
     $("#tideValue").text(tideValue + " cm below average");
     $("#tideValue").append(
       $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.svg')
     );
-    $("#tideGaugeValue").text(tideValue + " cm below MHHW @ "+hour);
+    $("#tideGaugeValue").text(tideValue + " cm below MHHW @ " + hour);
   } else {
-    if (selectedFeature.properties.sl_component.tide_values[row] == 0){
+    if (selectedFeature.properties.sl_component.tide_values[row] == 0) {
       $("#tideValue").text("About average");
       $("#tideValue").append(
         $('<img width= 15px; height = 15px; class="infoImg">').attr('src', 'assets/info_icon_gray.svg')
       );
-      $("#tideGaugeValue").text("About average @ "+hour);
-    }else {
+      $("#tideGaugeValue").text("About average @ " + hour);
+    } else {
       $("#tideValue").text("No data");
       $("#tideGaugeValue").text("No data");
     }
   }
 
-    $("#tideGauge").text(getStationName(tideGaugeName) + " (see blue marker)");
+  $("#tideGauge").text(getStationName(tideGaugeName) + " (see blue marker)");
 
   var mslValue = selectedFeature.properties.sl_component.msl_values[row];
   $("#mslValue").text(selectedFeature.properties.sl_component.msl_values[row] + " cm");
@@ -731,7 +738,7 @@ function closeBox(e) {
       }
     }
     // parentContainer.hide();
-    if ( parentContainer.hasClass("item3")) {
+    if (parentContainer.hasClass("item3")) {
       boxClose3();
     }
     if (parentContainer.hasClass("item4")) {
@@ -749,15 +756,16 @@ function closeBox(e) {
 
   }
 }
-function onAddInfoClose(){
+
+function onAddInfoClose() {
   $("#tideInfo").show();
   $("#addTideInfo").hide();
-  closeStations("",true);
+  closeStations("", true);
 }
 
-function boxClose2(){
+function boxClose2() {
   $('.item2').children('p').text("Choose from map");
-  $('.item2').children('p').css("font-style","italic");
+  $('.item2').children('p').css("font-style", "italic");
   // reset coastline segments to highest alert;
   $(".infoBubble").hide();
   firstTimeClicked = false;
@@ -767,7 +775,7 @@ function boxClose2(){
   $(".item3").hide();
   $(".item4").hide();
 
-  closeStations("",true);
+  closeStations("", true);
   removeOutline();
   map.setZoom(MIN_ZOOM);
 }
@@ -788,7 +796,7 @@ function boxClose3() {
   // map.setZoom(8);
   map.fitBounds(coastalWarningsLayer.getBounds());
   $('.item2').children('p').text("Choose from map");
-  $('.item2').children('p').css("font-style","italic");
+  $('.item2').children('p').css("font-style", "italic");
   // reset coastline segments to highest alert;
   $(".infoBubble").show();
   firstTimeClicked = false;
@@ -798,29 +806,29 @@ function boxClose3() {
   $(".item3").hide();
   $(".item4").hide();
 
-  closeStations("",true);
+  closeStations("", true);
   removeOutline();
 }
 
 function resetAllBoxes() {
   $('.item1').children('p').text("Choose from map");
-  $('.item1').children('p').css("font-style","italic");
-  $('.item2').children('p').css("font-style","italic");
+  $('.item1').children('p').css("font-style", "italic");
+  $('.item2').children('p').css("font-style", "italic");
   $(".item2").hide();
   $(".item3").hide();
   $(".item4").hide();
 }
 
 function boxFlow1(title) {
-  if(window.mobilecheck())
-  {
+
+  if (window.innerWidth < 1215) {
     $('.infoText p').html("<p>The map is showing <strong><i>maximum</i></strong> alert level during the next 7 days.</p>");
     $('.infoText ul').html("<li><strong>&#8680;</strong> Color of each coastline segment indicates alert level.</li> <li><strong>&#8680;</strong> Click a coastline segment for detailed outlook and alerts for specific days.</li>");
-}else{
-  $('.item1').children('p').text(title);
-$('.item1').children('p').css("font-style","normal");
-$(".item2").show();
-$(`<style>.item1:after{
+  }
+    $('.item1').children('p').text(title);
+    $('.item1').children('p').css("font-style", "normal");
+    $(".item2").show();
+    $(`<style>.item1:after{
   content:"";
   position: absolute;
   bottom: 0;
@@ -834,113 +842,132 @@ $(`<style>.item1:after{
   margin-bottom: -18px;
 }</style>`).appendTo('head');
 
-}
+
 }
 
-function boxFlow2(loc, t, sl_al, wave_al) {
-  $('.item2').children('p').text(loc);
-  $('.item2').children('p').css("font-style","normal");
+function boxFlow2(loc) {
+  var location = loc;
+  $('.item2').children('p').text(location);
+  $('.item2').children('p').css("font-style", "normal");
   // Move move so that the table doesn't obscure the view
   if ($('.item3').is(":hidden")) {
     // map.panBy([-325, 0], {
     //   duration: 0.5
     // });
-
-
   }
-  $(".item3").show();
-  $(`<style>.item2:after{
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    width: 0;
-    height: 0;
-    border: 18px solid transparent;
-    border-left-color: white;
-    border-right: 0;
-    margin-top: -18px;
-    margin-right: -18px;}</style>`).appendTo('head');
+}
 
-  if (wave_al === null) {
-    wave_al = ['-', '-', '-', '-', '-', '-', '-'];
-  } else {
+function populateAlertTable(dataObj){
 
-  }
+  var t = dataObj["time"];
+  var sl_al = dataObj["sl_alerts"];
+  var wave_al = dataObj["wave_alerts"];
 
-  //clear the table
-  $('#datatable tr:has(td)').remove();
-  for (var i = 0; i < 7; i++) {
-    var dateString = t[i].slice(0, -3);
-    var d = new Date(dateString).toLocaleString("en-US", {
-      timeZone: "Europe/London"
+    $(".item3").show();
+    $(`<style>.item2:after{
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border: 18px solid transparent;
+      border-left-color: white;
+      border-right: 0;
+      margin-top: -18px;
+      margin-right: -18px;}</style>`).appendTo('head');
+
+    if (wave_al === null) {
+      wave_al = ['-', '-', '-', '-', '-', '-', '-'];
+    } else {
+
+    }
+
+    //clear the table
+    $('#datatable tr:has(td)').remove();
+    for (var i = 0; i < 7; i++) {
+      var dateString = t[i].slice(0, -3);
+      var d = new Date(dateString).toLocaleString("en-US", {
+        timeZone: "Europe/London"
+      });
+      var dayName = getDayName(d, "en-US");
+      var srcStringT = "";
+      var srcStringW = "";
+      switch (sl_al[i]) {
+        case 0:
+          srcStringT = "css/circle.svg";
+          break;
+        case 1:
+          srcStringT = "css/circleO.svg";
+          break;
+        case 2:
+          srcStringT = "css/circleR.svg";
+          break;
+        default:
+          srcStringT = "css/circle.svg";
+      }
+
+      switch (wave_al[i]) {
+        case 0:
+          srcStringW = "css/circle.svg";
+          break;
+        case 1:
+          srcStringW = "css/circleO.svg";
+          break;
+        case 2:
+          srcStringW = "css/circleR.svg";
+          break;
+        default:
+          srcStringW = "css/none.svg";
+      }
+
+      if (window.innerWidth < 1215) {
+        $('#datatable').append(
+          $('<tr>').append(
+
+            $('<td>').append(dayName+'<br>').append(
+              $('<div style="float: left;"> <img width= 12px; height = 12px; class="imgT" src='+srcStringT+'></div>')
+            ).append(
+              $('<div style="float: right;"><img width= 12px; height = 12px; class="imgW" src='+srcStringW+'></div>')
+            ).addClass('dayColumn'),
+          )
+        );
+      } else {
+        $('#datatable').append(
+          $('<tr>').append(
+            $('<td>').append(
+              $('<img width= 12px; height = 12px;>').attr('src', srcStringT)
+              // .addClass('selectRow')
+              // .text(i+"N")
+            ),
+            $('<td>').append(
+              $('<img width= 12px; height = 12px;>').attr('src', srcStringW)
+              // $('<a>').attr('href', 'https://www.blic.rs')
+              // .addClass('imgurl')
+              // .attr('target', '_blank')
+              // .text(i+"K")
+            ),
+            $('<td>').append(dayName).addClass('dayColumn'),
+            $('<td>').append(dateString).addClass('dateColumn')
+          )
+        );
+      }
+
+    }
+
+    // Have a day automatically selected in the table
+    //The css child index is 1 based
+    var index = selectedDayIndex + 1;
+    // Update segment coloring to reflect the automatically selected day
+    updateSegmentsColor(selectedDayIndex);
+    $("#datatable tr:eq(" + index + ")").addClass('selectedRow');
+    // Fade out unselected rows
+    $('#datatable').children('tr').each(function(i, obj) {
+      if (obj.classList.contains("selectedRow"))
+        $(this).css("opacity", "1.0");
+      else
+        $(this).css("opacity", "0.5");
     });
-    var dayName = getDayName(d, "en-US");
-    var srcStringT = "";
-    var srcStringW = "";
-    switch (sl_al[i]) {
-      case 0:
-        srcStringT = "css/circle.svg";
-        break;
-      case 1:
-        srcStringT = "css/circleO.svg";
-        break;
-      case 2:
-        srcStringT = "css/circleR.svg";
-        break;
-      default:
-        srcStringT = "css/circle.svg";
-    }
-
-    switch (wave_al[i]) {
-      case 0:
-        srcStringW = "css/circle.svg";
-        break;
-      case 1:
-        srcStringW = "css/circleO.svg";
-        break;
-      case 2:
-        srcStringW = "css/circleR.svg";
-        break;
-      default:
-        srcStringW = "css/none.svg";
-    }
-
-
-    $('#datatable').append(
-      $('<tr>').append(
-        $('<td>').append(
-          $('<img width= 12px; height = 12px;>').attr('src', srcStringT)
-          // .addClass('selectRow')
-          // .text(i+"N")
-        ),
-        $('<td>').append(
-          $('<img width= 12px; height = 12px;>').attr('src', srcStringW)
-          // $('<a>').attr('href', 'https://www.blic.rs')
-          // .addClass('imgurl')
-          // .attr('target', '_blank')
-          // .text(i+"K")
-        ),
-        $('<td>').append(dayName).addClass('dayColumn'),
-        $('<td>').append(dateString).addClass('dateColumn')
-      )
-    );
-  }
-
-  // Have a day automatically selected in the table
-  //The css child index is 1 based
-  var index = selectedDayIndex + 1;
-  // Update segment coloring to reflect the automatically selected day
-  updateSegmentsColor(selectedDayIndex);
-  $("#datatable tr:eq(" + index + ")").addClass('selectedRow');
-  // Fade out unselected rows
-  $('#datatable').children('tr').each(function(i, obj) {
-    if (obj.classList.contains("selectedRow"))
-      $(this).css("opacity", "1.0");
-    else
-      $(this).css("opacity", "0.5");
-  });
-
 }
 
 function assemblePopup(t, l, alert) {
@@ -1012,7 +1039,7 @@ function updateSegmentsColor(day) {
     // If a coastline segment is selected, find the highest alert for the day
     // selected for each of the coastlines
     if (!firstTimeClicked) {
-      highestAlert = Math.max(Math.max.apply(null,layer.feature.properties.wave_component_alert_code), Math.max.apply(null,layer.feature.properties.sl_component.sea_level_forecast));
+      highestAlert = Math.max(Math.max.apply(null, layer.feature.properties.wave_component_alert_code), Math.max.apply(null, layer.feature.properties.sl_component.sea_level_forecast));
     } else {
       if (layer.feature.properties.wave_component_alert_code === null) {
         highestAlert = Math.max(null, layer.feature.properties.sl_component.sea_level_forecast[day]);
@@ -1041,21 +1068,21 @@ function updateSegmentsColor(day) {
       //     'rotate': 0,
       //   }
       // });
-//       console.log(layer._latlngs);
-//       antPoly = L.polyline.antPath(layer._latlngs, {
-//   "delay": 250,
-//   "dashArray": [
-//     20,
-//     50
-//   ],
-//   "weight": 40,
-//   "color": "#FFFFFFFF",
-//   "pulseColor": "#FFFFFF",
-//   "paused": false,
-//   "reverse": false,
-//   "hardwareAccelerated": true
-// });
-// antPoly.addTo(map);
+      //       console.log(layer._latlngs);
+      //       antPoly = L.polyline.antPath(layer._latlngs, {
+      //   "delay": 250,
+      //   "dashArray": [
+      //     20,
+      //     50
+      //   ],
+      //   "weight": 40,
+      //   "color": "#FFFFFFFF",
+      //   "pulseColor": "#FFFFFF",
+      //   "paused": false,
+      //   "reverse": false,
+      //   "hardwareAccelerated": true
+      // });
+      // antPoly.addTo(map);
     } else {
       lineWeight = lweight;
       segmentOpacity = 1.0;
@@ -1066,12 +1093,12 @@ function updateSegmentsColor(day) {
     }
 
     //update the outline line weight
-    map.eachLayer(function(layer){
-    if(layer instanceof L.Polyline & layer.options.outline)
-      layer.setStyle({
-        weight: getLineWeight()*1.5
-        // pane: 'sealevel'
-      });
+    map.eachLayer(function(layer) {
+      if (layer instanceof L.Polyline & layer.options.outline)
+        layer.setStyle({
+          weight: getLineWeight() * 1.5
+          // pane: 'sealevel'
+        });
     });
 
     switch (highestAlert) {
@@ -1112,7 +1139,7 @@ function updateSegmentsColor(day) {
 // Reset all layers to the original style
 function unselectLayer() {
   console.log("RESET CALLED");
-  var lweight  = getLineWeight();
+  var lweight = getLineWeight();
   coastalWarningsLayer.getLayers().forEach(function(layer) {
     layer.feature.properties["selected_layer"] = false;
     // layer.setStyle({
@@ -1127,8 +1154,8 @@ function unselectLayer() {
 
 }
 
-function getLineWeight(){
-  return (10*(6-map.getZoom())+5*(map.getZoom()-MAX_ZOOM))/(6-MAX_ZOOM)
+function getLineWeight() {
+  return (10 * (6 - map.getZoom()) + 5 * (map.getZoom() - MAX_ZOOM)) / (6 - MAX_ZOOM)
 }
 
 L.Control.Layers.include({
@@ -1178,83 +1205,94 @@ function getStationLayer(statCode) {
   return my_layer;
 }
 
-function closeStations(currStat, all){
+function closeStations(currStat, all) {
   stationsLayer.eachLayer(function(layer) {
-    if(all){
+    if (all) {
       layer.remove();
-    }else{
-    if (layer.feature.id != currStat) {
-      layer.remove();
+    } else {
+      if (layer.feature.id != currStat) {
+        layer.remove();
+      }
     }
-  }
   });
 }
 
-function setOutline(layer){
-  map.eachLayer(function(layer){
-  if(layer instanceof L.Polyline & layer.options.outline)
-    layer.remove();
+function setOutline(layer) {
+  map.eachLayer(function(layer) {
+    if (layer instanceof L.Polyline & layer.options.outline)
+      layer.remove();
   });
   var polyline = L.polyline(layer._latlngs, {
     color: 'white',
     outline: true,
     pane: 'overlayPane',
-    weight: getLineWeight()*1.5
+    weight: getLineWeight() * 1.5
   }).addTo(map);
   // polyline.bringToBack();
 }
 
-function removeOutline(){
-  map.eachLayer(function(layer){
-  if(layer instanceof L.Polyline & layer.options.outline)
-    layer.remove();
+function removeOutline() {
+  map.eachLayer(function(layer) {
+    if (layer instanceof L.Polyline & layer.options.outline)
+      layer.remove();
   });
 }
 
-function centerPixelToCoordinates(container){
-  var cX = container.offset().left + container.width()/2;
-  var cY = container.offset().top + container.height()/2;
+function centerPixelToCoordinates(container) {
+  var cX = container.offset().left + container.width() / 2;
+  var cY = container.offset().top + container.height() / 2;
 
-  return map.containerPointToLatLng([cX,cY]);
+  return map.containerPointToLatLng([cX, cY]);
 }
 
 function centerSelectedFeature() {
   var targetPoint, targetLatLng;
-  if(typeof selectedFeature.geometry !== 'undefined')
-  {
-    if(window.innerHeight > window.innerWidth){
-      if(window.mobilecheck())
-      $(".lds-facebook").css("bottom","25%");
-      $(".lds-facebook").css("left","50%");
-    console.log("Portrait",window.innerHeight);
-    targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([0, $(".item4").height()/2]),
-    targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
-  }else{
-    console.log("LANDSCAPE",window.innerHeight);
-    // console.log("SHOULD ADJUST");
-    //   if(window.innerWidth>1500)
-    // {
-      if(window.mobilecheck())
-     {
-       $(".lds-facebook").css("left","75%");
-       $(".lds-facebook").css("bottom","50%");
-       targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([$(".item4").width()/2, 0]),
-    targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
-     }else{
-        targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([$(".item4").width()/2, $(".item4").height()/2]),
-    targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
+  if (selectedFeature != null) {
+    if (window.innerHeight > window.innerWidth) {
+      // if (window.mobilecheck())
+        $(".lds-facebook").css("bottom", "25%");
+      $(".lds-facebook").css("left", "50%");
+      console.log("Portrait", window.innerHeight);
+      targetPoint = map.project([selectedFeature.geometry.coordinates[0][1], selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM - 1).subtract([0, $(".item4").height() / 2]),
+        targetLatLng = map.unproject(targetPoint, MAX_ZOOM - 1);
+    } else {
+      console.log("LANDSCAPE", window.innerHeight);
+      // console.log("SHOULD ADJUST");
+      //   if(window.innerWidth>1500)
+      // {
+      if (window.mobilecheck()) {
+        $(".lds-facebook").css("left", "75%");
+        $(".lds-facebook").css("bottom", "50%");
+        targetPoint = map.project([selectedFeature.geometry.coordinates[0][1], selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM - 1).subtract([$(".item4").width() / 2 + $(".item3").width() / 2, 0]), targetLatLng = map.unproject(targetPoint, MAX_ZOOM - 1);
+      } else {
+        targetPoint = map.project([selectedFeature.geometry.coordinates[0][1], selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM - 1).subtract([$(".item4").width() / 2, $(".item4").height() / 2]),
+          targetLatLng = map.unproject(targetPoint, MAX_ZOOM - 1);
       }
-    // }else
-    //   {
-    //     targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([0, $(".item4").height()/2]),
-    // targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
-    //   }
-  }
+      // }else
+      //   {
+      //     targetPoint = map.project([selectedFeature.geometry.coordinates[0][1],selectedFeature.geometry.coordinates[0][0]], MAX_ZOOM-1).subtract([0, $(".item4").height()/2]),
+      // targetLatLng = map.unproject(targetPoint, MAX_ZOOM-1);
+      //   }
+    }
 
-    map.setView(targetLatLng, MAX_ZOOM-1);
+    map.setView(targetLatLng, MAX_ZOOM - 1);
   }
 }
 
 window.addEventListener("resize", function() {
   centerSelectedFeature();
 });
+
+function myFunction(x) {
+  if(Object.keys(allTableData).length!==0){
+	  if (x.matches) { // If media query matches
+	    populateAlertTable(allTableData);
+	  } else {
+	    populateAlertTable(allTableData);
+	  }
+  }
+	}
+
+var x = window.matchMedia("(max-width: 1215px)");
+myFunction(x); // Call listener function at run time
+x.addListener(myFunction); // Attach listener function on state
