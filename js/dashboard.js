@@ -864,18 +864,7 @@ function populateAlertTable(dataObj){
   var wave_al = dataObj["wave_alerts"];
 
     $(".item3").show();
-    $(`<style>.item2:after{
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 50%;
-      width: 0;
-      height: 0;
-      border: 18px solid transparent;
-      border-left-color: white;
-      border-right: 0;
-      margin-top: -18px;
-      margin-right: -18px;}</style>`).appendTo('head');
+
 
     if (wave_al === null) {
       wave_al = ['-', '-', '-', '-', '-', '-', '-'];
@@ -933,6 +922,18 @@ function populateAlertTable(dataObj){
           )
         );
       } else {
+        $(`<style>.item2:after{
+          content: "";
+          position: absolute;
+          right: 0;
+          top: 50%;
+          width: 0;
+          height: 0;
+          border: 18px solid transparent;
+          border-left-color: white;
+          border-right: 0;
+          margin-top: -18px;
+          margin-right: -18px;}</style>`).appendTo('head');
         $('#datatable').append(
           $('<tr>').append(
             $('<td>').append(
