@@ -586,12 +586,22 @@ function updateDetailsBox(row) {
     var sp = selectedFeature.properties.swell_period[row];
     var sd = selectedFeature.properties.swell_direction[row];
     $("#swellValues").text("{0} m @ {1}s from {2}".format(sh, sp, sd));
-    var waveValueAr = selectedFeature.properties.wave_component_water_level[row];
-    if(waveValueAr[0]==0 & waveValueAr[1]==0){
-      $("#waveValue").text("0 cm");
-    }else {
-      $("#waveValue").text("{0}-{1} cm".format(waveValueAr[0], waveValueAr[1]));
+    // Provide percentile of breaking wave height
+    var waveAlrtCd = selectedFeature.properties.wave_component_alert_code[row]
+    if(waveAlrtCd==0){
+      $("#waveValue").text("Not in top 10% historically");
+    } else if(waveAlrtCd==1) {
+      $("#waveValue").text("Top 10% historically");
+    } else {
+      $("#waveValue").text("Top 1% historically");
     }
+    // // Provide contribution to wave level
+    // var waveValueAr = selectedFeature.properties.wave_component_water_level[row];
+    // if(waveValueAr[0]==0 & waveValueAr[1]==0){
+    //   $("#waveValue").text("0 cm");
+    // }else {
+    //   $("#waveValue").text("{0}-{1} cm".format(waveValueAr[0], waveValueAr[1]));
+    // }
 
 
     switch (selectedFeature.properties.wave_component_alert_code[row]) {
