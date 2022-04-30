@@ -391,7 +391,11 @@ mainGeoJSON.on('data:loaded', function() {
     });
   });
 
-
+    // Until we have more locations, simulate an alert click so that we zoom directly to hawaii on page load
+    // Todo: Remove this when more regions are added
+    allPulsesGroup.eachLayer(function(layer) {
+      layer.fire('click');
+    });
 
 });
 
